@@ -1,0 +1,2 @@
+class PointModel < ApplicationRecord
+end

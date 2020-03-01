@@ -1,0 +1,2 @@
+class PolygonModel < ApplicationRecord
+end
