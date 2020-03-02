@@ -1,5 +1,13 @@
-require "spatial_stats/railtie"
+# frozen_string_literal: true
+
+require 'spatial_stats/railtie'
+require 'spatial_stats/queries'
+require 'spatial_stats/weights'
 
 module SpatialStats
+  def self.included(klass)
+    puts 'here', klass
+    # klass.extend(SpatialStats::Queries::Weights)
+  end
   # Your code goes here...
 end

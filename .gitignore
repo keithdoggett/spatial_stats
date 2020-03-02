@@ -1,3 +1,4 @@
+.vscode/
 .bundle/
 log/*.log
 pkg/

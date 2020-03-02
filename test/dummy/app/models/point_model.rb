@@ -1,2 +1,0 @@
-class PointModel < ApplicationRecord
-end

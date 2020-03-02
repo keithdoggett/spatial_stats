@@ -1,6 +1,6 @@
-class CreatePointModels < ActiveRecord::Migration[6.0]
+class CreatePoints < ActiveRecord::Migration[6.0]
   def change
-    create_table :point_models do |t|
+    create_table :points do |t|
       t.st_point :position
       t.float :value
       
