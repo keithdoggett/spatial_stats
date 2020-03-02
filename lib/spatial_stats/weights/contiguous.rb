@@ -3,12 +3,12 @@
 module SpatialStats
   module Weights
     module Contiguous
-      def self.rook_weights(scope, column)
+      def self.rook_weights(scope, field)
         p_key = scope.primary_key
         keys = scope.pluck(p_key)
 
         neighbors = SpatialStats::Queries::Weights
-                    .rook_contiguity_neighbors(scope, column)
+                    .rook_contiguity_neighbors(scope, field)
 
         neighbors = neighbors.group_by(&:i_id)
         weights = neighbors.transform_values do |value|
@@ -21,12 +21,12 @@ module SpatialStats
         SpatialStats::Weights::WeightsMatrix.new(keys, weights)
       end
 
-      def self.queen_weights(scope, column)
+      def self.queen_weights(scope, field)
         p_key = scope.primary_key
         keys = scope.pluck(p_key)
 
         neighbors = SpatialStats::Queries::Weights
-                    .queen_contiguity_neighbors(scope, column)
+                    .queen_contiguity_neighbors(scope, field)
 
         neighbors = neighbors.group_by(&:i_id)
         weights = neighbors.transform_values do |value|

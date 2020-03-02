@@ -39,15 +39,6 @@ module SpatialStats
           hash[:weight] = weight
           hash
         end
-        # neighbors = neighbors.group_by(&:i_id)
-        # neighbors.transform_values do |val|
-        #   # val is array of neighbors
-        #   val.map! do |record|
-        #     data = record.as_json.symbolize_keys
-        #     data[:weight] = 1.0 / ((scale * data[:distance])**alpha)
-        #     data
-        #   end
-        # end
       end
 
       def self.idw_band(scope, column, bandwidth, alpha = 1)
@@ -82,15 +73,6 @@ module SpatialStats
           hash[:weight] = weight
           hash
         end
-        # neighbors = neighbors.group_by(&:i_id)
-        # neighbors.transform_values do |val|
-        #   # val is array of neighbors
-        #   val.map! do |record|
-        #     data = record.as_json.symbolize_keys
-        #     data[:weight] = 1.0 / ((scale * data[:distance])**alpha)
-        #     data
-        #   end
-        # end
       end
 
       def self.knn(scope, column, n)
@@ -109,7 +91,6 @@ module SpatialStats
             LIMIT :n
           ) AS neighbors
         SQL
-        # neighbors.group_by(&:i_id).transform_values { |v| v.map(&:j_id) }
       end
 
       def self.distance_band_neighbors(scope, column, bandwidth)
@@ -126,7 +107,6 @@ module SpatialStats
           )
           SELECT * FROM neighbors WHERE is_neighbor = 't' AND i_id <> j_id
         SQL
-        # neighbors.group_by(&:i_id).transform_values { |v| v.map(&:j_id) }
       end
 
       # DE-9IM queen contiguiety = F***T****
@@ -152,7 +132,6 @@ module SpatialStats
           )
           SELECT * FROM neighbors WHERE is_neighbor = 't'
         SQL
-        # neighbors.group_by(&:i_id).transform_values { |v| v.map(&:j_id) }
       end
     end
   end
