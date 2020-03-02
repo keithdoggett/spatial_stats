@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
                      'inside your rails app. Supports contiguious and distance-based'\
                      ' calculations.'
   spec.license     = 'MIT'
-
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   # if spec.respond_to?(:metadata)
