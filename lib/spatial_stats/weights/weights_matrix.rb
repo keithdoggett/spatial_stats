@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'matrix'
+
 module SpatialStats
   module Weights
     class WeightsMatrix
