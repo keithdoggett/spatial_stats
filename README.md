@@ -2,10 +2,6 @@
 
 Short description and motivation.
 
-## Usage
-
-How to use my plugin.
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -25,6 +21,10 @@ Or install it yourself as:
 ```bash
 $ gem install spatial_stats
 ```
+
+## Usage
+
+How to use my plugin.
 
 ## Contributing
 
@@ -55,6 +55,10 @@ rake
 ```
 
 This will run the tests. If they all passed, then your environment is setup correctly.
+
+## Future Work
+
+- Add Kernel based weighting.
 
 ## License
 
