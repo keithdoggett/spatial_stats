@@ -19,6 +19,16 @@ class LaggedVariablesTest < ActiveSupport::TestCase
     assert_equal(expected, result)
   end
 
+  def test_neighbor_sum_idw
+    mat = Matrix[[0, 0.5, 0], [0.3, 0, 0.2], [0, 0.5, 0]]
+    expected = [1, 0.9, 1]
+    result = SpatialStats::Utils::Lag.neighbor_sum(mat, @values)
+
+    # round floats
+    result.map! { |v| v.round(3) }
+    assert_equal(expected, result)
+  end
+
   def test_window_average
     expected = [3.0 / 2, 6.0 / 3, 5.0 / 2]
     result = SpatialStats::Utils::Lag.window_average(@matrix, @values)

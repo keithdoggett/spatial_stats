@@ -54,11 +54,18 @@ cd ../..
 rake
 ```
 
-This will run the tests. If they all passed, then your environment is setup correctly.
+This will run the tests. If they all pass, then your environment is setup correctly.
 
 ## Future Work
 
+#### Weights
+
 - Add Kernel based weighting.
+
+#### Utils
+
+- Rate smoothing
+- Bayes smoothing
 
 ## License
 
