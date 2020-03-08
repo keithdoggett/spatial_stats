@@ -57,7 +57,7 @@ rake
 
 This will run the tests. If they all pass, then your environment is setup correctly.
 
-Note: You need to have GEOS installed and linked to RGeo in order for the tests to work properly. You can test this by running the following:
+Note: It is recommended to have GEOS installed and linked to RGeo. You can test this by running the following:
 
 ```
 cd test/dummy
@@ -68,6 +68,10 @@ RGeo::Geos.supported?
 ```
 
 ## Future Work
+
+### General
+
+- Refactor Morans and BivariateMorans to inherit an abstract class.
 
 #### Weights
 

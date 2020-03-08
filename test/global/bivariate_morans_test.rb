@@ -43,37 +43,27 @@ class GlobalBivariateMoransTest < ActiveSupport::TestCase
     assert_in_epsilon(expected_i, i, 1e-4)
   end
 
-  # def test_i_clustered
-  #   # replace bottom 2 rows values with 1, top row with 0
-  #   values = [1, 1, 1, 1, 1, 1, 0, 0, 0]
-  #   Polygon.all.each_with_index do |poly, i|
-  #     poly.value = values[i]
-  #     poly.save
-  #   end
+  def test_expectation
+    moran = SpatialStats::Global::BivariateMorans
+            .new(@poly_scope, :value, :second_value, @weights)
+    expectation = moran.expectation
+    expected = -1.0 / 8
+    assert_equal(expected, expectation)
+  end
 
-  #   moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
-  #   i = moran.i
-  #   assert i.positive?
-  # end
+  def test_variance
+    moran = SpatialStats::Global::BivariateMorans
+            .new(@poly_scope, :value, :second_value, @weights)
+    var = moran.variance
+    expected = 0.0671875
+    assert_in_epsilon(expected, var, 0.0005)
+  end
 
-  # def test_expectation
-  #   moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
-  #   expectation = moran.expectation
-  #   expected = -1.0 / 8
-  #   assert_equal(expected, expectation)
-  # end
-
-  # def test_variance
-  #   moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
-  #   var = moran.variance
-  #   expected = 0.0671875
-  #   assert_in_epsilon(expected, var, 0.0005)
-  # end
-
-  # def test_z_score
-  #   moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
-  #   var = moran.z_score
-  #   expected = -3.375
-  #   assert_in_epsilon(expected, var, 0.0005)
-  # end
+  def test_z_score
+    moran = SpatialStats::Global::BivariateMorans
+            .new(@poly_scope, :value, :second_value, @weights)
+    var = moran.z_score
+    expected = 0.14335711
+    assert_in_epsilon(expected, var, 0.0005)
+  end
 end
