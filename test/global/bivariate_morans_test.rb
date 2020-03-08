@@ -38,7 +38,7 @@ class GlobalBivariateMoransTest < ActiveSupport::TestCase
             .new(@poly_scope, :value, :second_value, @weights)
     i = moran.i
     expected_i = -0.0878410461157883
-    assert_equal(expected_i, i)
+    assert_in_epsilon(expected_i, i, 1e-4)
   end
 
   # def test_i_clustered
