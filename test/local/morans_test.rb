@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GlobalMoransTest < ActiveSupport::TestCase
+class LocalMoransTest < ActiveSupport::TestCase
   def setup
     polys = Polygon.grid(0, 0, 1, 3)
 
@@ -18,20 +18,20 @@ class GlobalMoransTest < ActiveSupport::TestCase
   end
 
   def test_variables
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
     vars = moran.variables
     assert_equal(@values, vars)
   end
 
   def test_zbar
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
-    expected_zbar = 4.0 / 9
-    zbar = moran.zbar
-    assert_equal(expected_zbar, zbar)
+    moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
+    expected_ybar = 4.0 / 9
+    ybar = moran.zbar
+    assert_equal(expected_ybar, ybar)
   end
 
   def test_z
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
     z = moran.z
     expected_z = [-4.0 / 9, 5.0 / 9, -4.0 / 9, 5.0 / 9,
                   -4.0 / 9, 5.0 / 9, -4.0 / 9, 5.0 / 9, -4.0 / 9]
@@ -39,10 +39,11 @@ class GlobalMoransTest < ActiveSupport::TestCase
   end
 
   def test_i
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
     i = moran.i
-    expected_i = -1
-    assert_equal(expected_i, i)
+    i.each do |i_i|
+      assert i_i < -1
+    end
   end
 
   def test_i_clustered

@@ -3,6 +3,7 @@
 require 'spatial_stats/railtie'
 require 'spatial_stats/enumerable_ext'
 require 'spatial_stats/global'
+require 'spatial_stats/local'
 require 'spatial_stats/matrix_ext'
 require 'spatial_stats/queries'
 require 'spatial_stats/utils'

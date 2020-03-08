@@ -59,12 +59,12 @@ module SpatialStats
                                                                     @field)
       end
 
-      def ybar
+      def zbar
         variables.sum / variables.size
       end
 
       def z
-        variables.map { |val| val - ybar }
+        variables.map { |val| val - zbar }
       end
 
       private
