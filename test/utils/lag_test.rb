@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'matrix'
+require 'test_helper'
+
 class LaggedVariablesTest < ActiveSupport::TestCase
   def setup
     @matrix = Matrix[[0, 1, 0], [1, 0, 1], [0, 1, 0]]

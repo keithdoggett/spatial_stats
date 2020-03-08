@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class MatrixExtTest < ActiveSupport::TestCase
   def setup
     @matrix = Matrix[[0, 1, 0], [1, 0, 1], [0, 1, 0]]

@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 class Polygon < ApplicationRecord
-  @@factory = RGeo::Geos.factory
+  @@factory = RGeo::Cartesian.factory
+
+  def self.factory
+    @@factory = if RGeo::Geos.supported?
+      RGeo::Geos.factory
+    else
+      RGeo::Cartesian.factory
+    end
+  end
 
   def self.grid(x, y, len, size)
     # returns an array of squares as a grid
@@ -30,8 +38,30 @@ class Polygon < ApplicationRecord
       [xs[0], ys[1]]
     ]
     points = corners.map { |pt| @@factory.point(pt[0], pt[1]) }
-    linear_ring = @@factory.linear_ring(points)
-    polygon = @@factory.polygon(linear_ring)
+    linear_ring = self.factory.linear_ring(points)
+    polygon = self.factory.polygon(linear_ring)
     new(geom: polygon)
+  end
+
+  def centroid
+    # simple centroid method
+    # returns point at center
+    if RGeo::Geos.supported?
+      geom.centroid
+    else
+      x = 0.0
+      y = 0.0
+      pts = geom.coordinates[0]
+      pts.pop # get rid of duplicated initial point
+  
+      pts.each do |pt|
+        x += pt[0]
+        y += pt[1]
+      end
+      x /= pts.size
+      y /= pts.size
+  
+      self.class.factory.point(x, y)
+    end
   end
 end

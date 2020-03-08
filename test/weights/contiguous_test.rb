@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class ContiguousWeightsTest < ActiveSupport::TestCase
   def setup
     # create a 3x3 unit square grid

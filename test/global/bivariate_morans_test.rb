@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class GlobalBivariateMoransTest < ActiveSupport::TestCase
   def setup
     polys = Polygon.grid(0, 0, 1, 3)

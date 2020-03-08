@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class EnumerableExtTest < ActiveSupport::TestCase
   def setup
     @array = [0, 1, 0, 1, 0, 1, 0, 1, 0]

@@ -16,20 +16,6 @@ ActiveRecord::Schema.define(version: 2020_03_06_220137) do
   enable_extension "plpgsql"
   enable_extension "postgis"
 
-  create_table "geo_points", force: :cascade do |t|
-    t.geography "latlon", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
-    t.float "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "geo_polygons", force: :cascade do |t|
-    t.geography "geom", limit: {:srid=>4326, :type=>"st_polygon", :geographic=>true}
-    t.float "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "points", force: :cascade do |t|
     t.geometry "position", limit: {:srid=>0, :type=>"st_point"}
     t.float "value"

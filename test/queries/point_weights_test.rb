@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class PointQueryWeightsTest < ActiveSupport::TestCase
   def setup
     # make a 3x3 grid of polygons, then take the centroid of
     # each cell and save that as the point.
     grid = Polygon.grid(0, 0, 1, 3)
     grid.each do |cell|
-      pt = Point.new(position: cell.geom.centroid)
+      pt = Point.new(position: cell.centroid)
       pt.save
     end
   end
@@ -67,10 +69,13 @@ class PointQueryWeightsTest < ActiveSupport::TestCase
     # 1/2 is to nearest corner
     # 1/sqrt(5) is to opposite edges
     # 1/2sqrt(2) is to opposite corner
+    # round to the third decimal because the Cartesian factory
+    # returns floats that are slightly off
     valid_weights = [1, 1 / Math.sqrt(2), 1.0 / 2,
                      1 / Math.sqrt(5), 1 / (2 * Math.sqrt(2))]
+                     .map {|v| v.round(3)}
     neighbors.each do |neighbor|
-      assert_includes(valid_weights, neighbor[:weight])
+      assert_includes(valid_weights, neighbor[:weight].round(3))
     end
   end
 

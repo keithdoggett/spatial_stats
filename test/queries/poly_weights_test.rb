@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class PolygonQueryWeightsTest < ActiveSupport::TestCase
   def setup
     # create 3x3 grid of polygons

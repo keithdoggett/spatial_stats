@@ -32,6 +32,7 @@ Once cloned, run the following commands to setup the test database.
 
 ```sh
 cd ./spatial_stats
+bundle install
 cd test/dummy
 rake db:create
 rake db:migrate
@@ -55,6 +56,16 @@ rake
 ```
 
 This will run the tests. If they all pass, then your environment is setup correctly.
+
+Note: You need to have GEOS installed and linked to RGeo in order for the tests to work properly. You can test this by running the following:
+
+```
+cd test/dummy
+rails c
+
+RGeo::Geos.supported?
+# => true
+```
 
 ## Future Work
 

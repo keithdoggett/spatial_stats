@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'matrix'
+require 'test_helper'
 
 class WeightsMatrixTest < ActiveSupport::TestCase
   def setup
