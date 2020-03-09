@@ -40,7 +40,7 @@ class GlobalBivariateMoransTest < ActiveSupport::TestCase
             .new(@poly_scope, :value, :second_value, @weights)
     i = moran.i
     expected_i = -0.0878410461157883
-    assert_in_epsilon(expected_i, i, 1e-4)
+    assert_in_delta(expected_i, i, 1e-4)
   end
 
   def test_expectation
@@ -56,7 +56,7 @@ class GlobalBivariateMoransTest < ActiveSupport::TestCase
             .new(@poly_scope, :value, :second_value, @weights)
     var = moran.variance
     expected = 0.0671875
-    assert_in_epsilon(expected, var, 0.0005)
+    assert_in_delta(expected, var, 0.0005)
   end
 
   def test_z_score
@@ -64,6 +64,6 @@ class GlobalBivariateMoransTest < ActiveSupport::TestCase
             .new(@poly_scope, :value, :second_value, @weights)
     var = moran.z_score
     expected = 0.14335711
-    assert_in_epsilon(expected, var, 0.0005)
+    assert_in_delta(expected, var, 0.0005)
   end
 end

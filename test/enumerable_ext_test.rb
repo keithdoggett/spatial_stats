@@ -13,7 +13,7 @@ class EnumerableExtTest < ActiveSupport::TestCase
     result = @array.standardize
 
     result.each_with_index do |val, i|
-      assert_in_epsilon(val, expected[i], 0.0005)
+      assert_in_delta(val, expected[i], 0.0005)
     end
   end
 end
