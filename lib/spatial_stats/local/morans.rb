@@ -12,16 +12,13 @@ module SpatialStats
       attr_accessor :scope, :field, :weights
 
       def i
-        # first compute Si**2 vector
         si2 = si2_calc
-        wij = @weights.full
+        w = @weights.full
+        z_lag = SpatialStats::Utils::Lag.neighbor_sum(w, z)
         vector = []
+
         z.each_with_index do |z_val, idx|
-          sum_term = 0
-          z.each_with_index do |zj_val, j|
-            sum_term += wij[idx, j] * zj_val if idx != j
-          end
-          
+          sum_term = z_lag[idx]          
           vector << (z_val / si2[idx]) * sum_term
         end
         vector

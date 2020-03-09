@@ -54,9 +54,17 @@ class LocalMoransTest < ActiveSupport::TestCase
       poly.save
     end
 
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
+    
+    # these should all be slightly positive, at least.
+    # with the lowest values being the 0 corners
     i = moran.i
-    assert i.positive?
+    expected_i = [0.9411764705882355, 1.411764705882353, 0.9411764705882355,
+                  1.5673736818237505e-16, 0.47058823529411775,
+                  1.5673736818237505e-16, 1.1428571428571426, 
+                  3.428571428571428, 1.1428571428571426]
+    assert_equal(i, expected_i)
+    # i.positive?
   end
 
   def test_expectation
