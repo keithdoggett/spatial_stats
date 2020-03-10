@@ -38,14 +38,19 @@ class LocalMoransTest < ActiveSupport::TestCase
                   1.0540925533894598, -0.8432740427115678,
                   1.0540925533894598, -0.8432740427115678,
                   1.0540925533894598, -0.8432740427115678]
-    assert_equal(expected_z, z)
+    z.each_with_index.map do |v, idx|
+      assert_in_delta(expected_z[idx], v, 1e-5)
+    end
   end
 
   def test_i
     moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
     i = moran.i
-    i.each do |i_i|
-      assert i_i.negative?
+    expected_i = [-0.888888888888889, -0.8888888888888888, -0.888888888888889,
+                  -0.8888888888888888, -0.888888888888889, -0.8888888888888888,
+                  -0.888888888888889, -0.8888888888888888, -0.888888888888889]
+    i.each_with_index.map do |v, idx|
+      assert_in_delta(expected_i[idx], v, 1e-5)
     end
   end
 
@@ -66,27 +71,46 @@ class LocalMoransTest < ActiveSupport::TestCase
                   0.0, 0.11111111111111112, 0.0, 0.4444444444444444,
                   0.8888888888888888, 0.4444444444444444]
 
-    assert_equal(i, expected_i)
+    i.each_with_index.map do |v, idx|
+      assert_in_delta(expected_i[idx], v, 1e-5)
+    end
   end
 
-  # def test_expectation
-  #   moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
-  #   expectation = moran.expectation
-  #   expected = -1.0 / 8
-  #   assert_equal(expected, expectation)
-  # end
+  def test_expectation
+    moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
+    expectation = moran.expectation
+    expected = -1.0 / 8
+    assert_equal(expected, expectation)
+  end
 
-  # def test_variance
-  #   moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
-  #   var = moran.variance
-  #   expected = 0.0671875
-  #   assert_in_delta(expected, var, 0.005)
-  # end
+  def test_variance
+    moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
+    var = moran.variance
+    expected_variance = [0.6961309523809524, 0.511061507936508,
+                         0.6961309523809524, 0.511061507936508,
+                         0.4185267857142857, 0.511061507936508,
+                         0.6961309523809524, 0.511061507936508,
+                         0.6961309523809524]
+    var.each_with_index.map do |v, i|
+      assert_in_delta(expected_variance[i], v, 1e-5)
+    end
+  end
 
-  # def test_z_score
-  #   moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
-  #   var = moran.z_score
-  #   expected = -3.375
-  #   assert_in_delta(expected, var, 0.05)
-  # end
+  def test_z_score
+    moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
+    z_scores = moran.z_score
+    expected_z_scores = [-0.91555559, -1.06854695, -0.91555559, -1.06854695,
+                         -1.18077885, -1.06854695, -0.91555559, -1.06854695,
+                         -0.91555559]
+    z_scores.each_with_index.map do |v, idx|
+      assert_in_delta(expected_z_scores[idx], v, 1e-5)
+    end
+  end
+
+  def test_quads
+    moran = SpatialStats::Local::Morans.new(@poly_scope, :value, @weights)
+    quads = moran.quads
+    expected = %w[LH HL LH HL LH HL LH HL LH]
+    assert_equal(expected, quads)
+  end
 end
