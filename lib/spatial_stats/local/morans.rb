@@ -18,13 +18,11 @@ module SpatialStats
         si2 = z.sample_variance
         w = @weights.full
         z_lag = SpatialStats::Utils::Lag.neighbor_average(w, z)
-        vector = []
 
-        z.each_with_index do |z_val, idx|
+        z.each_with_index.map do |z_val, idx|
           sum_term = z_lag[idx]
-          vector << (z_val / si2) * sum_term
+          (z_val / si2) * sum_term
         end
-        vector
       end
 
       def expectation
@@ -114,16 +112,13 @@ module SpatialStats
         b2i = b2i_calc
         b_terms = []
 
-        (0..n - 1).each do |idx|
-          sigma_term = 0
-          (0..n - 1).each do |k|
-            (0..n - 1).each do |h|
-              sigma_term += w[idx, k] * w[idx, h]
-            end
-          end
-          b_terms << sigma_term * (2 * b2i - n) / ((n - 1) * (n - 2))
-        end
-        b_terms
+        # the technically, the formula is Sigma k (sigma h (wik * wih))
+        # since we use row standardized matricies, this is always 1
+        # for each row
+        # this also means that all b_terms will be the same.
+        sigma_term = 1.0
+        b_terms << sigma_term * (2 * b2i - n) / ((n - 1) * (n - 2))
+        b_terms * n
       end
 
       def b2i_calc

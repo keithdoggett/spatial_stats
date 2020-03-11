@@ -138,8 +138,6 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2019.3)
-      tzinfo (>= 1.0.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
@@ -154,7 +152,7 @@ DEPENDENCIES
   database_cleaner (~> 1.8.3)
   pg (~> 1.0)
   spatial_stats!
-  tzinfo-data
+  tzinfo (~> 1.2.6)
 
 BUNDLED WITH
    2.1.4

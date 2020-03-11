@@ -36,5 +36,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'activerecord-postgis-adapter', '~> 6.0.0'
   spec.add_development_dependency 'database_cleaner', '~> 1.8.3'
   spec.add_development_dependency 'pg', '~> 1.0'
-  spec.add_development_dependency 'tzinfo-data'
+  spec.add_development_dependency 'tzinfo', '~> 1.2.6'
 end
