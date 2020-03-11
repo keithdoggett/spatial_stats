@@ -67,11 +67,16 @@ RGeo::Geos.supported?
 # => true
 ```
 
+## TODO
+
+- Refactor methods like "variables" to (x,y, etc.) also change "variance" to var.
+- Memoize expensive functions within classes
+
 ## Future Work
 
 ### General
 
-- Refactor Morans and BivariateMorans to inherit an abstract class.
+- Refactor and BivariateMoran to inherit an abstract class.
 
 #### Weights
 

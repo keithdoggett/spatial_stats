@@ -2,7 +2,7 @@
 
 module SpatialStats
   module Global
-    class Morans
+    class Moran
       def initialize(scope, field, weights)
         @scope = scope
         @field = field

@@ -6,7 +6,7 @@
 # than arcgis. This shouldn't affect the expectation and variance of I.
 module SpatialStats
   module Local
-    class Morans
+    class Moran
       def initialize(scope, field, weights)
         @scope = scope
         @field = field
@@ -112,7 +112,7 @@ module SpatialStats
         b2i = b2i_calc
         b_terms = []
 
-        # the technically, the formula is Sigma k (sigma h (wik * wih))
+        # technically, the formula is Sigma k (sigma h (wik * wih))
         # since we use row standardized matricies, this is always 1
         # for each row
         # this also means that all b_terms will be the same.

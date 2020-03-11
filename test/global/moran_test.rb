@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GlobalMoransTest < ActiveSupport::TestCase
+class GlobalMoranTest < ActiveSupport::TestCase
   def setup
     polys = Polygon.grid(0, 0, 1, 3)
 
@@ -18,20 +18,20 @@ class GlobalMoransTest < ActiveSupport::TestCase
   end
 
   def test_variables
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
     vars = moran.variables
     assert_equal(@values, vars)
   end
 
   def test_zbar
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
     expected_zbar = 4.0 / 9
     zbar = moran.zbar
     assert_equal(expected_zbar, zbar)
   end
 
   def test_z
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
     z = moran.z
     expected_z = [-4.0 / 9, 5.0 / 9, -4.0 / 9, 5.0 / 9,
                   -4.0 / 9, 5.0 / 9, -4.0 / 9, 5.0 / 9, -4.0 / 9]
@@ -39,7 +39,7 @@ class GlobalMoransTest < ActiveSupport::TestCase
   end
 
   def test_i
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
     i = moran.i
     expected_i = -1
     assert_equal(expected_i, i)
@@ -53,27 +53,27 @@ class GlobalMoransTest < ActiveSupport::TestCase
       poly.save
     end
 
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
     i = moran.i
     assert i.positive?
   end
 
   def test_expectation
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
     expectation = moran.expectation
     expected = -1.0 / 8
     assert_equal(expected, expectation)
   end
 
   def test_variance
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
     var = moran.variance
     expected = 0.0671875
     assert_in_delta(expected, var, 0.005)
   end
 
   def test_z_score
-    moran = SpatialStats::Global::Morans.new(@poly_scope, :value, @weights)
+    moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
     var = moran.z_score
     expected = -3.375
     assert_in_delta(expected, var, 0.05)

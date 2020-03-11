@@ -3,7 +3,7 @@
 # https://geodacenter.github.io/workbook/5b_global_adv/lab5b.html
 module SpatialStats
   module Global
-    class BivariateMorans
+    class BivariateMoran
       def initialize(scope, x, y, weights)
         @scope = scope
         @x = x
@@ -24,7 +24,7 @@ module SpatialStats
       end
 
       def expectation
-        -1.0/(@weights.keys.size - 1)
+        -1.0 / (@weights.keys.size - 1)
       end
 
       def variance
