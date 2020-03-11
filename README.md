@@ -69,7 +69,6 @@ RGeo::Geos.supported?
 
 ## TODO
 
-- Refactor methods like "variables" to (x,y, etc.) also change "variance" to var.
 - Memoize expensive functions within classes
 
 ## Future Work

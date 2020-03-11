@@ -4,22 +4,22 @@
 module SpatialStats
   module Global
     class BivariateMoran
-      def initialize(scope, x, y, weights)
+      def initialize(scope, x_field, y_field, weights)
         @scope = scope
-        @x = x
-        @y = y
+        @x_field = x_field
+        @y_field = y_field
         @weights = weights
       end
 
       def i
         w = @weights.full
-        y_lag = SpatialStats::Utils::Lag.neighbor_average(w, y_vars)
+        y_lag = SpatialStats::Utils::Lag.neighbor_average(w, y)
         numerator = 0
-        x_vars.each_with_index do |x_var, idx|
-          numerator += x_var * y_lag[idx]
+        x.each_with_index do |xi, idx|
+          numerator += xi * y_lag[idx]
         end
 
-        denominator = x_vars.sum { |x_var| x_var**2 }
+        denominator = x.sum { |xi| xi**2 }
         numerator / denominator
       end
 
@@ -36,7 +36,7 @@ module SpatialStats
 
         s1 = s1_calc(n, wij)
         s2 = s2_calc(n, wij)
-        s3 = s3_calc(n, x_vars)
+        s3 = s3_calc(n, x)
 
         s4 = (n**2 - 3 * n + 3) * s1 - n * s2 + 3 * (w**2)
         s5 = (n**2 - n) * s1 - 2 * n * s2 + 6 * (w**2)
@@ -50,14 +50,14 @@ module SpatialStats
         (i - expectation) / Math.sqrt(variance)
       end
 
-      def x_vars
-        @x_vars ||= SpatialStats::Queries::Variables
-                    .query_field(@scope, @x).standardize
+      def x
+        @x ||= SpatialStats::Queries::Variables.query_field(@scope, @x_field)
+                                               .standardize
       end
 
-      def y_vars
-        @y_vars ||= SpatialStats::Queries::Variables
-                    .query_field(@scope, @y).standardize
+      def y
+        @y ||= SpatialStats::Queries::Variables.query_field(@scope, @y_field)
+                                               .standardize
       end
 
       private

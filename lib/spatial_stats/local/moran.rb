@@ -79,17 +79,17 @@ module SpatialStats
         end
       end
 
-      def variables
-        @variables ||= SpatialStats::Queries::Variables
-                       .query_field(@scope, @field).standardize
+      def x
+        @x ||= SpatialStats::Queries::Variables.query_field(@scope, @field)
+                                               .standardize
       end
 
       def zbar
-        variables.sum / variables.size
+        x.sum / x.size
       end
 
       def z
-        variables.map { |val| val - zbar }
+        x.map { |val| val - zbar }
       end
 
       private

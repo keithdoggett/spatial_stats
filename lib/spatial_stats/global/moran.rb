@@ -54,17 +54,16 @@ module SpatialStats
         (i - expectation) / Math.sqrt(variance)
       end
 
-      def variables
-        @variables ||= SpatialStats::Queries::Variables.query_field(@scope,
-                                                                    @field)
+      def x
+        @x ||= SpatialStats::Queries::Variables.query_field(@scope, @field)
       end
 
       def zbar
-        variables.sum / variables.size
+        x.sum / x.size
       end
 
       def z
-        variables.map { |val| val - zbar }
+        x.map { |val| val - zbar }
       end
 
       private

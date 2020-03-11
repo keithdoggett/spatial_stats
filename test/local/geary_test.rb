@@ -16,11 +16,11 @@ class LocalGearyTest < ActiveSupport::TestCase
     @weights = SpatialStats::Weights::Contiguous.rook_weights(@poly_scope, :geom)
   end
 
-  def test_variables
+  def test_x
     geary = SpatialStats::Local::Geary.new(@poly_scope, :value, @weights)
-    vars = geary.variables
+    x = geary.x
     expected = @values.standardize
-    assert_equal(expected, vars)
+    assert_equal(expected, x)
   end
 
   def test_i

@@ -17,10 +17,10 @@ class GlobalMoranTest < ActiveSupport::TestCase
     @weights = SpatialStats::Weights::Contiguous.rook_weights(@poly_scope, :geom)
   end
 
-  def test_variables
+  def test_x
     moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
-    vars = moran.variables
-    assert_equal(@values, vars)
+    x = moran.x
+    assert_equal(@values, x)
   end
 
   def test_zbar

@@ -18,20 +18,20 @@ class GlobalBivariateMoranTest < ActiveSupport::TestCase
     @weights = SpatialStats::Weights::Contiguous.rook_weights(@poly_scope, :geom)
   end
 
-  def test_x_vars
+  def test_x
     moran = SpatialStats::Global::BivariateMoran
             .new(@poly_scope, :value, :second_value, @weights)
-    vars = moran.x_vars
+    x = moran.x
     expected = @values.standardize
-    assert_equal(expected, vars)
+    assert_equal(expected, x)
   end
 
-  def test_y_vars
+  def test_y
     moran = SpatialStats::Global::BivariateMoran
             .new(@poly_scope, :value, :second_value, @weights)
-    vars = moran.y_vars
+    y = moran.y
     expected = @second_values.standardize
-    assert_equal(expected, vars)
+    assert_equal(expected, y)
   end
 
   def test_i

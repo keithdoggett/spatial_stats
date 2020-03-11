@@ -13,7 +13,7 @@ module SpatialStats
       def i
         w = weights.full.row_standardized
         n = w.row_size
-        zs = variables
+        zs = x
         zs.each_with_index.map do |z, idx|
           sum = 0
           (0..n - 1).each do |j|
@@ -26,8 +26,8 @@ module SpatialStats
       def quads
         # https://github.com/pysal/esda/blob/master/esda/moran.py#L925
         w = @weights.full
-        z_lag = SpatialStats::Utils::Lag.neighbor_average(w, variables)
-        zp = variables.map { |v| v > 0 }
+        z_lag = SpatialStats::Utils::Lag.neighbor_average(w, x)
+        zp = x.map { |v| v > 0 }
         lp = z_lag.map { |v| v > 0 }
 
         # hh = zp & lp
@@ -46,9 +46,9 @@ module SpatialStats
         end
       end
 
-      def variables
-        @variables ||= SpatialStats::Queries::Variables
-                       .query_field(@scope, @field).standardize
+      def x
+        @x ||= SpatialStats::Queries::Variables.query_field(@scope, @field)
+                                               .standardize
       end
     end
   end
