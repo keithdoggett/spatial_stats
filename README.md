@@ -70,12 +70,13 @@ RGeo::Geos.supported?
 ## TODO
 
 - Memoize expensive functions within classes
+- Make star a parameter to getis-ord class
 
 ## Future Work
 
-### General
+#### General
 
-- Refactor and BivariateMoran to inherit an abstract class.
+- Refactor stats to inherit an abstract class.
 
 #### Weights
 
@@ -85,6 +86,10 @@ RGeo::Geos.supported?
 
 - Rate smoothing
 - Bayes smoothing
+
+#### Local
+
+- Join Count Statistic
 
 ## License
 
