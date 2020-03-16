@@ -78,4 +78,12 @@ class GlobalMoranTest < ActiveSupport::TestCase
     expected = -3.375
     assert_in_delta(expected, var, 0.05)
   end
+
+  def test_mc
+    moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
+    seed = 123_456_789
+    p_val = moran.mc(999, seed)
+    expected_limit = 0.05
+    assert p_val < expected_limit
+  end
 end

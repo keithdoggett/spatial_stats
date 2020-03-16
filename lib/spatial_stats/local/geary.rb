@@ -11,10 +11,10 @@ module SpatialStats
         w = weights.full.row_standardized
         n = w.row_size
         zs = x
-        zs.each_with_index.map do |z, idx|
+        zs.each_with_index.map do |zi, idx|
           sum = 0
           (0..n - 1).each do |j|
-            sum += w[idx, j] * ((z - zs[j])**2)
+            sum += w[idx, j] * ((zi - zs[j])**2)
           end
           sum
         end

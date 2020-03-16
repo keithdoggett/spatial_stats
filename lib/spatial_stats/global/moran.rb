@@ -6,21 +6,24 @@ module SpatialStats
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
+      attr_accessor :x
 
       def i
         # compute's Moran's I. numerator is sum of zi * spatial lag of zi
         # denominator is sum of zi**2.
         # have to use row-standardized
-        w = @weights.full
-        z_lag = SpatialStats::Utils::Lag.neighbor_average(w, z)
-        numerator = 0
-        z.each_with_index do |zi, j|
-          row_sum = zi * z_lag[j]
-          numerator += row_sum
-        end
+        @i ||= begin
+          w = @weights.full
+          z_lag = SpatialStats::Utils::Lag.neighbor_average(w, z)
+          numerator = 0
+          z.each_with_index do |zi, j|
+            row_sum = zi * z_lag[j]
+            numerator += row_sum
+          end
 
-        denominator = z.sum { |zi| zi**2 }
-        numerator / denominator
+          denominator = z.sum { |zi| zi**2 }
+          numerator / denominator
+        end
       end
 
       def expectation
@@ -45,6 +48,31 @@ module SpatialStats
         var_left = (n * s4 - s3 * s5) / ((n - 1) * (n - 2) * (n - 3) * w**2)
         var_right = e**2
         var_left - var_right
+      end
+
+      def mc(permutations = 99, seed = nil)
+        rng = if seed
+                Random.new(seed)
+              else
+                Random.new
+              end
+        shuffles = []
+        permutations.times do
+          shuffles << x.shuffle(random: rng)
+        end
+
+        # r is the number of more extreme samples
+        i_orig = i
+        r = 0
+        is = []
+        shuffles.each do |shuffle|
+          moran = self.class.new(@scope, @field, @weights)
+          moran.x = shuffle
+          r += 1 if moran.i.abs >= i_orig.abs
+          is << moran.i
+        end
+
+        (r + 1).to_f / (permutations + 1)
       end
 
       def x
