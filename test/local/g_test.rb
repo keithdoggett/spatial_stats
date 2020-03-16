@@ -49,8 +49,7 @@ class LocalGTest < ActiveSupport::TestCase
   end
 
   def test_i_star
-    g = SpatialStats::Local::G.new(@poly_scope, :value, @weights)
-    g.star = true
+    g = SpatialStats::Local::G.new(@poly_scope, :value, @weights, true)
     i = g.i
     expected_i = [0.16666, 0.0625, 0.16666, 0.0625, 0.2,
                   0.0625, 0.16666, 0.0625, 0.16666]

@@ -2,7 +2,7 @@
 
 module SpatialStats
   module Local
-    class BivariateMoran
+    class BivariateMoran < Stat
       def initialize(scope, x_field, y_field, weights)
         @scope = scope
         @x_field = x_field

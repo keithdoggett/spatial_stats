@@ -2,13 +2,10 @@
 
 module SpatialStats
   module Global
-    class Moran
+    class Moran < Stat
       def initialize(scope, field, weights)
-        @scope = scope
-        @field = field
-        @weights = weights
+        super(scope, field, weights)
       end
-      attr_accessor :scope, :field, :weights
 
       def i
         # compute's Moran's I. numerator is sum of zi * spatial lag of zi
@@ -48,10 +45,6 @@ module SpatialStats
         var_left = (n * s4 - s3 * s5) / ((n - 1) * (n - 2) * (n - 3) * w**2)
         var_right = e**2
         var_left - var_right
-      end
-
-      def z_score
-        (i - expectation) / Math.sqrt(variance)
       end
 
       def x

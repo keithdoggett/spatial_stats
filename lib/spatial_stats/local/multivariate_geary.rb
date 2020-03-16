@@ -2,7 +2,7 @@
 
 module SpatialStats
   module Local
-    class MultivariateGeary
+    class MultivariateGeary < Stat
       def initialize(scope, fields, weights)
         @scope = scope
         @fields = fields

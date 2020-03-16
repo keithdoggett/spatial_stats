@@ -3,7 +3,7 @@
 # https://geodacenter.github.io/workbook/5b_global_adv/lab5b.html
 module SpatialStats
   module Global
-    class BivariateMoran
+    class BivariateMoran < Stat
       def initialize(scope, x_field, y_field, weights)
         @scope = scope
         @x_field = x_field
@@ -44,10 +44,6 @@ module SpatialStats
         var_left = (n * s4 - s3 * s5) / ((n - 1) * (n - 2) * (n - 3) * w**2)
         var_right = e**2
         var_left - var_right
-      end
-
-      def z_score
-        (i - expectation) / Math.sqrt(variance)
       end
 
       def x
