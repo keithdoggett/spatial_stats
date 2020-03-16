@@ -15,7 +15,7 @@ class LocalMultivariateGearyTest < ActiveSupport::TestCase
     end
 
     @poly_scope = Polygon.all
-    @weights = SpatialStats::Weights::Contiguous.rook_weights(@poly_scope, :geom)
+    @weights = SpatialStats::Weights::Contiguous.rook(@poly_scope, :geom)
   end
 
   def test_i

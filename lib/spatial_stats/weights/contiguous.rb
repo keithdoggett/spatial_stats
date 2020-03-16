@@ -3,7 +3,7 @@
 module SpatialStats
   module Weights
     module Contiguous
-      def self.rook_weights(scope, field)
+      def self.rook(scope, field)
         p_key = scope.primary_key
         keys = scope.pluck(p_key)
 
@@ -21,7 +21,7 @@ module SpatialStats
         SpatialStats::Weights::WeightsMatrix.new(keys, weights)
       end
 
-      def self.queen_weights(scope, field)
+      def self.queen(scope, field)
         p_key = scope.primary_key
         keys = scope.pluck(p_key)
 

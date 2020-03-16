@@ -9,19 +9,19 @@ class ContiguousWeightsTest < ActiveSupport::TestCase
     grid.each(&:save)
   end
 
-  def test_queen_weights
+  def test_queen
     scope = Polygon.all
     weights = SpatialStats::Weights::Contiguous
-              .queen_weights(scope, :geom)
+              .queen(scope, :geom)
 
     assert_equal(9, weights.keys.size)
     assert_equal(40, weights.full.sum)
   end
 
-  def test_rook_weights
+  def test_rook
     scope = Polygon.all
     weights = SpatialStats::Weights::Contiguous
-              .rook_weights(scope, :geom)
+              .rook(scope, :geom)
 
     assert_equal(9, weights.keys.size)
     assert_equal(24, weights.full.sum)
