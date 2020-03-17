@@ -38,8 +38,8 @@ class GlobalBivariateMoranTest < ActiveSupport::TestCase
     moran = SpatialStats::Global::BivariateMoran
             .new(@poly_scope, :value, :second_value, @weights)
     i = moran.i
-    expected_i = -0.0878410461157883
-    assert_in_delta(expected_i, i, 1e-4)
+    expected_i = -0.088
+    assert_in_delta(expected_i, i, 1e-3)
   end
 
   def test_expectation
@@ -64,5 +64,21 @@ class GlobalBivariateMoranTest < ActiveSupport::TestCase
     var = moran.z_score
     expected = 0.14335711
     assert_in_delta(expected, var, 0.0005)
+  end
+
+  def test_mc
+    # assign second_value a duplicate of values
+    Polygon.all.each_with_index do |poly, i|
+      poly.second_value = @values[i]
+      poly.save
+    end
+
+    moran = SpatialStats::Global::BivariateMoran
+            .new(@poly_scope, :value, :second_value, @weights)
+
+    seed = 123_456_789
+    p_val = moran.mc(999, seed)
+    expected = 0.018
+    assert_in_delta(expected, p_val, 0.005)
   end
 end

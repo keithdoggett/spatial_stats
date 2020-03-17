@@ -10,6 +10,7 @@ module SpatialStats
         @y_field = y_field
         @weights = weights
       end
+      attr_accessor :x, :y
 
       def i
         w = @weights.full
@@ -44,6 +45,33 @@ module SpatialStats
         var_left = (n * s4 - s3 * s5) / ((n - 1) * (n - 2) * (n - 3) * w**2)
         var_right = e**2
         var_left - var_right
+      end
+
+      def mc(permutations = 99, seed = nil)
+        # in bivariate, only shuffle y and fix x
+        rng = if seed
+                Random.new(seed)
+              else
+                Random.new
+              end
+        shuffles = []
+        permutations.times do
+          shuffles << y.shuffle(random: rng)
+        end
+
+        # r is the number of more extreme samples
+        i_orig = i
+        r = 0
+        is = []
+        shuffles.each do |shuffle|
+          moran = self.class.new(@scope, @x_field, @y_field, @weights)
+          moran.x = x
+          moran.y = shuffle
+          r += 1 if moran.i.abs >= i_orig.abs
+          is << moran.i
+        end
+
+        (r + 1).to_f / (permutations + 1)
       end
 
       def x
