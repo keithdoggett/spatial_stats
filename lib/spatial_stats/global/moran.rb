@@ -6,7 +6,7 @@ module SpatialStats
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
-      attr_accessor :x
+      attr_writer :x
 
       def i
         # compute's Moran's I. numerator is sum of zi * spatial lag of zi
@@ -61,16 +61,27 @@ module SpatialStats
           shuffles << x.shuffle(random: rng)
         end
 
-        # r is the number of more extreme samples
+        # r is the number of equal to or more extreme samples
         i_orig = i
         r = 0
-        is = []
         shuffles.each do |shuffle|
           moran = self.class.new(@scope, @field, @weights)
           moran.x = shuffle
-          r += 1 if moran.i.abs >= i_orig.abs
-          is << moran.i
+          r += 1 if moran.i >= i_orig
         end
+
+        # To get consistent results with GeoDa
+        # since that is what I'm using for testing,
+        # I'm using their method for determining "extreme"
+        # values.
+        # The following is what I thought it should be, but
+        # that does not match their output
+        # if i_orig.positive?
+        #   r += 1 if moran.i >= i_orig
+        # else
+        #   r += 1 if moran.i <= i_orig
+        # end
+        r = permutations - r if permutations - r < r
 
         (r + 1).to_f / (permutations + 1)
       end

@@ -10,7 +10,7 @@ module SpatialStats
         @y_field = y_field
         @weights = weights
       end
-      attr_accessor :x, :y
+      attr_writer :x, :y
 
       def i
         w = @weights.full
@@ -59,7 +59,7 @@ module SpatialStats
           shuffles << y.shuffle(random: rng)
         end
 
-        # r is the number of more extreme samples
+        # r is the number of equal to or more extreme samples
         i_orig = i
         r = 0
         is = []

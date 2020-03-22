@@ -5,7 +5,7 @@ module SpatialStats
     module Contiguous
       def self.rook(scope, field)
         p_key = scope.primary_key
-        keys = scope.pluck(p_key)
+        keys = scope.pluck(p_key).sort
 
         neighbors = SpatialStats::Queries::Weights
                     .rook_contiguity_neighbors(scope, field)
@@ -23,7 +23,7 @@ module SpatialStats
 
       def self.queen(scope, field)
         p_key = scope.primary_key
-        keys = scope.pluck(p_key)
+        keys = scope.pluck(p_key).sort
 
         neighbors = SpatialStats::Queries::Weights
                     .queen_contiguity_neighbors(scope, field)

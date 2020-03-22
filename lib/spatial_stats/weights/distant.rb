@@ -5,7 +5,7 @@ module SpatialStats
     module Distant
       def self.distance_band(scope, field, bandwidth)
         p_key = scope.primary_key
-        keys = scope.pluck(p_key)
+        keys = scope.pluck(p_key).sort
 
         neighbors = SpatialStats::Queries::Weights
                     .distance_band_neighbors(scope, field, bandwidth)
@@ -23,7 +23,7 @@ module SpatialStats
 
       def self.knn(scope, field, n)
         p_key = scope.primary_key
-        keys = scope.pluck(p_key)
+        keys = scope.pluck(p_key).sort
 
         neighbors = SpatialStats::Queries::Weights
                     .knn(scope, field, n)
@@ -41,7 +41,7 @@ module SpatialStats
 
       def self.idw_band(scope, field, bandwidth, alpha = 1)
         p_key = scope.primary_key
-        keys = scope.pluck(p_key)
+        keys = scope.pluck(p_key).sort
 
         neighbors = SpatialStats::Queries::Weights
                     .idw_band(scope, field, bandwidth, alpha)
@@ -58,7 +58,7 @@ module SpatialStats
 
       def self.idw_knn(scope, field, n, alpha = 1)
         p_key = scope.primary_key
-        keys = scope.pluck(p_key)
+        keys = scope.pluck(p_key).sort
 
         neighbors = SpatialStats::Queries::Weights
                     .idw_knn(scope, field, n, alpha)

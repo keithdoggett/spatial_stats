@@ -37,8 +37,8 @@ class LocalMoranTest < ActiveSupport::TestCase
                   1.0540925533894598, -0.8432740427115678,
                   1.0540925533894598, -0.8432740427115678,
                   1.0540925533894598, -0.8432740427115678]
-    z.each_with_index do |v, idx|
-      assert_in_delta(expected_z[idx], v, 1e-5)
+    z.each_with_index do |v, i|
+      assert_in_delta(expected_z[i], v, 1e-5)
     end
   end
 
@@ -70,8 +70,8 @@ class LocalMoranTest < ActiveSupport::TestCase
                   0.0, 0.11111111111111112, 0.0, 0.4444444444444444,
                   0.8888888888888888, 0.4444444444444444]
 
-    i.each_with_index do |v, idx|
-      assert_in_delta(expected_i[idx], v, 1e-5)
+    i.each_with_index do |v, i|
+      assert_in_delta(expected_i[i], v, 1e-5)
     end
   end
 
@@ -101,8 +101,8 @@ class LocalMoranTest < ActiveSupport::TestCase
     expected_z_scores = [-0.91555559, -1.06854695, -0.91555559, -1.06854695,
                          -1.18077885, -1.06854695, -0.91555559, -1.06854695,
                          -0.91555559]
-    z_scores.each_with_index do |v, idx|
-      assert_in_delta(expected_z_scores[idx], v, 1e-5)
+    z_scores.each_with_index do |v, i|
+      assert_in_delta(expected_z_scores[i], v, 1e-5)
     end
   end
 
@@ -111,5 +111,28 @@ class LocalMoranTest < ActiveSupport::TestCase
     quads = moran.quads
     expected = %w[LH HL LH HL LH HL LH HL LH]
     assert_equal(expected, quads)
+  end
+
+  def test_crand
+    # test value will be held in crand
+    moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
+    rands = moran.crand(moran.x, 9, Random.new)
+    rands.each_with_index do |perms, idx|
+      expected = moran.x[idx]
+      perms.each do |perm|
+        assert_equal(expected, perm[idx])
+      end
+    end
+  end
+
+  def test_mc
+    moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
+    seed = 123_456
+    p_vals = moran.mc(999, seed)
+    expected = [0.001] * 9 # from GeoDa
+
+    expected.each_with_index do |v, i|
+      assert_in_delta(v, p_vals[i], 0.0005)
+    end
   end
 end
