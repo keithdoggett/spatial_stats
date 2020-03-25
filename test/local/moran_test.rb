@@ -129,7 +129,7 @@ class LocalMoranTest < ActiveSupport::TestCase
     moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
     seed = 123_456
     p_vals = moran.mc(999, seed)
-    expected = [0.001] * 9 # from GeoDa
+    expected = [0.223, 0.162, 0.219, 0.168, 0.023, 0.187, 0.232, 0.193, 0.204]
 
     expected.each_with_index do |v, i|
       assert_in_delta(v, p_vals[i], 0.0005)

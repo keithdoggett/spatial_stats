@@ -6,18 +6,21 @@ module SpatialStats
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
+      attr_writer :x
 
       def i
-        w = weights.full.row_standardized
-        n = w.row_size
-        zs = x
-        zs.each_with_index.map do |zi, idx|
-          sum = 0
-          (0..n - 1).each do |j|
-            sum += w[idx, j] * ((zi - zs[j])**2)
-          end
-          sum
+        z.each_with_index.map do |_zi, idx|
+          i_i(idx)
         end
+      end
+
+      def i_i(idx)
+        n = w.row_size
+        sum = 0
+        (0..n - 1).each do |j|
+          sum += w[idx, j] * ((z[idx] - z[j])**2)
+        end
+        sum
       end
 
       def x
@@ -25,6 +28,16 @@ module SpatialStats
                                                .standardize
       end
       alias z x
+
+      def mc(permutations = 99, seed = nil)
+        super(permutations, seed)
+      end
+
+      private
+
+      def w
+        @w ||= weights.full.row_standardized
+      end
     end
   end
 end

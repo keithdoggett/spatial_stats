@@ -51,39 +51,7 @@ module SpatialStats
       end
 
       def mc(permutations = 99, seed = nil)
-        rng = if seed
-                Random.new(seed)
-              else
-                Random.new
-              end
-        shuffles = []
-        permutations.times do
-          shuffles << x.shuffle(random: rng)
-        end
-
-        # r is the number of equal to or more extreme samples
-        i_orig = i
-        r = 0
-        shuffles.each do |shuffle|
-          moran = self.class.new(@scope, @field, @weights)
-          moran.x = shuffle
-          r += 1 if moran.i >= i_orig
-        end
-
-        # To get consistent results with GeoDa
-        # since that is what I'm using for testing,
-        # I'm using their method for determining "extreme"
-        # values.
-        # The following is what I thought it should be, but
-        # that does not match their output
-        # if i_orig.positive?
-        #   r += 1 if moran.i >= i_orig
-        # else
-        #   r += 1 if moran.i <= i_orig
-        # end
-        r = permutations - r if permutations - r < r
-
-        (r + 1).to_f / (permutations + 1)
+        super(permutations, seed)
       end
 
       def x

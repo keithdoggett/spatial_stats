@@ -15,7 +15,7 @@ module SpatialStats
         raise NotImplementedError, 'method i not defined'
       end
 
-      def i_i
+      def i_i(_idx)
         raise NotImplementedError, 'method i_i not defined'
       end
 
@@ -41,12 +41,76 @@ module SpatialStats
         # For each n, i will be held the same and the values around it will
         # be permutated.
         arr.each_with_index.map do |xi, idx|
-          tmp_arr = arr.clone
+          tmp_arr = arr.dup
           tmp_arr.delete_at(idx)
           permutations.times.map do
             perm = tmp_arr.shuffle(random: rng)
             perm.insert(idx, xi)
           end
+        end
+      end
+
+      def mc(permutations, seed)
+        # For local tests, we need to shuffle the values
+        # but for each item, hold its value in place and shuffle
+        # its neighbors. Then we will only test for that item instead
+        # of the entire set. This will be done for each item.
+        rng = gen_rng(seed)
+        shuffles = crand(x, permutations, rng)
+
+        # r is the number of equal to or more extreme samples
+        i_orig = i
+        rs = [0] * i_orig.size
+        shuffles.each_with_index do |perms, idx|
+          stat = self.class.new(scope, field, weights)
+          ii_orig = i_orig[idx]
+          perms.each do |perm|
+            stat.x = perm
+            ii_new = stat.i_i(idx)
+
+            # https://geodacenter.github.io/glossary.html#ppvalue
+            # NOTE: this is inconsistent with the output from GeoDa
+            # for local permutation tests, they seem to use greater than
+            # not greater than or equal to. I'm going to go by the definition
+            # in the glossary for now.
+            if ii_orig.positive?
+              rs[idx] += 1 if ii_new >= ii_orig
+            else
+              rs[idx] += 1 if ii_new <= ii_orig
+            end
+          end
+        end
+
+        rs.map do |ri|
+          (ri + 1.0) / (permutations + 1.0)
+        end
+      end
+
+      def mc_bv(permutations, seed)
+        rng = gen_rng(seed)
+        shuffles = crand(y, permutations, rng)
+
+        # r is the number of equal to or more extreme samples
+        i_orig = i
+        rs = [0] * i_orig.size
+        shuffles.each_with_index do |perms, idx|
+          stat = self.class.new(@scope, @x_field, @y_field, @weights)
+          ii_orig = i_orig[idx]
+          perms.each do |perm|
+            stat.x = x
+            stat.y = perm
+            ii_new = stat.i_i(idx)
+
+            if ii_orig.positive?
+              rs[idx] += 1 if ii_new >= ii_orig
+            else
+              rs[idx] += 1 if ii_new <= ii_orig
+            end
+          end
+        end
+
+        rs.map do |ri|
+          (ri + 1.0) / (permutations + 1.0)
         end
       end
 
@@ -70,6 +134,16 @@ module SpatialStats
         quad_terms = %w[HH LH LL HL]
         hh.zip(lh, ll, hl).map do |feature|
           quad_terms[feature.index(true)]
+        end
+      end
+
+      private
+
+      def gen_rng(seed = nil)
+        if seed
+          Random.new(seed)
+        else
+          Random.new
         end
       end
     end

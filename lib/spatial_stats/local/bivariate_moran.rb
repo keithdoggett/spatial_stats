@@ -10,13 +10,20 @@ module SpatialStats
         @weights = weights
       end
       attr_accessor :scope, :x_field, :y_field, :weights
+      attr_writer :x, :y
 
       def i
-        w = weights.full
-        y_lag = SpatialStats::Utils::Lag.neighbor_average(w, y)
-        x.each_with_index.map do |xi, idx|
-          xi * y_lag[idx]
+        x.each_with_index.map do |_xi, idx|
+          i_i(idx)
         end
+      end
+
+      def i_i(idx)
+        x[idx] * y_lag[idx]
+      end
+
+      def mc(permutations = 99, seed = nil)
+        mc_bv(permutations, seed)
       end
 
       def x
@@ -27,6 +34,16 @@ module SpatialStats
       def y
         @y ||= SpatialStats::Queries::Variables.query_field(@scope, @y_field)
                                                .standardize
+      end
+
+      private
+
+      def w
+        @w ||= weights.full
+      end
+
+      def y_lag
+        SpatialStats::Utils::Lag.neighbor_average(w, y)
       end
     end
   end

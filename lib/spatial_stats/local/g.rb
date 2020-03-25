@@ -8,31 +8,16 @@ module SpatialStats
         @star = star
       end
       attr_accessor :star
+      attr_writer :x
 
       def i
-        # window if star is true
-        w = weights.full
-        x_lag = if star?
-                  SpatialStats::Utils::Lag.window_average(w, x)
-                else
-                  SpatialStats::Utils::Lag.neighbor_average(w, x)
-                end
-        n = w.row_size
-
-        denominators = if star?
-                         [x.sum] * n
-                       else
-                         # add everything but i
-                         (0..n - 1).each.map do |idx|
-                           terms = x.dup
-                           terms.delete_at(idx)
-                           terms.sum
-                         end
-                       end
-
-        x_lag.each_with_index.map do |numerator, idx|
-          numerator / denominators[idx]
+        x.each_with_index.map do |_x_val, idx|
+          i_i(idx)
         end
+      end
+
+      def i_i(idx)
+        x_lag[idx] / denominators[idx]
       end
 
       def x
@@ -41,7 +26,36 @@ module SpatialStats
       alias z x
 
       def star?
-        @star ||= @weights.full.trace.positive?
+        @star ||= w.trace.positive?
+      end
+
+      private
+
+      def w
+        @w ||= @weights.full
+      end
+
+      def x_lag
+        # window if star is true
+        if star?
+          SpatialStats::Utils::Lag.window_average(w, x)
+        else
+          SpatialStats::Utils::Lag.neighbor_average(w, x)
+        end
+      end
+
+      def denominators
+        n = w.row_size
+        if star?
+          [x.sum] * n
+        else
+          # add everything but i
+          (0..n - 1).each.map do |idx|
+            terms = x.dup
+            terms.delete_at(idx)
+            terms.sum
+          end
+        end
       end
     end
   end

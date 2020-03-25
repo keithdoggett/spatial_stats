@@ -48,30 +48,8 @@ module SpatialStats
       end
 
       def mc(permutations = 99, seed = nil)
-        # in bivariate, only shuffle y and fix x
-        rng = if seed
-                Random.new(seed)
-              else
-                Random.new
-              end
-        shuffles = []
-        permutations.times do
-          shuffles << y.shuffle(random: rng)
-        end
-
-        # r is the number of equal to or more extreme samples
-        i_orig = i
-        r = 0
-        is = []
-        shuffles.each do |shuffle|
-          moran = self.class.new(@scope, @x_field, @y_field, @weights)
-          moran.x = x
-          moran.y = shuffle
-          r += 1 if moran.i.abs >= i_orig.abs
-          is << moran.i
-        end
-
-        (r + 1).to_f / (permutations + 1)
+        # call super monte carlo for multivariate
+        mc_bv(permutations, seed)
       end
 
       def x

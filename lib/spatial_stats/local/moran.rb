@@ -55,43 +55,7 @@ module SpatialStats
       end
 
       def mc(permutations = 99, seed = nil)
-        # For local tests, we need to shuffle the values
-        # but for each item, hold its value in place and shuffle
-        # its neighbors. Then we will only test for that item instead
-        # of the entire set. This will be done for each item.
-        rng = if seed
-                Random.new(seed)
-              else
-                Random.new
-              end
-        shuffles = crand(x, permutations, rng)
-
-        # r is the number of equal to or more extreme samples
-        i_orig = i
-        rs = [0] * i_orig.size
-        shuffles.each_with_index do |perms, idx|
-          moran = self.class.new(@scope, @field, @weights)
-          ii_orig = i_orig[idx]
-          perms.each do |perm|
-            moran.x = perm
-            ii_new = moran.i_i(idx)
-
-            rs[idx] += 1 if ii_new >= ii_orig
-          end
-        end
-
-        # do the swap if the majority are above
-        rs = rs.map do |ri|
-          if permutations - ri < ri
-            permutations - ri
-          else
-            ri
-          end
-        end
-
-        rs.map do |ri|
-          (ri + 1).to_f / (permutations + 1)
-        end
+        super(permutations, seed)
       end
 
       def x

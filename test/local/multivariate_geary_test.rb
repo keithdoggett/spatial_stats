@@ -27,4 +27,15 @@ class LocalMultivariateGearyTest < ActiveSupport::TestCase
       assert_in_delta(expected_i[idx], v, 1e-5)
     end
   end
+
+  def test_mc
+    geary = SpatialStats::Local::MultivariateGeary.new(@poly_scope, %i[value second_value], @weights)
+    seed = 123_456
+    p_vals = geary.mc(999, seed)
+    expected = [0.522, 0.321, 0.593, 0.832, 0.168, 0.697, 0.541, 0.34, 0.625]
+
+    expected.each_with_index do |v, i|
+      assert_in_delta(v, p_vals[i], 0.0005)
+    end
+  end
 end
