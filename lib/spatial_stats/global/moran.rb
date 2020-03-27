@@ -13,8 +13,8 @@ module SpatialStats
         # denominator is sum of zi**2.
         # have to use row-standardized
         @i ||= begin
-          w = @weights.full
-          z_lag = SpatialStats::Utils::Lag.neighbor_average(w, z)
+          w = @weights.standardized
+          z_lag = SpatialStats::Utils::Lag.neighbor_sum(w, z)
           numerator = 0
           z.each_with_index do |zi, j|
             row_sum = zi * z_lag[j]
@@ -27,7 +27,7 @@ module SpatialStats
       end
 
       def expectation
-        # 1/(n-1)
+        # -1/(n-1)
         -1.0 / (@weights.keys.size - 1)
       end
 

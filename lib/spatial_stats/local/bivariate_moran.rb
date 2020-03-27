@@ -38,12 +38,8 @@ module SpatialStats
 
       private
 
-      def w
-        @w ||= weights.full
-      end
-
       def y_lag
-        SpatialStats::Utils::Lag.neighbor_average(w, y)
+        @y_lag ||= SpatialStats::Utils::Lag.neighbor_sum(w, y)
       end
     end
   end

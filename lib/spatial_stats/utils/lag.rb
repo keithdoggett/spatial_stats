@@ -8,8 +8,7 @@ module SpatialStats
       # from a weights matrix and variable array
       def self.neighbor_average(matrix, variables)
         matrix = matrix.row_standardized
-        vec = Vector.elements(variables)
-        (matrix * vec).to_a
+        neighbor_sum(matrix, variables)
       end
 
       def self.neighbor_sum(matrix, variables)
@@ -19,8 +18,7 @@ module SpatialStats
 
       def self.window_average(matrix, variables)
         matrix = matrix.windowed.row_standardized
-        vec = Vector.elements(variables)
-        (matrix * vec).to_a
+        window_sum(matrix, variables)
       end
 
       def self.window_sum(matrix, variables)

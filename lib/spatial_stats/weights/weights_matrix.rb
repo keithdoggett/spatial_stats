@@ -13,22 +13,28 @@ module SpatialStats
 
       def full
         # returns a square matrix Wij using @keys as the order of items
-        rows = []
-        @keys.each do |i|
-          # iterate through each key to get the data for the row
-          row = @keys.map do |j|
-            neighbors = @weights[i]
-            match = neighbors.find { |neighbor| neighbor[:j_id] == j }
-            if match
-              match[:weight]
-            else
-              0
+        @full ||= begin
+          rows = []
+          @keys.each do |i|
+            # iterate through each key to get the data for the row
+            row = @keys.map do |j|
+              neighbors = @weights[i]
+              match = neighbors.find { |neighbor| neighbor[:j_id] == j }
+              if match
+                match[:weight]
+              else
+                0
+              end
             end
+            rows << row
           end
-          rows << row
-        end
 
-        Matrix.rows(rows)
+          Matrix.rows(rows)
+        end
+      end
+
+      def standardized
+        @standardized ||= full.row_standardized
       end
     end
   end

@@ -61,10 +61,11 @@ module SpatialStats
         # r is the number of equal to or more extreme samples
         i_orig = i
         rs = [0] * i_orig.size
+
         shuffles.each_with_index do |perms, idx|
-          stat = self.class.new(scope, field, weights)
           ii_orig = i_orig[idx]
           perms.each do |perm|
+            stat = self.class.new(scope, field, weights)
             stat.x = perm
             ii_new = stat.i_i(idx)
 
@@ -94,9 +95,9 @@ module SpatialStats
         i_orig = i
         rs = [0] * i_orig.size
         shuffles.each_with_index do |perms, idx|
-          stat = self.class.new(@scope, @x_field, @y_field, @weights)
           ii_orig = i_orig[idx]
           perms.each do |perm|
+            stat = self.class.new(@scope, @x_field, @y_field, @weights)
             stat.x = x
             stat.y = perm
             ii_new = stat.i_i(idx)
@@ -138,6 +139,10 @@ module SpatialStats
       end
 
       private
+
+      def w
+        weights.standardized
+      end
 
       def gen_rng(seed = nil)
         if seed

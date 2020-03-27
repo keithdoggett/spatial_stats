@@ -13,8 +13,8 @@ module SpatialStats
       attr_writer :x, :y
 
       def i
-        w = @weights.full
-        y_lag = SpatialStats::Utils::Lag.neighbor_average(w, y)
+        w = @weights.standardized
+        y_lag = SpatialStats::Utils::Lag.neighbor_sum(w, y)
         numerator = 0
         x.each_with_index do |xi, idx|
           numerator += xi * y_lag[idx]

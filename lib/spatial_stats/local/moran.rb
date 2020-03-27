@@ -41,12 +41,12 @@ module SpatialStats
 
       def variance
         # formula is A - B - (E[I])**2
-        w = @weights.full.row_standardized
+        wt = w.row_standardized
         exp = expectation
 
         vars = []
-        a_terms = a_calc(w)
-        b_terms = b_calc(w)
+        a_terms = a_calc(wt)
+        b_terms = b_calc(wt)
 
         a_terms.each_with_index do |a_term, idx|
           vars << (a_term - b_terms[idx] - (exp**2))
@@ -64,43 +64,41 @@ module SpatialStats
       end
 
       def zbar
-        x.sum / x.size
+        @zbar ||= x.sum / x.size
       end
 
       def z
-        x.map { |val| val - zbar }
+        @z ||= x.map { |val| val - zbar }
       end
 
       private
+
+      def z_lag
+        # can't memoize yet because of mc testing
+        # w is already row_standardized, so we are using
+        # neighbor sum instead of neighbor_average to save cost
+        @z_lag ||= SpatialStats::Utils::Lag.neighbor_sum(w, z)
+      end
 
       def si2
         @si2 ||= z.sample_variance
       end
 
-      def w
-        @w ||= @weights.full
-      end
-
-      def z_lag
-        # can't memoize yet because of mc testing
-        SpatialStats::Utils::Lag.neighbor_average(w, z)
-      end
-
       # https://pro.arcgis.com/en/pro-app/tool-reference/spatial-statistics/h-local-morans-i-additional-math.htm
-      def a_calc(w)
-        n = w.row_size
+      def a_calc(wt)
+        n = wt.row_size
         b2i = b2i_calc
         a_terms = []
 
         (0..n - 1).each do |idx|
-          sigma_term = w.row(idx).sum { |v| v**2 }
+          sigma_term = wt.row(idx).sum { |v| v**2 }
           a_terms << (n - b2i) * sigma_term / (n - 1)
         end
         a_terms
       end
 
-      def b_calc(w)
-        n = w.row_size
+      def b_calc(wt)
+        n = wt.row_size
         b2i = b2i_calc
         b_terms = []
 

@@ -26,34 +26,46 @@ module SpatialStats
       alias z x
 
       def star?
-        @star ||= w.trace.positive?
+        @star ||= weights.full.trace.positive?
       end
 
       private
 
       def w
-        @w ||= @weights.full
+        @w ||= begin
+          if star?
+            # TODO: try to fix this because it will still likely be a
+            # bottleneck in mc testing
+            weights.full.windowed.row_standardized
+          else
+            weights.standardized
+          end
+        end
       end
 
       def x_lag
         # window if star is true
-        if star?
-          SpatialStats::Utils::Lag.window_average(w, x)
-        else
-          SpatialStats::Utils::Lag.neighbor_average(w, x)
+        @x_lag ||= begin
+          if star?
+            SpatialStats::Utils::Lag.window_sum(w, x)
+          else
+            SpatialStats::Utils::Lag.neighbor_sum(w, x)
+          end
         end
       end
 
       def denominators
-        n = w.row_size
-        if star?
-          [x.sum] * n
-        else
-          # add everything but i
-          (0..n - 1).each.map do |idx|
-            terms = x.dup
-            terms.delete_at(idx)
-            terms.sum
+        @denominators ||= begin
+          n = w.row_size
+          if star?
+            [x.sum] * n
+          else
+            # add everything but i
+            (0..n - 1).each.map do |idx|
+              terms = x.dup
+              terms.delete_at(idx)
+              terms.sum
+            end
           end
         end
       end

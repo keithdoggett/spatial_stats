@@ -33,7 +33,6 @@ module SpatialStats
         permutations.times do
           shuffles << x.shuffle(random: rng)
         end
-
         # r is the number of equal to or more extreme samples
         # one sided
         i_orig = i

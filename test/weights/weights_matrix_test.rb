@@ -36,4 +36,17 @@ class WeightsMatrixTest < ActiveSupport::TestCase
     ]
     assert_equal(expected, full_mat)
   end
+
+  def test_standardized
+    mat = SpatialStats::Weights::WeightsMatrix.new(@keys, @weights)
+
+    standardized_mat = mat.standardized
+    expected = Matrix[
+      [0, 0.5, 0, 0.5],
+      [1, 0, 0, 0],
+      [0, 0, 0, 1],
+      [0.5, 0, 0.5, 0]
+    ]
+    assert_equal(expected, standardized_mat)
+  end
 end

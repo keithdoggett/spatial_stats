@@ -37,7 +37,7 @@ module SpatialStats
             m = fields.size
             gearys = fields.each_with_index.map do |field, field_idx|
               geary = Geary.new(scope, field, weights)
-              geary.x = field_data[field_idx].values_at *perm
+              geary.x = field_data[field_idx].values_at(*perm)
               geary.i_i(idx)
             end
             ii_new = gearys.sum { |x| x / m }
@@ -62,10 +62,6 @@ module SpatialStats
           SpatialStats::Queries::Variables.query_field(@scope, field)
                                           .standardize
         end
-      end
-
-      def w
-        @weights.full
       end
     end
   end
