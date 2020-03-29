@@ -69,14 +69,17 @@ RGeo::Geos.supported?
 
 ## TODO
 
-- Memoize expensive functions within classes
-- Make star a parameter to getis-ord class
+- ~~Memoize expensive functions within classes~~
+- ~~Make star a parameter to getis-ord class~~
+- Add examples to docs
+- Create RDocs
 
 ## Future Work
 
 #### General
 
-- Refactor stats to inherit an abstract class.
+- ~~Refactor stats to inherit an abstract class.~~
+- Change WeightsMatrix class and Stat classes to utilize sparse matrix methods.
 
 #### Weights
 
@@ -90,6 +93,10 @@ RGeo::Geos.supported?
 #### Local
 
 - Join Count Statistic
+
+### PPA
+
+- Add descriptive stat methods for point clusters.
 
 ## License
 

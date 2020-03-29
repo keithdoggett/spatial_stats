@@ -11,10 +11,10 @@ Gem::Specification.new do |spec|
   spec.version     = SpatialStats::VERSION
   spec.authors     = ['Keith Doggett']
   spec.email       = ['keith.doggett887@gmail.com']
-  spec.homepage    = 'https://www.github.com/Kdoggett887/spatial_stats'
+  spec.homepage    = 'https://www.github.com/keithdoggett/spatial_stats'
   spec.summary     = 'An ActiveRecord/PostGIS extension that provides statistical methods to spatial postgresql databases.'
-  spec.description = 'An ActiveRecord/PostGIS extension that provides'\
-                     'statistical methods to spatial postgresql databases.'\
+  spec.description = 'An ActiveRecord/PostGIS extension that provides '\
+                     'statistical methods to spatial postgresql databases. '\
                      'It integrates with ActiveRecord to perform spatial weighting'\
                      ' in PostGIS and performs statistical computations '\
                      'inside your rails app. Supports contiguious and distance-based'\
