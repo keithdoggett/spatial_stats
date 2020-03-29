@@ -7,12 +7,12 @@ gemfile:
   - Gemfile
 services: -postgresql
 addons:
-  postgresql: 12
+  postgresql: 10
   apt:
     packages:
-      - postgresql-12-postgis-3
-      - postgresql-12-postgis-3-scripts
-      - postgresql-client-12
+      - postgresql-10-postgis-3
+      - postgresql-10-postgis-3-scripts
+      - postgresql-client-10
 env:
   global:
     - PGHOST=""
