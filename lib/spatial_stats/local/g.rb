@@ -8,7 +8,7 @@ module SpatialStats
         @star = star
       end
       attr_accessor :star
-      attr_writer :x
+      attr_writer :x, :z_lag
 
       def i
         x.each_with_index.map do |_x_val, idx|
@@ -43,9 +43,9 @@ module SpatialStats
         end
       end
 
-      def x_lag
+      def z_lag
         # window if star is true
-        @x_lag ||= begin
+        @z_lag ||= begin
           if star?
             SpatialStats::Utils::Lag.window_sum(w, x)
           else
@@ -53,10 +53,11 @@ module SpatialStats
           end
         end
       end
+      alias x_lag z_lag
 
       def denominators
         @denominators ||= begin
-          n = w.row_size
+          n = w.shape[0]
           if star?
             [x.sum] * n
           else

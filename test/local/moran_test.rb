@@ -23,13 +23,6 @@ class LocalMoranTest < ActiveSupport::TestCase
     assert_equal(expected, x)
   end
 
-  def test_zbar
-    moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
-    expected_zbar = 0
-    zbar = moran.zbar
-    assert_in_delta(expected_zbar, zbar, 0.0005)
-  end
-
   def test_z
     moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
     z = moran.z

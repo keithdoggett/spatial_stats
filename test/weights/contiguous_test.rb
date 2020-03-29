@@ -14,7 +14,7 @@ class ContiguousWeightsTest < ActiveSupport::TestCase
     weights = SpatialStats::Weights::Contiguous
               .queen(scope, :geom)
 
-    assert_equal(9, weights.keys.size)
+    assert_equal(9, weights.n)
     assert_equal(40, weights.full.sum)
   end
 
@@ -23,7 +23,7 @@ class ContiguousWeightsTest < ActiveSupport::TestCase
     weights = SpatialStats::Weights::Contiguous
               .rook(scope, :geom)
 
-    assert_equal(9, weights.keys.size)
+    assert_equal(9, weights.n)
     assert_equal(24, weights.full.sum)
   end
 end

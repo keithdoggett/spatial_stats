@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'matrix'
+require 'numo/narray'
 require 'test_helper'
 
 class LaggedVariablesTest < ActiveSupport::TestCase
   def setup
-    @matrix = Matrix[[0, 1, 0], [1, 0, 1], [0, 1, 0]]
+    @matrix = Numo::DFloat[[0, 1, 0], [1, 0, 1], [0, 1, 0]]
     @values = [1, 2, 3]
   end
 
@@ -22,7 +22,7 @@ class LaggedVariablesTest < ActiveSupport::TestCase
   end
 
   def test_neighbor_sum_idw
-    mat = Matrix[[0, 0.5, 0], [0.3, 0, 0.2], [0, 0.5, 0]]
+    mat = Numo::DFloat[[0, 0.5, 0], [0.3, 0, 0.2], [0, 0.5, 0]]
     expected = [1, 0.9, 1]
     result = SpatialStats::Utils::Lag.neighbor_sum(mat, @values)
 

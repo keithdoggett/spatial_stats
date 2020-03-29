@@ -50,7 +50,25 @@ module SpatialStats
         end
       end
 
-      def mc(permutations, seed)
+      # def crandi(arr, permutations, rng)
+      #   n = @weights.n
+      #   lisas = Numo::DFloat.zeros([n, permutations])
+
+      #   ids = (0..n - 1).to_a
+      #   rids = permutations.times.map do
+      #     ids.shuffle(random: rng)
+      #   end
+      #   p rids
+
+      #   (0..n - 1).each do |idx|
+      #     idsi = ids.dup
+      #     idsi.delete_at(idx)
+      #     ids.shuffle!(random: rng)
+      #     tmp = arr[idsi[rids[]]]
+      #   end
+      # end
+
+      def mc(permutations = 99, seed = nil)
         # For local tests, we need to shuffle the values
         # but for each item, hold its value in place and shuffle
         # its neighbors. Then we will only test for that item instead
@@ -62,11 +80,26 @@ module SpatialStats
         i_orig = i
         rs = [0] * i_orig.size
 
+        # For each shuffle, we only need the spatially lagged variable
+        # at one index, but it needs to be an array of length n.
+        # Store a zeros array that can be mutated or duplicated and the
+        # lagged variable at idx will only be set there.
+        lagged = [0] * i_orig.size
+
         shuffles.each_with_index do |perms, idx|
           ii_orig = i_orig[idx]
+          wi = w[idx, true] # current weight row
           perms.each do |perm|
             stat = self.class.new(scope, field, weights)
             stat.x = perm
+
+            # avoids computing lag for entire data set
+            # when we only care about one entry
+            lagged_var = wi.dot(perm)
+            z_lag = lagged.dup
+            z_lag[idx] = lagged_var
+            stat.z_lag = z_lag
+
             ii_new = stat.i_i(idx)
 
             # https://geodacenter.github.io/glossary.html#ppvalue
@@ -119,8 +152,8 @@ module SpatialStats
         # https://github.com/pysal/esda/blob/master/esda/moran.py#L925
         w = @weights.full
         z_lag = SpatialStats::Utils::Lag.neighbor_average(w, z)
-        zp = z.map { |v| v > 0 }
-        lp = z_lag.map { |v| v > 0 }
+        zp = z.map(&:positive?)
+        lp = z_lag.map(&:positive?)
 
         # hh = zp & lp
         # lh = zp ^ true & lp

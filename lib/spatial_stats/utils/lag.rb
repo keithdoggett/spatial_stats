@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'matrix'
+require 'numo/narray'
 module SpatialStats
   module Utils
     module Lag
@@ -12,8 +12,7 @@ module SpatialStats
       end
 
       def self.neighbor_sum(matrix, variables)
-        vec = Vector.elements(variables)
-        (matrix * vec).to_a
+        matrix.dot(variables).to_a
       end
 
       def self.window_average(matrix, variables)
@@ -23,8 +22,7 @@ module SpatialStats
 
       def self.window_sum(matrix, variables)
         matrix = matrix.windowed
-        vec = Vector.elements(variables)
-        (matrix * vec).to_a
+        matrix.dot(variables).to_a
       end
     end
   end

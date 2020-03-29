@@ -21,7 +21,7 @@ class DistantWeightsTest < ActiveSupport::TestCase
               .distance_band(scope, :position, bandwidth)
 
     # same as rook contiguity, so 24 matches
-    assert_equal(9, weights.keys.size)
+    assert_equal(9, weights.n)
     assert_equal(24, weights.full.sum.round)
   end
 
@@ -32,7 +32,7 @@ class DistantWeightsTest < ActiveSupport::TestCase
     weights = SpatialStats::Weights::Distant
               .knn(scope, :position, neighbors)
 
-    assert_equal(9, weights.keys.size)
+    assert_equal(9, weights.n)
     assert_equal(36, weights.full.sum.round)
   end
 
@@ -44,7 +44,7 @@ class DistantWeightsTest < ActiveSupport::TestCase
     weights = SpatialStats::Weights::Distant
               .idw_band(scope, :position, bandwidth, alpha)
 
-    assert_equal(9, weights.keys.size)
+    assert_equal(9, weights.n)
     assert_equal(32.0, weights.full.sum.round)
   end
 
@@ -56,7 +56,7 @@ class DistantWeightsTest < ActiveSupport::TestCase
     weights = SpatialStats::Weights::Distant
               .idw_knn(scope, :position, neighbors, alpha)
 
-    assert_equal(9, weights.keys.size)
+    assert_equal(9, weights.n)
     assert_equal(29.0, weights.full.sum.round)
   end
 end

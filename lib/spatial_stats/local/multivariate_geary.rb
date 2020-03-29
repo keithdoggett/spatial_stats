@@ -24,7 +24,7 @@ module SpatialStats
         # of indices, which will return a list of new orders for the fields.
         # They will then be shuffled corresponding to the new indices.
         rng = gen_rng(seed)
-        n = w.row_size
+        n = w.shape[0]
         indices = (0..(n - 1)).to_a
         shuffles = crand(indices, permutations, rng)
 

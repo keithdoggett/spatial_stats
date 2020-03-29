@@ -28,12 +28,12 @@ module SpatialStats
 
       def expectation
         # -1/(n-1)
-        -1.0 / (@weights.keys.size - 1)
+        -1.0 / (@weights.n - 1)
       end
 
       def variance
         # https://en.wikipedia.org/wiki/Moran%27s_I#Expected_value
-        n = @weights.keys.size
+        n = @weights.n
         wij = @weights.full
         w = wij.sum
         e = expectation

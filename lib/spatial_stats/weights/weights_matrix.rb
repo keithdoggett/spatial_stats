@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'matrix'
+require 'numo/narray'
 
 module SpatialStats
   module Weights
@@ -8,8 +8,9 @@ module SpatialStats
       def initialize(keys, weights)
         @keys = keys
         @weights = weights
+        @n = keys.size
       end
-      attr_accessor :keys, :weights
+      attr_accessor :keys, :weights, :n
 
       def full
         # returns a square matrix Wij using @keys as the order of items
@@ -29,7 +30,7 @@ module SpatialStats
             rows << row
           end
 
-          Matrix.rows(rows)
+          Numo::DFloat.cast(rows)
         end
       end
 

@@ -5,9 +5,9 @@ class Polygon < ApplicationRecord
 
   def self.factory
     @@factory = if RGeo::Geos.supported?
-      RGeo::Geos.factory
-    else
-      RGeo::Cartesian.factory
+                  RGeo::Geos.factory
+                else
+                  RGeo::Cartesian.factory
     end
   end
 
@@ -38,8 +38,8 @@ class Polygon < ApplicationRecord
       [xs[0], ys[1]]
     ]
     points = corners.map { |pt| @@factory.point(pt[0], pt[1]) }
-    linear_ring = self.factory.linear_ring(points)
-    polygon = self.factory.polygon(linear_ring)
+    linear_ring = factory.linear_ring(points)
+    polygon = factory.polygon(linear_ring)
     new(geom: polygon)
   end
 
@@ -53,15 +53,46 @@ class Polygon < ApplicationRecord
       y = 0.0
       pts = geom.coordinates[0]
       pts.pop # get rid of duplicated initial point
-  
+
       pts.each do |pt|
         x += pt[0]
         y += pt[1]
       end
       x /= pts.size
       y /= pts.size
-  
+
       self.class.factory.point(x, y)
+    end
+  end
+
+  def self.profile_stat
+    scope = all
+    weights = SpatialStats::Weights::Contiguous.queen(scope, :geom)
+
+    1.times do
+      stat = SpatialStats::Local::MultivariateGeary.new(scope, %i[value second_value],
+                                                        weights)
+      RubyProf.start
+      stat.i
+      result = RubyProf.stop
+
+      printer = RubyProf::FlatPrinter.new(result)
+      printer.print
+    end
+  end
+
+  def self.profile_mc
+    scope = all.limit(800)
+    weights = SpatialStats::Weights::Contiguous.queen(scope, :geom)
+
+    1.times do
+      stat = SpatialStats::Local::Moran.new(scope, :value, weights)
+      RubyProf.start
+      stat.mc(99)
+      result = RubyProf.stop
+
+      printer = RubyProf::FlatPrinter.new(result)
+      printer.print
     end
   end
 end

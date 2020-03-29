@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'matrix'
+require 'numo/narray'
 require 'test_helper'
 
 class WeightsMatrixTest < ActiveSupport::TestCase
@@ -25,10 +25,10 @@ class WeightsMatrixTest < ActiveSupport::TestCase
     mat = SpatialStats::Weights::WeightsMatrix.new(@keys, @weights)
 
     full_mat = mat.full
-    assert_equal(4, full_mat.row_count)
-    assert_equal(4, full_mat.column_count)
+    assert_equal(4, full_mat.shape[0])
+    assert_equal(4, full_mat.shape[1])
 
-    expected = Matrix[
+    expected = Numo::DFloat[
       [0, 1, 0, 1],
       [1, 0, 0, 0],
       [0, 0, 0, 1],
@@ -41,7 +41,7 @@ class WeightsMatrixTest < ActiveSupport::TestCase
     mat = SpatialStats::Weights::WeightsMatrix.new(@keys, @weights)
 
     standardized_mat = mat.standardized
-    expected = Matrix[
+    expected = Numo::DFloat[
       [0, 0.5, 0, 0.5],
       [1, 0, 0, 0],
       [0, 0, 0, 1],
