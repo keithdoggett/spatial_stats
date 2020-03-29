@@ -1,0 +1,20 @@
+language: ruby
+rvm:
+  - 2.7
+  - 2.6
+  - 2.5
+gemfile:
+  - Gemfile
+addons:
+  postgresql: 12
+  apt:
+    packages:
+      - postgresql-12-postgis-3
+      - postgresql-12-postgis-3-scripts
+      - postgresql-client-12
+
+before_install: gem install bundler -v 2.1.4
+before_script:
+  - cd test/dummy && rake db:create && rake db:migrate
+  - cd ../..
+script: bundle exec rake test
