@@ -54,6 +54,35 @@ module SpatialStats
         vars
       end
 
+      def crand(arr, permutations, rng)
+        # basing this off the ESDA method
+        # need to get k for max_neighbors
+        # and wc for cardinalities of each item
+        # this returns an array of length n with
+        # (permutations x neighborz) Numo Arrays.
+        # This helps reduce computation time because
+        # we are only dealing with neighbors for each
+        # entry not the entire list of permutations for each entry.
+        wc = weights.weights.values.map(&:size)
+        k = wc.max + 1
+        n_1 = weights.n - 1
+        prange = (0..permutations - 1).to_a
+
+        arr = Numo::DFloat.cast(arr)
+
+        ids = (0..n_1).to_a
+        ids_perm = (0..n_1 - 1).to_a
+        rids = Numo::Int32.cast(prange.map { ids_perm.sample(k, random: rng) })
+
+        (0..n_1).map do |idx|
+          idsi = ids.dup
+          idsi.delete_at(idx)
+          idsi.shuffle!(random: rng)
+          idsi = Numo::Int32.cast(idsi)
+          arr[idsi[rids[true, 0..wc[idx] - 1]]]
+        end
+      end
+
       def mc(permutations = 99, seed = nil)
         # For local tests, we need to shuffle the values
         # but for each item, hold its value in place and shuffle
@@ -61,64 +90,32 @@ module SpatialStats
         # of the entire set. This will be done for each item.
         rng = gen_rng(seed)
         shuffles = crand(x, permutations, rng)
-        shuffles = Numo::DFloat.cast(shuffles)
-        n = shuffles.shape[0]
+        n = shuffles.size
         # r is the number of equal to or more extreme samples
         i_orig = i
         rs = [0] * i_orig.size
+
+        ws = weights.weights.values.map do |neighbors|
+          neighbors.map { |v| v[:weight] }
+        end
 
         # For each shuffle, we only need the spatially lagged variable
         # at one index, but it needs to be an array of length n.
         # Store a zeros array that can be mutated or duplicated and the
         # lagged variable at idx will only be set there.
-        lagged = [0] * i_orig.size
         idx = 0
         while idx < n
           ii_orig = i_orig[idx]
-          perms = shuffles[idx, true, true]
-          z_lag = perms.dot(w)
-          # p z_lag
-          # p w.dot(perms.transpose).transpose
-          ii_new = (perms * z_lag)
-          p ii_new[true, idx]
+          z_lag = (Numo::DFloat.cast(ws[idx]) * shuffles[idx]).sum(1)
+          ii_new = z[idx] * z_lag
           rs[idx] = if ii_orig.positive?
                       (ii_new >= ii_orig).count
                     else
                       (ii_new <= ii_orig).count
                     end
 
-          p rs[idx]
           idx += 1
         end
-
-        # shuffles.each_with_index do |perms, idx|
-        #   ii_orig = i_orig[idx]
-        #   wi = w[idx, true] # current weight row
-        #   perms.each do |perm|
-        #     stat = self.class.new(scope, field, weights)
-        #     stat.x = perm
-
-        #     # avoids computing lag for entire data set
-        #     # when we only care about one entry
-        #     lagged_var = wi.dot(perm)
-        #     z_lag = lagged.dup
-        #     z_lag[idx] = lagged_var
-        #     stat.z_lag = z_lag
-
-        #     ii_new = stat.i_i(idx)
-
-        #     # https://geodacenter.github.io/glossary.html#ppvalue
-        #     # NOTE: this is inconsistent with the output from GeoDa
-        #     # for local permutation tests, they seem to use greater than
-        #     # not greater than or equal to. I'm going to go by the definition
-        #     # in the glossary for now.
-        #     if ii_orig.positive?
-        #       rs[idx] += 1 if ii_new >= ii_orig
-        #     else
-        #       rs[idx] += 1 if ii_new <= ii_orig
-        #     end
-        #   end
-        # end
 
         rs.map do |ri|
           (ri + 1.0) / (permutations + 1.0)

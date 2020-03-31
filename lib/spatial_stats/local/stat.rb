@@ -35,38 +35,41 @@ module SpatialStats
         end
       end
 
-      def crand(arr, permutations, rng)
-        # conditional randomization method
-        # will generate an n x permutations array of arrays.
-        # For each n, i will be held the same and the values around it will
-        # be permutated.
-        arr.each_with_index.map do |xi, idx|
-          tmp_arr = arr.dup
-          tmp_arr.delete_at(idx)
-          permutations.times.map do
-            perm = tmp_arr.shuffle(random: rng)
-            perm.insert(idx, xi)
-          end
-        end
-      end
-
-      # def crandi(arr, permutations, rng)
-      #   n = @weights.n
-      #   lisas = Numo::DFloat.zeros([n, permutations])
-
-      #   ids = (0..n - 1).to_a
-      #   rids = permutations.times.map do
-      #     ids.shuffle(random: rng)
-      #   end
-      #   p rids
-
-      #   (0..n - 1).each do |idx|
-      #     idsi = ids.dup
-      #     idsi.delete_at(idx)
-      #     ids.shuffle!(random: rng)
-      #     tmp = arr[idsi[rids[]]]
+      # def crand(arr, permutations, rng)
+      #   # conditional randomization method
+      #   # will generate an n x permutations array of arrays.
+      #   # For each n, i will be held the same and the values around it will
+      #   # be permutated.
+      #   arr.each_with_index.map do |xi, idx|
+      #     tmp_arr = arr.dup
+      #     tmp_arr.delete_at(idx)
+      #     permutations.times.map do
+      #       perm = tmp_arr.shuffle(random: rng)
+      #       perm.insert(idx, xi)
+      #     end
       #   end
       # end
+
+      def crand(arr, permutations, rng)
+        wc = weights.weights.values.map(&:size)
+        k = wc.max + 1
+        n_1 = weights.n - 1
+        prange = (0..permutations - 1).to_a
+
+        arr = Numo::DFloat.cast(arr)
+
+        ids = (0..n_1).to_a
+        ids_perm = (0..n_1 - 1).to_a
+        rids = Numo::Int32.cast(prange.map { ids_perm.sample(k, random: rng) })
+
+        (0..n_1).map do |idx|
+          idsi = ids.dup
+          idsi.delete_at(idx)
+          idsi.shuffle!(random: rng)
+          idsi = Numo::Int32.cast(idsi)
+          arr[idsi[rids[true, 0..wc[idx] - 1]]]
+        end
+      end
 
       def mc(permutations = 99, seed = nil)
         # For local tests, we need to shuffle the values
