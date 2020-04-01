@@ -35,38 +35,45 @@ module SpatialStats
         end
       end
 
-      def crand(arr, permutations, rng)
-        # conditional randomization method
-        # will generate an n x permutations array of arrays.
-        # For each n, i will be held the same and the values around it will
-        # be permutated.
-        arr.each_with_index.map do |xi, idx|
-          tmp_arr = arr.dup
-          tmp_arr.delete_at(idx)
-          permutations.times.map do
-            perm = tmp_arr.shuffle(random: rng)
-            perm.insert(idx, xi)
-          end
-        end
+      def mc_i
+        raise NotImplementedError, 'method mc_i not defined'
       end
 
-      # def crandi(arr, permutations, rng)
-      #   n = @weights.n
-      #   lisas = Numo::DFloat.zeros([n, permutations])
+      def crand(arr, permutations, rng)
+        # basing this off the ESDA method
+        # need to get k for max_neighbors
+        # and wc for cardinalities of each item
+        # this returns an array of length n with
+        # (permutations x neighborz) Numo Arrays.
+        # This helps reduce computation time because
+        # we are only dealing with neighbors for each
+        # entry not the entire list of permutations for each entry.
+        n_1 = weights.n - 1
 
-      #   ids = (0..n - 1).to_a
-      #   rids = permutations.times.map do
-      #     ids.shuffle(random: rng)
-      #   end
-      #   p rids
+        # weight counts
+        wc = [0] * weights.n
+        k = 0
+        (0..n_1).each do |idx|
+          wc[idx] = (w[idx, true] > 0).count
+        end
 
-      #   (0..n - 1).each do |idx|
-      #     idsi = ids.dup
-      #     idsi.delete_at(idx)
-      #     ids.shuffle!(random: rng)
-      #     tmp = arr[idsi[rids[]]]
-      #   end
-      # end
+        k = wc.max + 1
+        prange = (0..permutations - 1).to_a
+
+        arr = Numo::DFloat.cast(arr)
+
+        ids = (0..n_1).to_a
+        ids_perm = (0..n_1 - 1).to_a
+        rids = Numo::Int32.cast(prange.map { ids_perm.sample(k, random: rng) })
+
+        (0..n_1).map do |idx|
+          idsi = ids.dup
+          idsi.delete_at(idx)
+          idsi.shuffle!(random: rng)
+          idsi = Numo::Int32.cast(idsi)
+          arr[idsi[rids[true, 0..wc[idx] - 1]]]
+        end
+      end
 
       def mc(permutations = 99, seed = nil)
         # For local tests, we need to shuffle the values
@@ -75,44 +82,27 @@ module SpatialStats
         # of the entire set. This will be done for each item.
         rng = gen_rng(seed)
         shuffles = crand(x, permutations, rng)
-
+        n = weights.n
         # r is the number of equal to or more extreme samples
         i_orig = i
         rs = [0] * i_orig.size
 
-        # For each shuffle, we only need the spatially lagged variable
-        # at one index, but it needs to be an array of length n.
-        # Store a zeros array that can be mutated or duplicated and the
-        # lagged variable at idx will only be set there.
-        lagged = [0] * i_orig.size
+        ws = neighbor_weights
 
-        shuffles.each_with_index do |perms, idx|
+        idx = 0
+        while idx < n
           ii_orig = i_orig[idx]
-          wi = w[idx, true] # current weight row
-          perms.each do |perm|
-            stat = self.class.new(scope, field, weights)
-            stat.x = perm
 
-            # avoids computing lag for entire data set
-            # when we only care about one entry
-            lagged_var = wi.dot(perm)
-            z_lag = lagged.dup
-            z_lag[idx] = lagged_var
-            stat.z_lag = z_lag
+          wi = Numo::DFloat.cast(ws[idx])
+          ii_new = mc_i(wi, shuffles[idx], idx)
 
-            ii_new = stat.i_i(idx)
+          rs[idx] = if ii_orig.positive?
+                      (ii_new >= ii_orig).count
+                    else
+                      (ii_new <= ii_orig).count
+                    end
 
-            # https://geodacenter.github.io/glossary.html#ppvalue
-            # NOTE: this is inconsistent with the output from GeoDa
-            # for local permutation tests, they seem to use greater than
-            # not greater than or equal to. I'm going to go by the definition
-            # in the glossary for now.
-            if ii_orig.positive?
-              rs[idx] += 1 if ii_new >= ii_orig
-            else
-              rs[idx] += 1 if ii_new <= ii_orig
-            end
-          end
+          idx += 1
         end
 
         rs.map do |ri|
@@ -123,24 +113,26 @@ module SpatialStats
       def mc_bv(permutations, seed)
         rng = gen_rng(seed)
         shuffles = crand(y, permutations, rng)
+        n = weights.n
 
-        # r is the number of equal to or more extreme samples
         i_orig = i
         rs = [0] * i_orig.size
-        shuffles.each_with_index do |perms, idx|
-          ii_orig = i_orig[idx]
-          perms.each do |perm|
-            stat = self.class.new(@scope, @x_field, @y_field, @weights)
-            stat.x = x
-            stat.y = perm
-            ii_new = stat.i_i(idx)
 
-            if ii_orig.positive?
-              rs[idx] += 1 if ii_new >= ii_orig
-            else
-              rs[idx] += 1 if ii_new <= ii_orig
-            end
-          end
+        ws = neighbor_weights
+
+        idx = 0
+        while idx < n
+          ii_orig = i_orig[idx]
+          wi = Numo::DFloat.cast(ws[idx])
+          ii_new = mc_i(wi, shuffles[idx], idx)
+
+          rs[idx] = if ii_orig.positive?
+                      (ii_new >= ii_orig).count
+                    else
+                      (ii_new <= ii_orig).count
+                    end
+
+          idx += 1
         end
 
         rs.map do |ri|
@@ -183,6 +175,20 @@ module SpatialStats
         else
           Random.new
         end
+      end
+
+      def neighbor_weights
+        # record the non-zero weights in variable length arrays for each
+        # row in the weights table
+        ws = [[]] * weights.n
+        (0..weights.n - 1).each do |idx|
+          neighbors = []
+          w[idx, true].each do |wij|
+            neighbors << wij if wij != 0
+          end
+          ws[idx] = neighbors
+        end
+        ws
       end
     end
   end

@@ -20,6 +20,11 @@ module SpatialStats
         x_lag[idx] / denominators[idx]
       end
 
+      def mc_i(wi, perms, idx)
+        x_lag_i = (wi * perms).sum(1)
+        x_lag_i / denominators[idx]
+      end
+
       def x
         @x ||= SpatialStats::Queries::Variables.query_field(@scope, @field)
       end

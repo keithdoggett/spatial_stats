@@ -54,6 +54,13 @@ module SpatialStats
         vars
       end
 
+      def mc_i(wi, perms, idx)
+        # compute i for a single index given DFloat of neighbor weights
+        # and DFloat of neighbor z perms
+        z_lag_i = (wi * perms).sum(1)
+        z[idx] * z_lag_i
+      end
+
       def x
         @x ||= SpatialStats::Queries::Variables.query_field(@scope, @field)
                                                .standardize
@@ -61,7 +68,6 @@ module SpatialStats
       alias z x
 
       def z_lag
-        # can't memoize yet because of mc testing
         # w is already row_standardized, so we are using
         # neighbor sum instead of neighbor_average to save cost
         @z_lag ||= SpatialStats::Utils::Lag.neighbor_sum(w, z)

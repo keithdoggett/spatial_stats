@@ -22,6 +22,11 @@ module SpatialStats
         x[idx] * y_lag[idx]
       end
 
+      def mc_i(wi, perms, idx)
+        y_lag_i = (wi * perms).sum(1)
+        x[idx] * y_lag_i
+      end
+
       def mc(permutations = 99, seed = nil)
         mc_bv(permutations, seed)
       end
