@@ -8,23 +8,22 @@ module SpatialStats
       end
       attr_writer :x
 
-      def i
+      def stat
         # compute's Moran's I. numerator is sum of zi * spatial lag of zi
         # denominator is sum of zi**2.
         # have to use row-standardized
-        @i ||= begin
-          w = @weights.standardized
-          z_lag = SpatialStats::Utils::Lag.neighbor_sum(w, z)
-          numerator = 0
-          z.each_with_index do |zi, j|
-            row_sum = zi * z_lag[j]
-            numerator += row_sum
-          end
-
-          denominator = z.sum { |zi| zi**2 }
-          numerator / denominator
+        w = @weights.standardized
+        z_lag = SpatialStats::Utils::Lag.neighbor_sum(w, z)
+        numerator = 0
+        z.each_with_index do |zi, j|
+          row_sum = zi * z_lag[j]
+          numerator += row_sum
         end
+
+        denominator = z.sum { |zi| zi**2 }
+        numerator / denominator
       end
+      alias i stat
 
       def expectation
         # -1/(n-1)
@@ -76,12 +75,12 @@ module SpatialStats
 
       def s2_calc(n, wij)
         s2 = 0
-        (0..n - 1).each do |i|
+        (0..n - 1).each do |idx|
           left_term = 0
           right_term = 0
           (0..n - 1).each do |j|
-            left_term += wij[i, j]
-            right_term += wij[j, i]
+            left_term += wij[idx, j]
+            right_term += wij[j, idx]
           end
           s2 += (left_term + right_term)**2
         end
@@ -90,9 +89,9 @@ module SpatialStats
 
       def s1_calc(n, wij)
         s1 = 0
-        (0..n - 1).each do |i|
+        (0..n - 1).each do |idx|
           (0..n - 1).each do |j|
-            s1 += (wij[i, j] + wij[j, i])**2
+            s1 += (wij[idx, j] + wij[j, idx])**2
           end
         end
         s1 / 2

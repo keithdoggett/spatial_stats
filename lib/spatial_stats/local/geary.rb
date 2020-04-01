@@ -6,15 +6,15 @@ module SpatialStats
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
-      attr_writer :x
 
-      def i
+      def stat
         z.each_with_index.map do |_zi, idx|
-          i_i(idx)
+          stat_i(idx)
         end
       end
+      alias c stat
 
-      def i_i(idx)
+      def stat_i(idx)
         zs = Numo::DFloat.cast(z)
         zi = (z[idx] - zs)**2
         (w[idx, true] * zi).sum

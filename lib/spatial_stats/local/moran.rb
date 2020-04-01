@@ -13,15 +13,15 @@ module SpatialStats
         @field = field
         @weights = weights
       end
-      attr_writer :x, :z_lag
 
-      def i
+      def stat
         z.each_with_index.map do |_z_val, idx|
-          i_i(idx)
+          stat_i(idx)
         end
       end
+      alias i stat
 
-      def i_i(idx)
+      def stat_i(idx)
         # method to compute i at a single index.
         # this is important for permutation testing
         # because for each test we only want the result from

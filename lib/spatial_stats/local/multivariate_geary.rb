@@ -10,13 +10,14 @@ module SpatialStats
       end
       attr_accessor :scope, :fields, :weights
 
-      def i
+      def stat
         m = fields.size
         gearys = fields.map do |field|
-          Geary.new(scope, field, weights).i
+          Geary.new(scope, field, weights).stat
         end
         gearys.transpose.map { |x| x.reduce(:+) / m }
       end
+      alias c stat
 
       def mc_i(wi, perms, idx)
         m = fields.size
@@ -40,27 +41,26 @@ module SpatialStats
         # They will then be shuffled corresponding to the new indices.
         rng = gen_rng(seed)
         n = w.shape[0]
-        m = field_data.size
         indices = (0..(n - 1)).to_a
         shuffles = crand(indices, permutations, rng)
 
-        i_orig = i
-        rs = [0] * i_orig.size
+        stat_orig = stat
+        rs = [0] * n
 
         ws = neighbor_weights
 
         idx = 0
         while idx < n
-          ii_orig = i_orig[idx]
+          stat_i_orig = stat_orig[idx]
           wi = Numo::DFloat.cast(ws[idx])
 
           # for each field, compute the C value at that index.
-          ii_new = mc_i(wi, shuffles[idx], idx)
+          stat_i_new = mc_i(wi, shuffles[idx], idx)
 
-          rs[idx] = if ii_orig.positive?
-                      (ii_new >= ii_orig).count
+          rs[idx] = if stat_i_orig.positive?
+                      (stat_i_new >= stat_i_orig).count
                     else
-                      (ii_new <= ii_orig).count
+                      (stat_i_new <= stat_i_orig).count
                     end
 
           idx += 1

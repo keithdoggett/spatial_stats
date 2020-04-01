@@ -2,21 +2,21 @@
 
 module SpatialStats
   module Local
-    class G < Stat
+    class GetisOrd < Stat
       def initialize(scope, field, weights, star = false)
         super(scope, field, weights)
         @star = star
       end
       attr_accessor :star
-      attr_writer :x, :z_lag
 
-      def i
+      def stat
         x.each_with_index.map do |_x_val, idx|
-          i_i(idx)
+          stat_i(idx)
         end
       end
+      alias g stat
 
-      def i_i(idx)
+      def stat_i(idx)
         x_lag[idx] / denominators[idx]
       end
 
@@ -39,8 +39,6 @@ module SpatialStats
       def w
         @w ||= begin
           if star?
-            # TODO: try to fix this because it will still likely be a
-            # bottleneck in mc testing
             weights.full.windowed.row_standardized
           else
             weights.standardized

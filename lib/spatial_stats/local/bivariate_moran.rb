@@ -10,15 +10,15 @@ module SpatialStats
         @weights = weights
       end
       attr_accessor :scope, :x_field, :y_field, :weights
-      attr_writer :x, :y
 
-      def i
+      def stat
         x.each_with_index.map do |_xi, idx|
-          i_i(idx)
+          stat_i(idx)
         end
       end
+      alias i stat
 
-      def i_i(idx)
+      def stat_i(idx)
         x[idx] * y_lag[idx]
       end
 

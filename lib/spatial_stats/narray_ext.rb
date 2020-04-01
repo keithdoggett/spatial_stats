@@ -3,7 +3,19 @@
 require 'numo/narray'
 
 module Numo
+  ##
+  # Extension to Numo::NArray base class.
   class NArray
+    ##
+    # For a 2-D NArray, change the non-zero values so that the sum of each row
+    # is 1.
+    #
+    # @ example
+    #
+    #   Numo::DFloat [[0,1,1], [1,1,1]].row_standardized
+    #   Numo::DFloat [[0,0.5,0.5], [0.33333,0.33333,0.33333]]
+    #
+    # @return [Numo::NArray]
     def row_standardized
       # every row will sum up to 1, or if they are all 0, do nothing
       standardized = each_over_axis.map do |row|

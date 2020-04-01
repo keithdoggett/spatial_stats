@@ -11,12 +11,12 @@ module SpatialStats
       end
       attr_accessor :scope, :field, :weights
 
-      def i
-        raise NotImplementedError, 'method i not defined'
+      def stat
+        raise NotImplementedError, 'method stat not defined'
       end
 
-      def i_i(_idx)
-        raise NotImplementedError, 'method i_i not defined'
+      def stat_i
+        raise NotImplementedError, 'method stat_i not defined'
       end
 
       def expectation
@@ -28,7 +28,7 @@ module SpatialStats
       end
 
       def z_score
-        numerators = i.map { |v| v - expectation }
+        numerators = stat.map { |v| v - expectation }
         denominators = variance.map { |v| Math.sqrt(v) }
         numerators.each_with_index.map do |numerator, idx|
           numerator / denominators[idx]
@@ -84,22 +84,22 @@ module SpatialStats
         shuffles = crand(x, permutations, rng)
         n = weights.n
         # r is the number of equal to or more extreme samples
-        i_orig = i
-        rs = [0] * i_orig.size
+        stat_orig = stat
+        rs = [0] * n
 
         ws = neighbor_weights
 
         idx = 0
         while idx < n
-          ii_orig = i_orig[idx]
+          stat_i_orig = stat_orig[idx]
 
           wi = Numo::DFloat.cast(ws[idx])
-          ii_new = mc_i(wi, shuffles[idx], idx)
+          stat_i_new = mc_i(wi, shuffles[idx], idx)
 
-          rs[idx] = if ii_orig.positive?
-                      (ii_new >= ii_orig).count
+          rs[idx] = if stat_i_orig.positive?
+                      (stat_i_new >= stat_i_orig).count
                     else
-                      (ii_new <= ii_orig).count
+                      (stat_i_new <= stat_i_orig).count
                     end
 
           idx += 1
@@ -115,21 +115,21 @@ module SpatialStats
         shuffles = crand(y, permutations, rng)
         n = weights.n
 
-        i_orig = i
-        rs = [0] * i_orig.size
+        stat_orig = stat
+        rs = [0] * n
 
         ws = neighbor_weights
 
         idx = 0
         while idx < n
-          ii_orig = i_orig[idx]
+          stat_i_orig = stat_orig[idx]
           wi = Numo::DFloat.cast(ws[idx])
-          ii_new = mc_i(wi, shuffles[idx], idx)
+          stat_i_new = mc_i(wi, shuffles[idx], idx)
 
-          rs[idx] = if ii_orig.positive?
-                      (ii_new >= ii_orig).count
+          rs[idx] = if stat_i_orig.positive?
+                      (stat_i_new >= stat_i_orig).count
                     else
-                      (ii_new <= ii_orig).count
+                      (stat_i_new <= stat_i_orig).count
                     end
 
           idx += 1

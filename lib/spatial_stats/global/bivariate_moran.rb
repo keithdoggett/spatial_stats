@@ -12,7 +12,7 @@ module SpatialStats
       end
       attr_writer :x, :y
 
-      def i
+      def stat
         w = @weights.standardized
         y_lag = SpatialStats::Utils::Lag.neighbor_sum(w, y)
         numerator = 0
@@ -23,6 +23,7 @@ module SpatialStats
         denominator = x.sum { |xi| xi**2 }
         numerator / denominator
       end
+      alias i stat
 
       def expectation
         -1.0 / (@weights.n - 1)

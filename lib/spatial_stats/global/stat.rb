@@ -11,8 +11,8 @@ module SpatialStats
       end
       attr_accessor :scope, :field, :weights
 
-      def i
-        raise NotImplementedError, 'method i not defined'
+      def stat
+        raise NotImplementedError, 'method stat not defined'
       end
 
       def expectation
@@ -24,7 +24,7 @@ module SpatialStats
       end
 
       def z_score
-        (i - expectation) / Math.sqrt(variance)
+        (stat - expectation) / Math.sqrt(variance)
       end
 
       def mc(permutations, seed)
@@ -35,17 +35,17 @@ module SpatialStats
         end
         # r is the number of equal to or more extreme samples
         # one sided
-        i_orig = i
+        stat_orig = stat
         r = 0
         shuffles.each do |shuffle|
-          stat = self.class.new(@scope, @field, @weights)
-          stat.x = shuffle
+          klass = self.class.new(@scope, @field, @weights)
+          klass.x = shuffle
 
           # https://geodacenter.github.io/glossary.html#ppvalue
-          if i_orig.positive?
-            r += 1 if stat.i >= i_orig
+          if stat_orig.positive?
+            r += 1 if klass.stat >= stat_orig
           else
-            r += 1 if stat.i <= i_orig
+            r += 1 if klass.stat <= stat_orig
           end
         end
 
@@ -61,17 +61,17 @@ module SpatialStats
         end
 
         # r is the number of equal to or more extreme samples
-        i_orig = i
+        stat_orig = stat
         r = 0
         shuffles.each do |shuffle|
-          stat = self.class.new(@scope, @x_field, @y_field, @weights)
-          stat.x = x
-          stat.y = shuffle
+          klass = self.class.new(@scope, @x_field, @y_field, @weights)
+          klass.x = x
+          klass.y = shuffle
 
-          if i_orig.positive?
-            r += 1 if stat.i >= i_orig
+          if stat_orig.positive?
+            r += 1 if klass.stat >= stat_orig
           else
-            r += 1 if stat.i <= i_orig
+            r += 1 if klass.stat <= stat_orig
           end
         end
 
