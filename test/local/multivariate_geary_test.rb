@@ -18,13 +18,13 @@ class LocalMultivariateGearyTest < ActiveSupport::TestCase
     @weights = SpatialStats::Weights::Contiguous.rook(@poly_scope, :geom)
   end
 
-  def test_i
+  def test_stat
     geary = SpatialStats::Local::MultivariateGeary.new(@poly_scope, %i[value second_value], @weights)
-    i = geary.i
-    expected_i = [2.8, 2.466667, 1.8, 2.466667, 2.3,
+    c = geary.stat
+    expected_c = [2.8, 2.466667, 1.8, 2.466667, 2.3,
                   1.8, 2.8, 2.466667, 1.8]
-    i.each_with_index do |v, idx|
-      assert_in_delta(expected_i[idx], v, 1e-5)
+    c.each_with_index do |v, idx|
+      assert_in_delta(expected_c[idx], v, 1e-5)
     end
   end
 

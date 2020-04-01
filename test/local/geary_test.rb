@@ -23,16 +23,16 @@ class LocalGearyTest < ActiveSupport::TestCase
     assert_equal(expected, x)
   end
 
-  def test_i
+  def test_stat
     geary = SpatialStats::Local::Geary.new(@poly_scope, :value, @weights)
-    i = geary.i
-    expected_i = [3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6]
-    i.each_with_index do |v, idx|
-      assert_in_delta(expected_i[idx], v, 1e-5)
+    c = geary.stat
+    expected_c = [3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6]
+    c.each_with_index do |v, idx|
+      assert_in_delta(expected_c[idx], v, 1e-5)
     end
   end
 
-  def test_i_clustered
+  def test_stat_clustered
     # replace bottom 2 rows values with 1, top row with 0
     values = [1, 1, 1, 1, 1, 1, 0, 0, 0]
     Polygon.all.each_with_index do |poly, i|
@@ -41,12 +41,12 @@ class LocalGearyTest < ActiveSupport::TestCase
     end
 
     geary = SpatialStats::Local::Geary.new(@poly_scope, :value, @weights)
-    i = geary.i
-    expected_i = [0, 0, 0, 1.3333333333333333,
+    c = geary.stat
+    expected_c = [0, 0, 0, 1.3333333333333333,
                   1.0, 1.3333333333333333, 2.0, 1.3333333333333333, 2]
 
-    i.each_with_index do |v, idx|
-      assert_in_delta(expected_i[idx], v, 1e-5)
+    c.each_with_index do |v, idx|
+      assert_in_delta(expected_c[idx], v, 1e-5)
     end
   end
 

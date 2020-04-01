@@ -34,10 +34,10 @@ class GlobalBivariateMoranTest < ActiveSupport::TestCase
     assert_equal(expected, y)
   end
 
-  def test_i
+  def test_stat
     moran = SpatialStats::Global::BivariateMoran
             .new(@poly_scope, :value, :second_value, @weights)
-    i = moran.i
+    i = moran.stat
     expected_i = -0.088
     assert_in_delta(expected_i, i, 1e-3)
   end

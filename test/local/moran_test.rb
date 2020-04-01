@@ -35,9 +35,9 @@ class LocalMoranTest < ActiveSupport::TestCase
     end
   end
 
-  def test_i
+  def test_stat
     moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
-    i = moran.i
+    i = moran.stat
     expected_i = [-0.888888888888889, -0.8888888888888888, -0.888888888888889,
                   -0.8888888888888888, -0.888888888888889, -0.8888888888888888,
                   -0.888888888888889, -0.8888888888888888, -0.888888888888889]
@@ -46,7 +46,7 @@ class LocalMoranTest < ActiveSupport::TestCase
     end
   end
 
-  def test_i_clustered
+  def test_stat_clustered
     # replace bottom 2 rows values with 1, top row with 0
     values = [1, 1, 1, 1, 1, 1, 0, 0, 0]
     Polygon.all.each_with_index do |poly, i|

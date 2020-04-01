@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class LocalGTest < ActiveSupport::TestCase
+class LocalGetisOrdTest < ActiveSupport::TestCase
   def setup
     polys = Polygon.grid(0, 0, 1, 3)
 
@@ -17,7 +17,7 @@ class LocalGTest < ActiveSupport::TestCase
   end
 
   def test_star_without_diag
-    g = SpatialStats::Local::G.new(@poly_scope, :value, @weights)
+    g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, @weights)
     refute g.star?
   end
 
@@ -27,38 +27,38 @@ class LocalGTest < ActiveSupport::TestCase
       2 => [{ j_id: 1, weight: 1 }, { j_id: 2, weight: 1 }]
     }
     weights = SpatialStats::Weights::WeightsMatrix.new([1, 2], neighbors)
-    g = SpatialStats::Local::G.new(@poly_scope, :value, weights)
+    g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, weights)
 
     assert g.star?
   end
 
   def test_x
-    g = SpatialStats::Local::G.new(@poly_scope, :value, @weights)
+    g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, @weights)
     x = g.x
     expected = @values
     assert_equal(expected, x)
   end
 
-  def test_i
-    g = SpatialStats::Local::G.new(@poly_scope, :value, @weights)
-    i = g.i
+  def test_stat
+    g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, @weights)
+    gi = g.stat
     expected_i = [0.25, 0, 0.25, 0, 0.25, 0, 0.25, 0, 0.25]
-    i.each_with_index do |v, idx|
+    gi.each_with_index do |v, idx|
       assert_in_delta(expected_i[idx], v, 1e-5)
     end
   end
 
-  def test_i_star
-    g = SpatialStats::Local::G.new(@poly_scope, :value, @weights, true)
-    i = g.i
-    expected_i = [0.16666, 0.0625, 0.16666, 0.0625, 0.2,
-                  0.0625, 0.16666, 0.0625, 0.16666]
-    i.each_with_index do |v, idx|
-      assert_in_delta(expected_i[idx], v, 1e-5)
+  def test_stat_star
+    g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, @weights, true)
+    gi = g.stat
+    expected_gi = [0.16666, 0.0625, 0.16666, 0.0625, 0.2,
+                   0.0625, 0.16666, 0.0625, 0.16666]
+    gi.each_with_index do |v, idx|
+      assert_in_delta(expected_gi[idx], v, 1e-5)
     end
   end
 
-  def test_i_clustered
+  def test_stat_clustered
     # replace bottom 2 rows values with 1, top row with 0
     values = [1, 1, 1, 1, 1, 1, 0, 0, 0]
     Polygon.all.each_with_index do |poly, i|
@@ -66,25 +66,25 @@ class LocalGTest < ActiveSupport::TestCase
       poly.save
     end
 
-    g = SpatialStats::Local::G.new(@poly_scope, :value, @weights)
-    i = g.i
-    expected_i = [0.2, 0.2, 0.2, 0.1333333, 0.15, 0.1333333,
-                  0.0833333, 0.055556, 0.0833333]
+    g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, @weights)
+    gi = g.stat
+    expected_gi = [0.2, 0.2, 0.2, 0.1333333, 0.15, 0.1333333,
+                   0.0833333, 0.055556, 0.0833333]
 
-    i.each_with_index do |v, idx|
-      assert_in_delta(expected_i[idx], v, 1e-5)
+    gi.each_with_index do |v, idx|
+      assert_in_delta(expected_gi[idx], v, 1e-5)
     end
   end
 
   def test_quads
-    g = SpatialStats::Local::G.new(@poly_scope, :value, @weights)
+    g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, @weights)
     quads = g.quads
     expected = %w[LH HL LH HL LH HL LH HL LH]
     assert_equal(expected, quads)
   end
 
   def test_mc
-    g = SpatialStats::Local::G.new(@poly_scope, :value, @weights)
+    g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, @weights)
     seed = 123_456
     p_vals = g.mc(999, seed)
     expected = [0.216, 0.165, 0.224, 0.184, 0.02, 0.17, 0.224, 0.195, 0.215]

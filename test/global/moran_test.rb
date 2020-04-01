@@ -38,14 +38,14 @@ class GlobalMoranTest < ActiveSupport::TestCase
     assert_equal(expected_z, z)
   end
 
-  def test_i
+  def test_stat
     moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
-    i = moran.i
+    i = moran.stat
     expected_i = -1
     assert_equal(expected_i, i)
   end
 
-  def test_i_clustered
+  def test_stat_clustered
     # replace bottom 2 rows values with 1, top row with 0
     values = [1, 1, 1, 1, 1, 1, 0, 0, 0]
     Polygon.all.each_with_index do |poly, i|
@@ -54,7 +54,7 @@ class GlobalMoranTest < ActiveSupport::TestCase
     end
 
     moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
-    i = moran.i
+    i = moran.stat
     assert i.positive?
   end
 
