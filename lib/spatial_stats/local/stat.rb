@@ -35,25 +35,25 @@ module SpatialStats
         end
       end
 
-      # def crand(arr, permutations, rng)
-      #   # conditional randomization method
-      #   # will generate an n x permutations array of arrays.
-      #   # For each n, i will be held the same and the values around it will
-      #   # be permutated.
-      #   arr.each_with_index.map do |xi, idx|
-      #     tmp_arr = arr.dup
-      #     tmp_arr.delete_at(idx)
-      #     permutations.times.map do
-      #       perm = tmp_arr.shuffle(random: rng)
-      #       perm.insert(idx, xi)
-      #     end
-      #   end
-      # end
-
       def crand(arr, permutations, rng)
-        wc = weights.weights.values.map(&:size)
-        k = wc.max + 1
+        # basing this off the ESDA method
+        # need to get k for max_neighbors
+        # and wc for cardinalities of each item
+        # this returns an array of length n with
+        # (permutations x neighborz) Numo Arrays.
+        # This helps reduce computation time because
+        # we are only dealing with neighbors for each
+        # entry not the entire list of permutations for each entry.
         n_1 = weights.n - 1
+
+        # weight counts
+        wc = [0] * weights.n
+        k = 0
+        (0..n_1).each do |idx|
+          wc[idx] = (w[idx, true] > 0).count
+        end
+
+        k = wc.max + 1
         prange = (0..permutations - 1).to_a
 
         arr = Numo::DFloat.cast(arr)

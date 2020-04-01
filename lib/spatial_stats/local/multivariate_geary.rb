@@ -25,29 +25,47 @@ module SpatialStats
         # They will then be shuffled corresponding to the new indices.
         rng = gen_rng(seed)
         n = w.shape[0]
+        m = field_data.size
         indices = (0..(n - 1)).to_a
         shuffles = crand(indices, permutations, rng)
 
+        ws = [[]] * n
+        (0..weights.n - 1).each do |idx|
+          neighbors = []
+          w[idx, true].each do |wij|
+            neighbors << wij if wij != 0
+          end
+          ws[idx] = neighbors
+        end
+
         i_orig = i
         rs = [0] * i_orig.size
-        shuffles.each_with_index do |perms, idx|
-          ii_orig = i_orig[idx]
-          perms.each do |perm|
-            # essentially reimplement i here, but only use i_i
-            m = fields.size
-            gearys = fields.each_with_index.map do |field, field_idx|
-              geary = Geary.new(scope, field, weights)
-              geary.x = field_data[field_idx].values_at(*perm)
-              geary.i_i(idx)
-            end
-            ii_new = gearys.sum { |x| x / m }
 
-            if ii_orig.positive?
-              rs[idx] += 1 if ii_new >= ii_orig
-            else
-              rs[idx] += 1 if ii_new <= ii_orig
-            end
+        idx = 0
+        f_data = Numo::DFloat.cast(field_data)
+
+        while idx < n
+          ii_orig = i_orig[idx]
+          wi = Numo::DFloat.cast(ws[idx])
+
+          # for each field, compute the C value at that index.
+          cs = Numo::DFloat.zeros(m, permutations)
+          (0..m - 1).each do |mi|
+            field = field_data[mi]
+            zs = f_data[mi, true][shuffles[idx]]
+            c = (field[idx] - zs)**2
+
+            cs[mi, true] = (wi * c).sum(1)
           end
+          ii_new = cs.mean(0)
+
+          rs[idx] = if ii_orig.positive?
+                      (ii_new >= ii_orig).count
+                    else
+                      (ii_new <= ii_orig).count
+                    end
+
+          idx += 1
         end
 
         rs.map do |ri|

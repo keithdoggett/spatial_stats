@@ -54,42 +54,6 @@ module SpatialStats
         vars
       end
 
-      def crand(arr, permutations, rng)
-        # basing this off the ESDA method
-        # need to get k for max_neighbors
-        # and wc for cardinalities of each item
-        # this returns an array of length n with
-        # (permutations x neighborz) Numo Arrays.
-        # This helps reduce computation time because
-        # we are only dealing with neighbors for each
-        # entry not the entire list of permutations for each entry.
-        n_1 = weights.n - 1
-
-        # weight counts
-        wc = [0] * weights.n
-        k = 0
-        (0..n_1).each do |idx|
-          wc[idx] = (w[idx, true] > 0).count
-        end
-
-        k = wc.max + 1
-        prange = (0..permutations - 1).to_a
-
-        arr = Numo::DFloat.cast(arr)
-
-        ids = (0..n_1).to_a
-        ids_perm = (0..n_1 - 1).to_a
-        rids = Numo::Int32.cast(prange.map { ids_perm.sample(k, random: rng) })
-
-        (0..n_1).map do |idx|
-          idsi = ids.dup
-          idsi.delete_at(idx)
-          idsi.shuffle!(random: rng)
-          idsi = Numo::Int32.cast(idsi)
-          arr[idsi[rids[true, 0..wc[idx] - 1]]]
-        end
-      end
-
       def mc(permutations = 99, seed = nil)
         # For local tests, we need to shuffle the values
         # but for each item, hold its value in place and shuffle
