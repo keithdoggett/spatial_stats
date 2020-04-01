@@ -35,6 +35,10 @@ module SpatialStats
         end
       end
 
+      def mc_i
+        raise NotImplementedError, 'method mc_i not defined'
+      end
+
       def crand(arr, permutations, rng)
         # basing this off the ESDA method
         # need to get k for max_neighbors
@@ -78,44 +82,27 @@ module SpatialStats
         # of the entire set. This will be done for each item.
         rng = gen_rng(seed)
         shuffles = crand(x, permutations, rng)
-
+        n = weights.n
         # r is the number of equal to or more extreme samples
         i_orig = i
         rs = [0] * i_orig.size
 
-        # For each shuffle, we only need the spatially lagged variable
-        # at one index, but it needs to be an array of length n.
-        # Store a zeros array that can be mutated or duplicated and the
-        # lagged variable at idx will only be set there.
-        lagged = [0] * i_orig.size
+        ws = neighbor_weights
 
-        shuffles.each_with_index do |perms, idx|
+        idx = 0
+        while idx < n
           ii_orig = i_orig[idx]
-          wi = w[idx, true] # current weight row
-          perms.each do |perm|
-            stat = self.class.new(scope, field, weights)
-            stat.x = perm
 
-            # avoids computing lag for entire data set
-            # when we only care about one entry
-            lagged_var = wi.dot(perm)
-            z_lag = lagged.dup
-            z_lag[idx] = lagged_var
-            stat.z_lag = z_lag
+          wi = Numo::DFloat.cast(ws[idx])
+          ii_new = mc_i(wi, shuffles[idx], idx)
 
-            ii_new = stat.i_i(idx)
+          rs[idx] = if ii_orig.positive?
+                      (ii_new >= ii_orig).count
+                    else
+                      (ii_new <= ii_orig).count
+                    end
 
-            # https://geodacenter.github.io/glossary.html#ppvalue
-            # NOTE: this is inconsistent with the output from GeoDa
-            # for local permutation tests, they seem to use greater than
-            # not greater than or equal to. I'm going to go by the definition
-            # in the glossary for now.
-            if ii_orig.positive?
-              rs[idx] += 1 if ii_new >= ii_orig
-            else
-              rs[idx] += 1 if ii_new <= ii_orig
-            end
-          end
+          idx += 1
         end
 
         rs.map do |ri|
@@ -126,24 +113,26 @@ module SpatialStats
       def mc_bv(permutations, seed)
         rng = gen_rng(seed)
         shuffles = crand(y, permutations, rng)
+        n = weights.n
 
-        # r is the number of equal to or more extreme samples
         i_orig = i
         rs = [0] * i_orig.size
-        shuffles.each_with_index do |perms, idx|
-          ii_orig = i_orig[idx]
-          perms.each do |perm|
-            stat = self.class.new(@scope, @x_field, @y_field, @weights)
-            stat.x = x
-            stat.y = perm
-            ii_new = stat.i_i(idx)
 
-            if ii_orig.positive?
-              rs[idx] += 1 if ii_new >= ii_orig
-            else
-              rs[idx] += 1 if ii_new <= ii_orig
-            end
-          end
+        ws = neighbor_weights
+
+        idx = 0
+        while idx < n
+          ii_orig = i_orig[idx]
+          wi = Numo::DFloat.cast(ws[idx])
+          ii_new = mc_i(wi, shuffles[idx], idx)
+
+          rs[idx] = if ii_orig.positive?
+                      (ii_new >= ii_orig).count
+                    else
+                      (ii_new <= ii_orig).count
+                    end
+
+          idx += 1
         end
 
         rs.map do |ri|
@@ -186,6 +175,20 @@ module SpatialStats
         else
           Random.new
         end
+      end
+
+      def neighbor_weights
+        # record the non-zero weights in variable length arrays for each
+        # row in the weights table
+        ws = [[]] * weights.n
+        (0..weights.n - 1).each do |idx|
+          neighbors = []
+          w[idx, true].each do |wij|
+            neighbors << wij if wij != 0
+          end
+          ws[idx] = neighbors
+        end
+        ws
       end
     end
   end
