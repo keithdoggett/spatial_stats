@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    spatial_stats (0.2.1)
+    spatial_stats (0.2.2)
       numo-narray (~> 0.9.1)
       rails (~> 6.0.0)
 
