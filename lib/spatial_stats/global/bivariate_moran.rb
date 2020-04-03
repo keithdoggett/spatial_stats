@@ -108,6 +108,12 @@ module SpatialStats
 
       private
 
+      def stat_mc(perms)
+        x_arr = Numo::DFloat.cast(x)
+        lag = w.dot(perms.transpose)
+        x_arr.dot(lag) / (x_arr**2).sum
+      end
+
       def s3_calc(n, zs)
         numerator = (1.0 / n) * zs.sum { |v| v**4 }
         denominator = ((1.0 / n) * zs.sum { |v| v**2 })**2
