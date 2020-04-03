@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.24
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "README";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'><p><a href="https://travis-ci.com/keithdoggett/spatial_stats"><img src="https://travis-ci.com/keithdoggett/spatial_stats.svg?branch=master" alt="Build Status" /></a></p>
+
+<h1 id="spatialstats">SpatialStats</h1>
+
+<p>SpatialStats is an ActiveRecord plugin that utilizes PostGIS and Ruby to compute weights/statistics of spatial data sets in Rails Apps.</p>
+
+<h2 id="installation">Installation</h2>
+
+<p>Add this line to your application’s Gemfile:</p>
+
+<p><code>ruby
+gem 'spatial_stats'
+</code></p>
+
+<p>And then execute:</p>
+
+<p><code>bash
+$ bundle
+</code></p>
+
+<p>Or install it yourself as:</p>
+
+<p><code>bash
+$ gem install spatial_stats
+</code></p>
+
+<h2 id="usage">Usage</h2>
+
+<h3 id="weights">Weights</h3>
+
+<p>Weights define the spatial relation between members of a dataset. Contiguous operations are supported for <code>polygons</code> and <code>multipolygons</code>, and distant operations are supported for <code>points</code>.</p>
+
+<p>To compute weights, you need an <code>ActiveRecord::Relation</code> scope and a geometry field. From there, you can pick what type of weight operation to compute (<code>knn</code>, <code>queen neighbors</code>, etc.).</p>
+
+<h4 id="compute-queen-weights">Compute Queen Weights</h4>
+
+<p><code>ruby
+# County table has the following fields: avg_income: float, geom: multipolygon.
+scope = County.all
+geom_field = :geom
+weights = SpatialStats::Weights::Contiguous.queen(scope, geom_field)
+# =&gt; #&lt;SpatialStats::Weights::WeightsMatrix&gt;
+</code></p>
+
+<h4 id="compute-knn-of-centroids">Compute KNN of Centroids</h4>
+
+<p>The field being queried does not have to be defined in the schema, but could be computed during the query for scope.</p>
+
+<p>This example finds the inverse distance weighted, 5 nearest neighbors for the centroid of each county.</p>
+
+<p><code>ruby
+scope = County.all.select("*, st_centroid(geom) as geom")
+weights = SpatialStats::Weights::Distant.idw_knn(scope, :geom, 5)
+# =&gt; #&lt;SpatialStats::Weights::WeightsMatrix&gt;
+</code></p>
+
+<h4 id="define-weightsmatrix-without-query">Define WeightsMatrix without Query</h4>
+
+<p>Weight matrices can be defined by a hash that describes each key’s neighbor and weight.</p>
+
+<p>Note: Currently, the keys must be numeric.</p>
+
+<p>Example: Define WeightsMatrix and get the matrix in row_standardized format.</p>
+
+<p>```ruby
+weights = {
+    1 =&gt; [{ j_id: 2, weight: 1 }, { j_id: 4, weight: 1 }],
+    2 =&gt; [{ j_id: 1, weight: 1 }],
+    3 =&gt; [{ j_id: 4, weight: 1 }],
+    4 =&gt; [{ j_id: 1, weight: 1 }, { j_id: 3, weight: 1 }]
+}
+keys = weights.keys
+wm = SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+#  =&gt; #&lt;SpatialStats::Weights::WeightsMatrix:0x0000561e205677c0 @keys=[1, 2, 3, 4], @weights=:weight=&gt;1, :weight=&gt;1], 2=&gt;[:weight=&gt;1], 3=&gt;[:weight=&gt;1], 4=&gt;[:weight=&gt;1, :weight=&gt;1]}, @n=4&gt;</p>
+
+<p>wm.standardized
+#  =&gt; Numo::DFloat#shape=[4,4]
+#[[0, 0.5, 0, 0.5],
+# [1, 0, 0, 0],
+# [0, 0, 0, 1],
+# [0.5, 0, 0.5, 0]]
+```</p>
+
+<h3 id="lagged-variables">Lagged Variables</h3>
+
+<p>Spatially lagged variables can be computed with a 2-D n x n <code>Numo::NArray</code> and 1-D vector (<code>Array</code> or <code>Numo::NArray</code>).</p>
+
+<h4 id="compute-a-lagged-variable">Compute a Lagged Variable</h4>
+
+<p><code>ruby
+w = Numo::DFloat[[0, 0.5, 0, 0.5],
+                 [1, 0, 0, 0],
+                 [0, 0, 0, 1],
+                 [0.5, 0, 0.5, 0]]
+vec = [1, 2, 3, 4]
+lagged_var = SpatialStats::Utils::Lag.neighbor_sum(w, vec)
+# =&gt; [3.0, 1.0, 4.0, 2.0]
+</code></p>
+
+<h3 id="global-stats">Global Stats</h3>
+
+<p>Global stats compute a value for the dataset, like how clustered the observations are within the region.</p>
+
+<p>Most <code>stat</code> classes take three parameters: <code>scope</code>, <code>data_field</code>, and <code>weights</code>. All <code>stat</code> classes have the <code>stat</code> method that will compute the target statistic. These are also aliased with the common name of the statistic, such as <code>i</code> for <code>Moran</code> or <code>c</code> for <code>Geary</code>.</p>
+
+<h4 id="compute-morans-i">Compute Moran’s I</h4>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)
+moran = SpatialStats::Global::Moran.new(scope, :avg_income, weights)
+# =&gt; &lt;SpatialStats::Global::Moran&gt;</p>
+
+<p>moran.stat
+# =&gt; 0.834</p>
+
+<p>moran.i
+# =&gt; 0.834
+```</p>
+
+<h4 id="compute-morans-i-z-score">Compute Moran’s I Z-Score</h4>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)
+moran = SpatialStats::Global::Moran.new(scope, :avg_income, weights)
+# =&gt; &lt;SpatialStats::Global::Moran&gt;</p>
+
+<p>moran.z_score
+# =&gt; 3.2
+```</p>
+
+<h4 id="run-a-permutation-test-on-morans-i">Run a Permutation Test on Moran’s I</h4>
+
+<p>All stat classes have the <code>mc</code> method which takes <code>permutations</code> and <code>seed</code> as its parameters. <code>mc</code> runs a permutation test on the class and returns the psuedo p-value.</p>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)
+moran = SpatialStats::Global::Moran.new(scope, :avg_income, weights)
+# =&gt; &lt;SpatialStats::Global::Moran&gt;</p>
+
+<p>moran.mc(999, 123_456)
+# =&gt; 0.003
+```</p>
+
+<h3 id="local-stats">Local Stats</h3>
+
+<p>Local stats compute a value each observation in the dataset, like how similar its neighbors are to itself. Local stats operate similarly to global stats, except that almost every operation will return an array of length <code>n</code> where <code>n</code> is the number of observations in the dataset.</p>
+
+<p>Most <code>stat</code> classes take three parameters: <code>scope</code>, <code>data_field</code>, and <code>weights</code>. All <code>stat</code> classes have the <code>stat</code> method that will compute the target statistic. These are also aliased with the common name of the statistic, such as <code>i</code> for <code>Moran</code> or <code>c</code> for <code>Geary</code>.</p>
+
+<h4 id="compute-morans-i-1">Compute Moran’s I</h4>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)
+moran = SpatialStats::Local::Moran.new(scope, :avg_income, weights)
+# =&gt; &lt;SpatialStats::Local::Moran&gt;</p>
+
+<p>moran.stat
+# =&gt; [0.888, 0.675, 0.2345, -0.987, -0.42, …]</p>
+
+<p>moran.i
+# =&gt; [0.888, 0.675, 0.2345, -0.987, -0.42, …]
+```</p>
+
+<h4 id="compute-morans-i-z-scores">Compute Moran’s I Z-Scores</h4>
+
+<p>Note: Many classes do not have a variance or expectation method implemented and this will raise a <code>NotImplementedError</code>.</p>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)
+moran = SpatialStats::Local::Moran.new(scope, :avg_income, weights)
+# =&gt; &lt;SpatialStats::Local::Moran&gt;</p>
+
+<p>moran.z_score
+# =&gt; # =&gt; [0.65, 1.23, 0.42, 3.45, -0.34, …]
+```</p>
+
+<h4 id="run-a-permutation-test-on-morans-i-1">Run a Permutation Test on Moran’s I</h4>
+
+<p>All stat classes have the <code>mc</code> method which takes <code>permutations</code> and <code>seed</code> as its parameters. <code>mc</code> runs a permutation test on the class and returns the psuedo p-values.</p>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)
+moran = SpatialStats::Local::Moran.new(scope, :avg_income, weights)
+# =&gt; &lt;SpatialStats::Local::Moran&gt;</p>
+
+<p>moran.mc(999, 123_456)
+# =&gt; [0.24, 0.13, 0.53, 0.023, 0.65, …]
+```</p>
+
+<h2 id="contributing">Contributing</h2>
+
+<p>Once cloned, run the following commands to setup the test database.</p>
+
+<p><code>bash
+cd ./spatial_stats
+bundle install
+cd test/dummy
+rake db:create
+rake db:migrate
+</code></p>
+
+<p>If you are getting an error, you may need to set the following environment variables.</p>
+
+<p><code>bash
+$PGUSER # default "postgres"
+$PGPASSWORD # default ""
+$PGHOST # default "127.0.0.1"
+$PGPORT # default "5432"
+$PGDATABASE # default "spatial_stats_test"
+</code></p>
+
+<p>If the dummy app is setup correctly, run the following:</p>
+
+<p><code>bash
+cd ../..
+rake
+</code></p>
+
+<p>This will run the tests. If they all pass, then your environment is setup correctly.</p>
+
+<p>Note: It is recommended to have GEOS installed and linked to RGeo. You can test this by running the following:</p>
+
+<p>```bash
+cd test/dummy
+rails c</p>
+
+<p>RGeo::Geos.supported?
+# =&gt; true
+```</p>
+
+<h2 id="todo">TODO</h2>
+
+<ul>
+  <li>~~Memoize expensive functions within classes~~</li>
+  <li>~~Make star a parameter to getis-ord class~~</li>
+  <li>~~Add examples/usage to docs~~</li>
+  <li>~~Create RDocs~~</li>
+  <li>Refactor Global Moran and BVMoran</li>
+  <li>Support non-numeric keys in WeightsMatrix/General refactor</li>
+  <li>Write SparseMatrix C ext</li>
+</ul>
+
+<h2 id="future-work">Future Work</h2>
+
+<h4 id="general">General</h4>
+
+<ul>
+  <li>~~Refactor stats to inherit an abstract class.~~</li>
+  <li>Change WeightsMatrix class and Stat classes to utilize sparse matrix methods.</li>
+  <li>Split into two separate gems spatial_stats and spatial_stats-activerecord</li>
+</ul>
+
+<h4 id="weights-1">Weights</h4>
+
+<ul>
+  <li>Add Kernel based weighting</li>
+</ul>
+
+<h4 id="utils">Utils</h4>
+
+<ul>
+  <li>Rate smoothing</li>
+  <li>Bayes smoothing</li>
+</ul>
+
+<h3 id="global">Global</h3>
+
+<ul>
+  <li>Geary class</li>
+  <li>GetisOrd class</li>
+</ul>
+
+<h4 id="local">Local</h4>
+
+<ul>
+  <li>Join Count Statistic</li>
+</ul>
+
+<h3 id="ppa">PPA</h3>
+
+<ul>
+  <li>Add descriptive stat methods for point clusters.</li>
+</ul>
+
+<h2 id="license">License</h2>
+
+<p>The gem is available as open source under the terms of the <a href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+</div></div>
+
+      <div id="footer">
+  Generated on Fri Apr  3 09:41:51 2020 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.24 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>
