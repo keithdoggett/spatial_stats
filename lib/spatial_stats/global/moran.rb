@@ -29,7 +29,6 @@ module SpatialStats
         # compute's Moran's I. numerator is sum of zi * spatial lag of zi
         # denominator is sum of zi**2.
         # have to use row-standardized weights
-        w = @weights.standardized
         z_lag = SpatialStats::Utils::Lag.neighbor_sum(w, z)
         numerator = 0
         z.each_with_index do |zi, j|
@@ -49,7 +48,7 @@ module SpatialStats
       # @return [Float]
       def expectation
         # -1/(n-1)
-        -1.0 / (@weights.n - 1)
+        -1.0 / (weights.n - 1)
       end
 
       ##
@@ -58,19 +57,18 @@ module SpatialStats
       #
       # @return [Float]
       def variance
-        n = @weights.n
-        wij = @weights.full
-        w = wij.sum
+        n = weights.n
+        w_sum = w.sum
         e = expectation
 
-        s1 = s1_calc(n, wij)
-        s2 = s2_calc(n, wij)
+        s1 = s1_calc(n, w)
+        s2 = s2_calc(n, w)
         s3 = s3_calc(n, z)
 
-        s4 = (n**2 - 3 * n + 3) * s1 - n * s2 + 3 * (w**2)
-        s5 = (n**2 - n) * s1 - 2 * n * s2 + 6 * (w**2)
+        s4 = (n**2 - 3 * n + 3) * s1 - n * s2 + 3 * (w_sum**2)
+        s5 = (n**2 - n) * s1 - 2 * n * s2 + 6 * (w_sum**2)
 
-        var_left = (n * s4 - s3 * s5) / ((n - 1) * (n - 2) * (n - 3) * w**2)
+        var_left = (n * s4 - s3 * s5) / ((n - 1) * (n - 2) * (n - 3) * w_sum**2)
         var_right = e**2
         var_left - var_right
       end
@@ -97,26 +95,17 @@ module SpatialStats
       # @return [Array]
       def x
         @x ||= SpatialStats::Queries::Variables.query_field(@scope, @field)
+                                               .standardize
       end
-
-      # TODO: remove these last 2 methods and just standardize x.
-      ##
-      # Mean of x
-      #
-      # @return [Float]
-      def zbar
-        x.sum / x.size
-      end
-
-      ##
-      # Array of xi - zbar for i: [0:n-1]
-      #
-      # @return [Array]
-      def z
-        x.map { |val| val - zbar }
-      end
+      alias z x
 
       private
+
+      def stat_mc(perms)
+        z_arr = Numo::DFloat.cast(z)
+        lag = w.dot(perms.transpose)
+        z_arr.dot(lag) / (z_arr**2).sum
+      end
 
       def s3_calc(n, zs)
         numerator = (1.0 / n) * zs.sum { |v| v**4 }

@@ -45,21 +45,21 @@ module SpatialStats
         permutations.times do
           shuffles << x.shuffle(random: rng)
         end
+        shuffles = Numo::DFloat.cast(shuffles)
+
         # r is the number of equal to or more extreme samples
         # one sided
-        stat_orig = stat
-        r = 0
-        shuffles.each do |shuffle|
-          klass = self.class.new(@scope, @field, @weights)
-          klass.x = shuffle
+        stat_orig = stat.round(5)
+        # r = 0
 
-          # https://geodacenter.github.io/glossary.html#ppvalue
-          if stat_orig.positive?
-            r += 1 if klass.stat >= stat_orig
-          else
-            r += 1 if klass.stat <= stat_orig
-          end
-        end
+        # compute new stat values
+        stat_new = stat_mc(shuffles)
+
+        r = if stat_orig.positive?
+              (stat_new >= stat_orig).count
+            else
+              (stat_new <= stat_orig).count
+            end
 
         (r + 1.0) / (permutations + 1.0)
       end
@@ -71,26 +71,30 @@ module SpatialStats
         permutations.times do
           shuffles << y.shuffle(random: rng)
         end
+        shuffles = Numo::DFloat.cast(shuffles)
 
         # r is the number of equal to or more extreme samples
-        stat_orig = stat
-        r = 0
-        shuffles.each do |shuffle|
-          klass = self.class.new(@scope, @x_field, @y_field, @weights)
-          klass.x = x
-          klass.y = shuffle
+        stat_orig = stat.round(5)
+        stat_new = stat_mc(shuffles)
 
-          if stat_orig.positive?
-            r += 1 if klass.stat >= stat_orig
-          else
-            r += 1 if klass.stat <= stat_orig
-          end
-        end
+        r = if stat_orig.positive?
+              (stat_new >= stat_orig).count
+            else
+              (stat_new <= stat_orig).count
+            end
 
         (r + 1.0) / (permutations + 1.0)
       end
 
       private
+
+      def stat_mc(_shuffles)
+        raise NotImplementedError, 'private method stat_mc not defined'
+      end
+
+      def w
+        @w ||= weights.standardized
+      end
 
       def gen_rng(seed)
         if seed

@@ -72,7 +72,7 @@ class GlobalBivariateMoranTest < ActiveSupport::TestCase
 
     seed = 123_456_789
     p_val = moran.mc(999, seed)
-    expected = 0.586
+    expected = 0.608
     assert_in_delta(expected, p_val, 0.005)
   end
 end
