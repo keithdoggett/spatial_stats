@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    spatial_stats (0.1.1)
+    spatial_stats (0.2.1)
       numo-narray (~> 0.9.1)
       rails (~> 6.0.0)
 
@@ -89,8 +89,6 @@ GEM
     minitest (5.14.0)
     nio4r (2.5.2)
     nokogiri (1.10.9)
-      mini_portile2 (~> 2.4.0)
-    nokogiri (1.10.9-x86-mingw32)
       mini_portile2 (~> 2.4.0)
     numo-narray (0.9.1.6)
     pg (1.2.3)
