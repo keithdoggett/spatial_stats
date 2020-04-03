@@ -1,9 +1,20 @@
 # frozen_string_literal: true
 
-# https://geodacenter.github.io/workbook/5b_global_adv/lab5b.html
 module SpatialStats
   module Global
+    ##
+    # BivariateMoran computes the correlation between a variable x and
+    # a spatially lagged variable y.
     class BivariateMoran < Stat
+      ##
+      # A new instance of BivariateMoran
+      #
+      # @param [ActiveRecord::Relation] scope
+      # @param [Symbol, String] x_field to query from scope
+      # @param [Symbol, String] y_field to query from scope
+      # @param [WeightsMatrix] weights to define relationship between observations in scope
+      #
+      # @return [BivariateMoran]
       def initialize(scope, x_field, y_field, weights)
         @scope = scope
         @x_field = x_field
@@ -12,6 +23,11 @@ module SpatialStats
       end
       attr_writer :x, :y
 
+      ##
+      # Computes the global spatial correlation of x against spatially lagged
+      # y.
+      #
+      # @return [Float]
       def stat
         w = @weights.standardized
         y_lag = SpatialStats::Utils::Lag.neighbor_sum(w, y)
@@ -25,12 +41,20 @@ module SpatialStats
       end
       alias i stat
 
+      ##
+      # The expected value of +#stat+.
+      # @see https://en.wikipedia.org/wiki/Moran%27s_I#Expected_value
+      # @return [Float]
       def expectation
         -1.0 / (@weights.n - 1)
       end
 
+      ##
+      # The variance of the bivariate spatial correlation.
+      # @see https://en.wikipedia.org/wiki/Moran%27s_I#Expected_value
+      #
+      # @return [Float]
       def variance
-        # https://en.wikipedia.org/wiki/Moran%27s_I#Expected_value
         n = @weights.n
         wij = @weights.full
         w = wij.sum
@@ -48,16 +72,35 @@ module SpatialStats
         var_left - var_right
       end
 
+      ##
+      # Permutation test to determine a pseudo p-value of the computed I stat.
+      # Shuffles y values while holding x constant and recomputing I for each
+      # variation, then compares that I value to the computed one.
+      # The ratio of more extreme values to permutations is returned.
+      #
+      # @see https://geodacenter.github.io/glossary.html#perm
+      #
+      # @param [Integer] permutations to run. Last digit should be 9 to produce round numbers.
+      # @param [Integer] seed used in random number generator for shuffles.
+      #
+      # @return [Float]
       def mc(permutations = 99, seed = nil)
-        # call super monte carlo for multivariate
         mc_bv(permutations, seed)
       end
 
+      ##
+      # Standardized variables queried from +x_field+.
+      #
+      # @return [Array]
       def x
         @x ||= SpatialStats::Queries::Variables.query_field(@scope, @x_field)
                                                .standardize
       end
 
+      ##
+      # Standardized variables queried from +y_field+.
+      #
+      # @return [Array]
       def y
         @y ||= SpatialStats::Queries::Variables.query_field(@scope, @y_field)
                                                .standardize

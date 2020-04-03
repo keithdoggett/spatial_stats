@@ -2,14 +2,31 @@
 
 module SpatialStats
   module Queries
-    # This provides PostGIS queries for calculating weights/neighbors
-    # of spatial data sets
+    ##
+    # Weights includes methods for querying a scope using PostGIS sql methods
+    # to determine neighbors and weights based on different weighting
+    # schemes/formulas.
     module Weights
-      def self.idw_knn(scope, column, n, alpha)
+      ##
+      # Compute inverse distance weighted, k nearest neighbors weights
+      # for a given scope and geometry.
+      #
+      # Combines knn and idw weightings. Each observation will have
+      # k neighbors, but the weights will be calculated by 1/(d**alpha).
+      #
+      # Only works for geometry types that implement ST_Distance.
+      #
+      # @param [ActiveRecord::Relation] scope you want to query
+      # @param [Symbol, String] column that contains the geometry
+      # @param [Integer] k neighbors to find
+      # @param [Integer] alpha number used in inverse calculations (usually 1 or 2)
+      #
+      # @return [Hash]
+      def self.idw_knn(scope, column, k, alpha = 1)
         klass = scope.klass
         column = ActiveRecord::Base.connection.quote_column_name(column)
         primary_key = klass.quoted_primary_key
-        neighbors = klass.find_by_sql([<<-SQL, scope: scope, n: n])
+        neighbors = klass.find_by_sql([<<-SQL, scope: scope, k: k])
           WITH scope as (:scope)
           SELECT neighbors.*
           FROM scope AS a
@@ -19,7 +36,7 @@ module SpatialStats
             FROM scope as b
             WHERE a.#{primary_key} <> b.#{primary_key}
             ORDER BY a.#{column} <-> b.#{column}
-            LIMIT :n
+            LIMIT :k
           ) AS neighbors
         SQL
 
@@ -41,6 +58,21 @@ module SpatialStats
         end
       end
 
+      ##
+      # Compute inverse distance weighted, band limited weights
+      # for a given scope and geometry.
+      #
+      # Combines distance_band and idw weightings. Each observation will have
+      # neighbers in the bandwidth, but the weights will be calculated by 1/(d**alpha).
+      #
+      # Only works for geometry types that implement ST_Distance and ST_DWithin.
+      #
+      # @param [ActiveRecord::Relation] scope you want to query
+      # @param [Symbol, String] column that contains the geometry
+      # @param [Numeric] bandwidth to find neighbors in
+      # @param [Integer] alpha number used in inverse calculations (usually 1 or 2)
+      #
+      # @return [Hash]
       def self.idw_band(scope, column, bandwidth, alpha = 1)
         klass = scope.klass
         column = ActiveRecord::Base.connection.quote_column_name(column)
@@ -75,11 +107,19 @@ module SpatialStats
         end
       end
 
-      def self.knn(scope, column, n)
+      ##
+      # Compute k nearest neighbor weights for a given scope.
+      #
+      # @param [ActiveRecord::Relation] scope you want to query
+      # @param [Symbol, String] column that contains the geometry
+      # @param [Integer] k neighbors to find
+      #
+      # @return [Hash]
+      def self.knn(scope, column, k)
         klass = scope.klass
         column = ActiveRecord::Base.connection.quote_column_name(column)
         primary_key = klass.quoted_primary_key
-        klass.find_by_sql([<<-SQL, scope: scope, n: n])
+        klass.find_by_sql([<<-SQL, scope: scope, k: k])
           WITH scope as (:scope)
           SELECT neighbors.*
           FROM scope AS a
@@ -88,11 +128,21 @@ module SpatialStats
             FROM scope as b
             WHERE a.#{primary_key} <> b.#{primary_key}
             ORDER BY a.#{column} <-> b.#{column}
-            LIMIT :n
+            LIMIT :k
           ) AS neighbors
         SQL
       end
 
+      ##
+      # Compute distance band weights for a given scope. Identifies neighbors
+      # as other observations in scope that are within the distance band
+      # from the observation.
+      #
+      # @param [ActiveRecord::Relation] scope you want to query
+      # @param [Symbol, String] column that contains the geometry
+      # @param [Numeric] bandwidth to find neighbors in
+      #
+      # @return [Hash]
       def self.distance_band_neighbors(scope, column, bandwidth)
         klass = scope.klass
         column = ActiveRecord::Base.connection.quote_column_name(column)
@@ -109,15 +159,47 @@ module SpatialStats
         SQL
       end
 
-      # DE-9IM queen contiguiety = F***T****
+      ##
+      # Compute queen contiguity weights for a given scope. Queen
+      # contiguity weights are defined by geometries sharing an edge
+      # or vertex.
+      #
+      # DE-9IM pattern = +F***T****+
+      #
+      # @param [ActiveRecord::Relation] scope you want to query
+      # @param [Symbol, String] column that contains the geometry
+      #
+      # @return [Hash]
       def self.queen_contiguity_neighbors(scope, column)
         _contiguity_neighbors(scope, column, 'F***T****')
       end
 
+      ##
+      # Compute rook contiguity weights for a given scope. Rook
+      # contiguity weights are defined by geometries sharing an edge.
+      #
+      # DE-9IM pattern = +'F***1****'+
+      #
+      # @param [ActiveRecord::Relation] scope you want to query
+      # @param [Symbol, String] column that contains the geometry
+      #
+      # @return [Hash]
       def self.rook_contiguity_neighbors(scope, column)
         _contiguity_neighbors(scope, column, 'F***1****')
       end
 
+      ##
+      # Generic function to compute contiguity neighbor weights for a
+      # given scope. Takes any valid DE-9IM pattern and computes the
+      # neighbors based off of that.
+      #
+      # @see https://en.wikipedia.org/wiki/DE-9IM
+      #
+      # @param [ActiveRecord::Relation] scope you want to query
+      # @param [Symbol, String] column that contains the geometry
+      # @param [String] pattern to describe neighbor relation
+      #
+      # @return [Hash]
       def self._contiguity_neighbors(scope, column, pattern)
         klass = scope.klass
         column = ActiveRecord::Base.connection.quote_column_name(column)

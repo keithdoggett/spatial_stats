@@ -2,6 +2,11 @@
 
 module SpatialStats
   module Local
+    ##
+    # Stat is the abstract base class for local stats.
+    # It defines the methods that are common between all classes
+    # and will raise a NotImplementedError on those that are specific
+    # for each type of statistic.
     class Stat
       # Base class for local stats
       def initialize(scope, field, weights)
@@ -15,10 +20,6 @@ module SpatialStats
         raise NotImplementedError, 'method stat not defined'
       end
 
-      def stat_i
-        raise NotImplementedError, 'method stat_i not defined'
-      end
-
       def expectation
         raise NotImplementedError, 'method expectation not implemented'
       end
@@ -27,6 +28,10 @@ module SpatialStats
         raise NotImplementedError, 'method variance not implemented'
       end
 
+      ##
+      # Z-score for each observation of the statistic.
+      #
+      # @return [Array] of the number of deviations from the mean
       def z_score
         numerators = stat.map { |v| v - expectation }
         denominators = variance.map { |v| Math.sqrt(v) }
@@ -35,10 +40,23 @@ module SpatialStats
         end
       end
 
-      def mc_i
-        raise NotImplementedError, 'method mc_i not defined'
-      end
-
+      ##
+      # Conditional randomization algorithm used in permutation testing.
+      # Outputs an array of length n of Numo::DFloat matrices of
+      # size m x num_neighbors. Where m is the number of permutations and
+      # num_neighbors is the number of neighbors for that observation.
+      #
+      # The values are randomly permutated values from arr that will act
+      # as its neighbors for that permutation.
+      #
+      # This is super important because most weight matrices are very
+      # sparse so the amount of shuffling/multiplication that is done
+      # is reduced drastically.
+      #
+      # @see https://github.com/pysal/esda/blob/master/esda/moran.py#L893
+      #
+      # @return [Array] of Numo::Narray matrices
+      #
       def crand(arr, permutations, rng)
         # basing this off the ESDA method
         # need to get k for max_neighbors
@@ -75,6 +93,18 @@ module SpatialStats
         end
       end
 
+      ##
+      # Permutation test to determine a pseudo p-values of the +#stat+ method.
+      # Shuffles x values, recomputes +#stat+ for each variation, then compares
+      # to the computed one. The ratio of more extreme values to
+      # permutations is returned for each observation.
+      #
+      # @see https://geodacenter.github.io/glossary.html#perm
+      #
+      # @param [Integer] permutations to run. Last digit should be 9 to produce round numbers.
+      # @param [Integer] seed used in random number generator for shuffles.
+      #
+      # @return [Array] of p-values
       def mc(permutations = 99, seed = nil)
         # For local tests, we need to shuffle the values
         # but for each item, hold its value in place and shuffle
@@ -110,6 +140,18 @@ module SpatialStats
         end
       end
 
+      ##
+      # Permutation test to determine a pseudo p-values of the +#stat+ method.
+      # Shuffles y values, hold x values, recomputes +#stat+ for each variation,
+      # then compares to the computed one. The ratio of more extreme values to
+      # permutations is returned for each observation.
+      #
+      # @see https://geodacenter.github.io/glossary.html#perm
+      #
+      # @param [Integer] permutations to run. Last digit should be 9 to produce round numbers.
+      # @param [Integer] seed used in random number generator for shuffles.
+      #
+      # @return [Array] of p-values
       def mc_bv(permutations, seed)
         rng = gen_rng(seed)
         shuffles = crand(y, permutations, rng)
@@ -140,6 +182,22 @@ module SpatialStats
         end
       end
 
+      ##
+      # Determines what quadrant an observation is in. Based on its value
+      # compared to its neighbors. This does not work for all stats, since
+      # it requires that values be negative.
+      #
+      # In a standardized array of z, high values are values greater than 0
+      # and it's neighbors are determined by the spatial lag and if that is
+      # positive then it's neighbors would be high, low otherwise.
+      #
+      # Quadrants are:
+      # [HH] a high value surrounded by other high values
+      # [LH] a low value surrounded by high values
+      # [LL] a low value surrounded by low values
+      # [HL] a high value surrounded by low values
+      #
+      # @return [Array] of labels
       def quads
         # https://github.com/pysal/esda/blob/master/esda/moran.py#L925
         w = @weights.full
@@ -164,6 +222,14 @@ module SpatialStats
       end
 
       private
+
+      def stat_i
+        raise NotImplementedError, 'method stat_i not defined'
+      end
+
+      def mc_i
+        raise NotImplementedError, 'method mc_i not defined'
+      end
 
       def w
         weights.standardized

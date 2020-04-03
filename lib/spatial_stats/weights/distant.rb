@@ -2,7 +2,18 @@
 
 module SpatialStats
   module Weights
+    # Distant weights module includes methods that provide an interface to
+    # distance-based weights queries and formats the result properly to utilize
+    # a weights matrix.
     module Distant
+      ##
+      # Compute distance band weights matrix for a scope.
+      #
+      # @param [ActiveRecord::Relation] scope to query
+      # @param [Symbol, String] field with geometry in it
+      # @param [Numeric] bandwidth of distance band
+      #
+      # @return [WeightsMatrix]
       def self.distance_band(scope, field, bandwidth)
         p_key = scope.primary_key
         keys = scope.pluck(p_key).sort
@@ -21,12 +32,20 @@ module SpatialStats
         SpatialStats::Weights::WeightsMatrix.new(keys, weights)
       end
 
-      def self.knn(scope, field, n)
+      ##
+      # Compute distance band weights matrix for a scope.
+      #
+      # @param [ActiveRecord::Relation] scope to query
+      # @param [Symbol, String] field with geometry in it
+      # @param [Integer] k neighbors to find
+      #
+      # @return [WeightsMatrix]
+      def self.knn(scope, field, k)
         p_key = scope.primary_key
         keys = scope.pluck(p_key).sort
 
         neighbors = SpatialStats::Queries::Weights
-                    .knn(scope, field, n)
+                    .knn(scope, field, k)
 
         neighbors = neighbors.group_by(&:i_id)
         weights = neighbors.transform_values do |value|
@@ -39,6 +58,15 @@ module SpatialStats
         SpatialStats::Weights::WeightsMatrix.new(keys, weights)
       end
 
+      ##
+      # Compute idw, distance band weights matrix for a scope.
+      #
+      # @param [ActiveRecord::Relation] scope to query
+      # @param [Symbol, String] field with geometry in it
+      # @param [Numeric] bandwidth of distance band
+      # @param [Numeric] alpha used in weighting calculation (usually 1 or 2)
+      #
+      # @return [WeightsMatrix]
       def self.idw_band(scope, field, bandwidth, alpha = 1)
         p_key = scope.primary_key
         keys = scope.pluck(p_key).sort
@@ -56,12 +84,21 @@ module SpatialStats
         SpatialStats::Weights::WeightsMatrix.new(keys, weights)
       end
 
-      def self.idw_knn(scope, field, n, alpha = 1)
+      ##
+      # Compute idw, knn weights matrix for a scope.
+      #
+      # @param [ActiveRecord::Relation] scope to query
+      # @param [Symbol, String] field with geometry in it
+      # @param [Integer] k neighbors to find
+      # @param [Numeric] alpha used in weighting calculation (usually 1 or 2)
+      #
+      # @return [WeightsMatrix]
+      def self.idw_knn(scope, field, k, alpha = 1)
         p_key = scope.primary_key
         keys = scope.pluck(p_key).sort
 
         neighbors = SpatialStats::Queries::Weights
-                    .idw_knn(scope, field, n, alpha)
+                    .idw_knn(scope, field, k, alpha)
         neighbors = neighbors.group_by { |pair| pair[:i_id] }
 
         # only keep j_id and weight

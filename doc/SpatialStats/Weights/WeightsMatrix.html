@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: SpatialStats::Weights::WeightsMatrix
+  
+    &mdash; Documentation by YARD 0.9.24
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "SpatialStats::Weights::WeightsMatrix";
+  relpath = '../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../_index.html">Index (W)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Weights.html" title="SpatialStats::Weights (module)">Weights</a></span></span>
+     &raquo; 
+    <span class="title">WeightsMatrix</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: SpatialStats::Weights::WeightsMatrix
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">SpatialStats::Weights::WeightsMatrix</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/spatial_stats/weights/weights_matrix.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>WeightsMatrix class is used to store spatial weights and related information in various formats.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#keys-instance_method" title="#keys (instance method)">#<strong>keys</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute keys.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#n-instance_method" title="#n (instance method)">#<strong>n</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute n.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#weights-instance_method" title="#weights (instance method)">#<strong>weights</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute weights.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#full-instance_method" title="#full (instance method)">#<strong>full</strong>  &#x21d2; Numo::DFloat </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the n x n Numo::Narray of the weights hash.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(keys, weights)  &#x21d2; WeightsMatrix </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of WeightsMatrix.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#standardized-instance_method" title="#standardized (instance method)">#<strong>standardized</strong>  &#x21d2; Numo::DFloat </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Row standardized version of <code>#full</code>.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(keys, weights)  &#x21d2; <tt><span class='object_link'><a href="" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>A new instance of WeightsMatrix</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>keys</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>ordered list of keys used in weights</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>weights</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>hash of format <tt>{key: [{j_id: neighbor_key, weight: 1}]}</tt> that describe the relations between neighbors</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18
+19
+20
+21
+22</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/weights_matrix.rb', line 18</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_keys'>keys</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
+  <span class='ivar'>@keys</span> <span class='op'>=</span> <span class='id identifier rubyid_keys'>keys</span>
+  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span>
+  <span class='ivar'>@n</span> <span class='op'>=</span> <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="keys=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="keys-instance_method">
+  
+    #<strong>keys</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute keys.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/weights_matrix.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_keys'>keys</span>
+  <span class='ivar'>@keys</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="n=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="n-instance_method">
+  
+    #<strong>n</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute n.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/weights_matrix.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_n'>n</span>
+  <span class='ivar'>@n</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="weights=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="weights-instance_method">
+  
+    #<strong>weights</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute weights.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/weights_matrix.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_weights'>weights</span>
+  <span class='ivar'>@weights</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="full-instance_method">
+  
+    #<strong>full</strong>  &#x21d2; <tt>Numo::DFloat</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the n x n Numo::Narray of the weights hash.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code><span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='int'>1</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='lbrace'>{</span><span class='label'>j_id:</span> <span class='int'>2</span><span class='comma'>,</span> <span class='label'>weight:</span> <span class='int'>1</span><span class='rbrace'>}</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>2</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='lbrace'>{</span><span class='label'>j_id:</span> <span class='int'>1</span><span class='comma'>,</span> <span class='label'>weight:</span> <span class='int'>1</span><span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span><span class='label'>j_id:</span> <span class='int'>3</span><span class='comma'>,</span> <span class='label'>weight:</span> <span class='int'>1</span><span class='rbrace'>}</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>3</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='lbrace'>{</span><span class='label'>j_id:</span> <span class='int'>2</span><span class='comma'>,</span> <span class='label'>weight:</span> <span class='int'>1</span><span class='rbrace'>}</span><span class='rbracket'>]</span><span class='rbrace'>}</span>
+<span class='id identifier rubyid_wm'>wm</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="SpatialStats::Weights::WeightsMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_hash'>hash</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wm'>wm</span><span class='period'>.</span><span class='id identifier rubyid_full'>full</span>
+<span class='comment'># =&gt; Numo::DFloat[[0, 1, 0], [1, 0, 1], [0, 1, 0]]</span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Numo::DFloat</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/weights_matrix.rb', line 36</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_full'>full</span>
+  <span class='comment'># returns a square matrix Wij using @keys as the order of items
+</span>  <span class='ivar'>@full</span> <span class='op'>||=</span> <span class='kw'>begin</span>
+    <span class='id identifier rubyid_rows'>rows</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+    <span class='ivar'>@keys</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+      <span class='comment'># iterate through each key to get the data for the row
+</span>      <span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='ivar'>@keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_j'>j</span><span class='op'>|</span>
+        <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='ivar'>@weights</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_neighbor'>neighbor</span><span class='op'>|</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:j_id</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='id identifier rubyid_j'>j</span> <span class='rbrace'>}</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_match'>match</span>
+          <span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span>
+        <span class='kw'>else</span>
+          <span class='int'>0</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_rows'>rows</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_row'>row</span>
+    <span class='kw'>end</span>
+
+    <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_rows'>rows</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="standardized-instance_method">
+  
+    #<strong>standardized</strong>  &#x21d2; <tt>Numo::DFloat</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Row standardized version of <code>#full</code></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Numo::DFloat</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+62
+63
+64</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/weights_matrix.rb', line 62</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_standardized'>standardized</span>
+  <span class='ivar'>@standardized</span> <span class='op'>||=</span> <span class='id identifier rubyid_full'>full</span><span class='period'>.</span><span class='id identifier rubyid_row_standardized'>row_standardized</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Fri Apr  3 09:34:48 2020 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.24 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>

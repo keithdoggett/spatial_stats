@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: SpatialStats::Queries::Weights
+  
+    &mdash; Documentation by YARD 0.9.24
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "SpatialStats::Queries::Weights";
+  relpath = '../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../_index.html">Index (W)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span>
+     &raquo; 
+    <span class="title">Weights</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: SpatialStats::Queries::Weights
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/spatial_stats/queries/weights.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Weights includes methods for querying a scope using PostGIS sql methods to determine neighbors and weights based on different weighting schemes/formulas.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#_contiguity_neighbors-class_method" title="_contiguity_neighbors (class method)">.<strong>_contiguity_neighbors</strong>(scope, column, pattern)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Generic function to compute contiguity neighbor weights for a given scope.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#distance_band_neighbors-class_method" title="distance_band_neighbors (class method)">.<strong>distance_band_neighbors</strong>(scope, column, bandwidth)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute distance band weights for a given scope.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#idw_band-class_method" title="idw_band (class method)">.<strong>idw_band</strong>(scope, column, bandwidth, alpha = 1)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute inverse distance weighted, band limited weights for a given scope and geometry.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#idw_knn-class_method" title="idw_knn (class method)">.<strong>idw_knn</strong>(scope, column, k, alpha = 1)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute inverse distance weighted, k nearest neighbors weights for a given scope and geometry.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#knn-class_method" title="knn (class method)">.<strong>knn</strong>(scope, column, k)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute k nearest neighbor weights for a given scope.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#queen_contiguity_neighbors-class_method" title="queen_contiguity_neighbors (class method)">.<strong>queen_contiguity_neighbors</strong>(scope, column)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute queen contiguity weights for a given scope.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#rook_contiguity_neighbors-class_method" title="rook_contiguity_neighbors (class method)">.<strong>rook_contiguity_neighbors</strong>(scope, column)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute rook contiguity weights for a given scope.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="_contiguity_neighbors-class_method">
+  
+    .<strong>_contiguity_neighbors</strong>(scope, column, pattern)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Generic function to compute contiguity neighbor weights for a given scope. Takes any valid DE-9IM pattern and computes the neighbors based off of that.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>scope</span>
+      
+      
+        <span class='type'>(<tt>ActiveRecord::Relation</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>you want to query</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>column</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>that contains the geometry</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pattern</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>to describe neighbor relation</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="https://en.wikipedia.org/wiki/DE-9IM" target="_parent" title="https://en.wikipedia.org/wiki/DE-9IM">https://en.wikipedia.org/wiki/DE-9IM</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/queries/weights.rb', line 203</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid__contiguity_neighbors'>_contiguity_neighbors</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='id identifier rubyid_pattern'>pattern</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_klass'>klass</span>
+  <span class='id identifier rubyid_column'>column</span> <span class='op'>=</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span><span class='period'>.</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_quote_column_name'>quote_column_name</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_primary_key'>primary_key</span> <span class='op'>=</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_quoted_primary_key'>quoted_primary_key</span>
+  <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_find_by_sql'>find_by_sql</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='heredoc_beg'>&lt;&lt;-SQL</span><span class='comma'>,</span> <span class='label'>scope:</span> <span class='id identifier rubyid_scope'>scope</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='tstring_content'>    WITH neighbors AS (
+      WITH scope AS (:scope)
+      SELECT a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as i_id, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as j_id,
+      ST_RELATE(a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>, \&#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_pattern'>pattern</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&#39;) as is_neighbor
+      FROM scope as a, scope as b
+      ORDER BY i_id
+    )
+    SELECT * FROM neighbors WHERE is_neighbor = &#39;t&#39;
+</span><span class='heredoc_end'>  SQL
+</span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="distance_band_neighbors-class_method">
+  
+    .<strong>distance_band_neighbors</strong>(scope, column, bandwidth)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute distance band weights for a given scope. Identifies neighbors as other observations in scope that are within the distance band from the observation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>scope</span>
+      
+      
+        <span class='type'>(<tt>ActiveRecord::Relation</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>you want to query</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>column</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>that contains the geometry</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>bandwidth</span>
+      
+      
+        <span class='type'>(<tt>Numeric</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>to find neighbors in</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/queries/weights.rb', line 146</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_distance_band_neighbors'>distance_band_neighbors</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='id identifier rubyid_bandwidth'>bandwidth</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_klass'>klass</span>
+  <span class='id identifier rubyid_column'>column</span> <span class='op'>=</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span><span class='period'>.</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_quote_column_name'>quote_column_name</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_primary_key'>primary_key</span> <span class='op'>=</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_quoted_primary_key'>quoted_primary_key</span>
+  <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_find_by_sql'>find_by_sql</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='heredoc_beg'>&lt;&lt;-SQL</span><span class='comma'>,</span> <span class='label'>scope:</span> <span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='label'>distance:</span> <span class='id identifier rubyid_bandwidth'>bandwidth</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='tstring_content'>    WITH neighbors AS (
+      WITH scope AS (:scope)
+      SELECT a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as i_id, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as j_id,
+      ST_DWithin(a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>, :distance) as is_neighbor
+      FROM scope as a, scope as b
+      ORDER BY i_id
+    )
+    SELECT * FROM neighbors WHERE is_neighbor = &#39;t&#39; AND i_id &lt;&gt; j_id
+</span><span class='heredoc_end'>  SQL
+</span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="idw_band-class_method">
+  
+    .<strong>idw_band</strong>(scope, column, bandwidth, alpha = 1)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute inverse distance weighted, band limited weights for a given scope and geometry.</p>
+
+<p>Combines distance_band and idw weightings. Each observation will have neighbers in the bandwidth, but the weights will be calculated by 1/(d**alpha).</p>
+
+<p>Only works for geometry types that implement ST_Distance and ST_DWithin.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>scope</span>
+      
+      
+        <span class='type'>(<tt>ActiveRecord::Relation</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>you want to query</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>column</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>that contains the geometry</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>bandwidth</span>
+      
+      
+        <span class='type'>(<tt>Numeric</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>to find neighbors in</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>alpha</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>1</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number used in inverse calculations (usually 1 or 2)</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/queries/weights.rb', line 76</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_idw_band'>idw_band</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='id identifier rubyid_bandwidth'>bandwidth</span><span class='comma'>,</span> <span class='id identifier rubyid_alpha'>alpha</span> <span class='op'>=</span> <span class='int'>1</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_klass'>klass</span>
+  <span class='id identifier rubyid_column'>column</span> <span class='op'>=</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span><span class='period'>.</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_quote_column_name'>quote_column_name</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_primary_key'>primary_key</span> <span class='op'>=</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_quoted_primary_key'>quoted_primary_key</span>
+  <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_find_by_sql'>find_by_sql</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='heredoc_beg'>&lt;&lt;-SQL</span><span class='comma'>,</span> <span class='label'>scope:</span> <span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='label'>bandwidth:</span> <span class='id identifier rubyid_bandwidth'>bandwidth</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='tstring_content'>    WITH neighbors AS (
+      WITH scope AS (:scope)
+      SELECT a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as i_id, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as j_id,
+      ST_DWithin(a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>, :bandwidth) as is_neighbor,
+      ST_Distance(a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>) as distance
+      FROM scope as a, scope as b
+      ORDER BY i_id
+    )
+    SELECT * FROM neighbors WHERE is_neighbor = &#39;t&#39; AND i_id &lt;&gt; j_id
+</span><span class='heredoc_end'>  SQL
+</span>
+  <span class='comment'># if the lowest distance is &lt;1, then we need to scale
+</span>  <span class='comment'># every distance by the factor that makes the lowest 1
+</span>  <span class='id identifier rubyid_min_dist'>min_dist</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:distance</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span>
+  <span class='id identifier rubyid_scale'>scale</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_min_dist'>min_dist</span> <span class='op'>&lt;</span> <span class='int'>1</span>
+            <span class='int'>1</span> <span class='op'>/</span> <span class='id identifier rubyid_min_dist'>min_dist</span>
+          <span class='kw'>else</span>
+            <span class='int'>1</span>
+          <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_neighbor'>neighbor</span><span class='op'>|</span>
+    <span class='comment'># formula is 1/(d^alpha)
+</span>    <span class='id identifier rubyid_weight'>weight</span> <span class='op'>=</span> <span class='float'>1.0</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_scale'>scale</span> <span class='op'>*</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='period'>.</span><span class='id identifier rubyid_distance'>distance</span><span class='rparen'>)</span><span class='op'>**</span><span class='id identifier rubyid_alpha'>alpha</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='period'>.</span><span class='id identifier rubyid_as_json'>as_json</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+    <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_weight'>weight</span>
+    <span class='id identifier rubyid_hash'>hash</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="idw_knn-class_method">
+  
+    .<strong>idw_knn</strong>(scope, column, k, alpha = 1)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute inverse distance weighted, k nearest neighbors weights for a given scope and geometry.</p>
+
+<p>Combines knn and idw weightings. Each observation will have k neighbors, but the weights will be calculated by 1/(d**alpha).</p>
+
+<p>Only works for geometry types that implement ST_Distance.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>scope</span>
+      
+      
+        <span class='type'>(<tt>ActiveRecord::Relation</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>you want to query</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>column</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>that contains the geometry</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>k</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>neighbors to find</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>alpha</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>1</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number used in inverse calculations (usually 1 or 2)</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/queries/weights.rb', line 25</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_idw_knn'>idw_knn</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid_alpha'>alpha</span> <span class='op'>=</span> <span class='int'>1</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_klass'>klass</span>
+  <span class='id identifier rubyid_column'>column</span> <span class='op'>=</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span><span class='period'>.</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_quote_column_name'>quote_column_name</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_primary_key'>primary_key</span> <span class='op'>=</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_quoted_primary_key'>quoted_primary_key</span>
+  <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_find_by_sql'>find_by_sql</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='heredoc_beg'>&lt;&lt;-SQL</span><span class='comma'>,</span> <span class='label'>scope:</span> <span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='label'>k:</span> <span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='tstring_content'>    WITH scope as (:scope)
+    SELECT neighbors.*
+    FROM scope AS a
+      CROSS JOIN LATERAL (
+      SELECT a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as i_id, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as j_id,
+      ST_Distance(a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>) as distance
+      FROM scope as b
+      WHERE a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> &lt;&gt; b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'>
+      ORDER BY a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'> &lt;-&gt; b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>
+      LIMIT :k
+    ) AS neighbors
+</span><span class='heredoc_end'>  SQL
+</span>
+  <span class='comment'># if the lowest distance is &lt;1, then we need to scale
+</span>  <span class='comment'># every distance by the factor that makes the lowest 1
+</span>  <span class='id identifier rubyid_min_dist'>min_dist</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:distance</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span>
+  <span class='id identifier rubyid_scale'>scale</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_min_dist'>min_dist</span> <span class='op'>&lt;</span> <span class='int'>1</span>
+            <span class='int'>1</span> <span class='op'>/</span> <span class='id identifier rubyid_min_dist'>min_dist</span>
+          <span class='kw'>else</span>
+            <span class='int'>1</span>
+          <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_neighbor'>neighbor</span><span class='op'>|</span>
+    <span class='comment'># formula is 1/(d^alpha)
+</span>    <span class='id identifier rubyid_weight'>weight</span> <span class='op'>=</span> <span class='float'>1.0</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_scale'>scale</span> <span class='op'>*</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='period'>.</span><span class='id identifier rubyid_distance'>distance</span><span class='rparen'>)</span><span class='op'>**</span><span class='id identifier rubyid_alpha'>alpha</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='period'>.</span><span class='id identifier rubyid_as_json'>as_json</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+    <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_weight'>weight</span>
+    <span class='id identifier rubyid_hash'>hash</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="knn-class_method">
+  
+    .<strong>knn</strong>(scope, column, k)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute k nearest neighbor weights for a given scope.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>scope</span>
+      
+      
+        <span class='type'>(<tt>ActiveRecord::Relation</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>you want to query</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>column</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>that contains the geometry</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>k</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>neighbors to find</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/queries/weights.rb', line 118</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_knn'>knn</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='id identifier rubyid_k'>k</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_klass'>klass</span>
+  <span class='id identifier rubyid_column'>column</span> <span class='op'>=</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span><span class='period'>.</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_quote_column_name'>quote_column_name</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_primary_key'>primary_key</span> <span class='op'>=</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_quoted_primary_key'>quoted_primary_key</span>
+  <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_find_by_sql'>find_by_sql</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='heredoc_beg'>&lt;&lt;-SQL</span><span class='comma'>,</span> <span class='label'>scope:</span> <span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='label'>k:</span> <span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='tstring_content'>    WITH scope as (:scope)
+    SELECT neighbors.*
+    FROM scope AS a
+      CROSS JOIN LATERAL (
+      SELECT a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as i_id, b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> as j_id
+      FROM scope as b
+      WHERE a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'> &lt;&gt; b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='embexpr_end'>}</span><span class='tstring_content'>
+      ORDER BY a.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'> &lt;-&gt; b.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_column'>column</span><span class='embexpr_end'>}</span><span class='tstring_content'>
+      LIMIT :k
+    ) AS neighbors
+</span><span class='heredoc_end'>  SQL
+</span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="queen_contiguity_neighbors-class_method">
+  
+    .<strong>queen_contiguity_neighbors</strong>(scope, column)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute queen contiguity weights for a given scope. Queen contiguity weights are defined by geometries sharing an edge or vertex.</p>
+
+<p>DE-9IM pattern = <tt>F**<strong>T*</strong>**</tt></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>scope</span>
+      
+      
+        <span class='type'>(<tt>ActiveRecord::Relation</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>you want to query</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>column</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>that contains the geometry</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+173
+174
+175</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/queries/weights.rb', line 173</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_queen_contiguity_neighbors'>queen_contiguity_neighbors</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid__contiguity_neighbors'>_contiguity_neighbors</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>F***T****</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="rook_contiguity_neighbors-class_method">
+  
+    .<strong>rook_contiguity_neighbors</strong>(scope, column)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute rook contiguity weights for a given scope. Rook contiguity weights are defined by geometries sharing an edge.</p>
+
+<p>DE-9IM pattern = <tt>&#39;F**<strong>1*</strong>**&#39;</tt></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>scope</span>
+      
+      
+        <span class='type'>(<tt>ActiveRecord::Relation</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>you want to query</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>column</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>that contains the geometry</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+187
+188
+189</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/queries/weights.rb', line 187</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_rook_contiguity_neighbors'>rook_contiguity_neighbors</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid__contiguity_neighbors'>_contiguity_neighbors</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>F***1****</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Fri Apr  3 09:34:48 2020 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.24 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>

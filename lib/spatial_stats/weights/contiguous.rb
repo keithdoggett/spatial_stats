@@ -2,7 +2,18 @@
 
 module SpatialStats
   module Weights
+    ##
+    # Contiguous weights module includes methods that provide an interface to
+    # coniguous weights queries and formats the result properly to utilize
+    # a weights matrix.
     module Contiguous
+      ##
+      # Compute rook weights matrix for a scope.
+      #
+      # @param [ActiveRecord::Relation] scope to query
+      # @param [Symbol, String] field with geometry in it
+      #
+      # @return [WeightsMatrix]
       def self.rook(scope, field)
         p_key = scope.primary_key
         keys = scope.pluck(p_key).sort
@@ -21,6 +32,13 @@ module SpatialStats
         SpatialStats::Weights::WeightsMatrix.new(keys, weights)
       end
 
+      ##
+      # Compute queen weights matrix for a scope.
+      #
+      # @param [ActiveRecord::Relation] scope to query
+      # @param [Symbol, String] field with geometry in it
+      #
+      # @return [WeightsMatrix]
       def self.queen(scope, field)
         p_key = scope.primary_key
         keys = scope.pluck(p_key).sort

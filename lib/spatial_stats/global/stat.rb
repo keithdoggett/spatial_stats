@@ -2,8 +2,12 @@
 
 module SpatialStats
   module Global
+    ##
+    # Stat is the abstract base class for global stats.
+    # It defines the methods that are common between all classes
+    # and will raise a NotImplementedError on those that are specific
+    # for each type of statistic.
     class Stat
-      # Base class for global stats
       def initialize(scope, field, weights)
         @scope = scope
         @field = field
@@ -15,6 +19,10 @@ module SpatialStats
         raise NotImplementedError, 'method stat not defined'
       end
 
+      ##
+      # The expected value of +#stat+
+      #
+      # @return [Float]
       def expectation
         raise NotImplementedError, 'method expectation not implemented'
       end
@@ -23,6 +31,10 @@ module SpatialStats
         raise NotImplementedError, 'method variance not implemented'
       end
 
+      ##
+      # Z-score of the statistic.
+      #
+      # @return [Float] the number of deviations from the mean
       def z_score
         (stat - expectation) / Math.sqrt(variance)
       end

@@ -1,19 +1,31 @@
 # frozen_string_literal: true
 
-# https://pro.arcgis.com/en/pro-app/tool-reference/spatial-statistics/h-how-cluster-and-outlier-analysis-anselin-local-m.htm
-# For now, instead of doing neighbor's variance (Si**2), I'm going to use
-# the total sample variance. This is how GeoDa does it, but is different
-# than arcgis. This shouldn't affect the expectation and variance of I.
 module SpatialStats
   module Local
+    ##
+    # Moran's I statistic computes the spatial autocorrelation of variable x.
+    # It does this by computing a spatially lagged version of itself and
+    # comparing that with each observation based on the weights matrix.
+    # The local version returns the spatial autocorrelation for each
+    # observation in the dataset.
     class Moran < Stat
+      ##
+      # A new instance of Moran
+      #
+      # @param [ActiveRecord::Relation] scope
+      # @param [Symbol, String] field to query from scope
+      # @param [WeightsMatrix] weights to define relationship between observations in scope
+      #
+      # @return [Moran]
       def initialize(scope, field, weights)
         super(scope, field, weights)
-        @scope = scope
-        @field = field
-        @weights = weights
       end
 
+      ##
+      # Computes the local indicator of spatial autocorrelation (lisa) for
+      # x against lagged x.
+      #
+      # @return [Array] of autocorrelations for each observation.
       def stat
         z.each_with_index.map do |_z_val, idx|
           stat_i(idx)
@@ -21,16 +33,12 @@ module SpatialStats
       end
       alias i stat
 
-      def stat_i(idx)
-        # method to compute i at a single index.
-        # this is important for permutation testing
-        # because for each test we only want the result from
-        # 1 index not the entire set, so this will save lots of
-        # computations.
-        sum_term = z_lag[idx]
-        (z[idx] / si2) * sum_term
-      end
-
+      ##
+      # Expected value of I for each observation. Since the weights matrix
+      # is standardized during the calculation, the expectation is the same for
+      # each observation.
+      #
+      # @return [Float]
       def expectation
         # since we are using row standardized weights, the expectation
         # will just be -1/(n-1) for all items. Otherwise, it would be
@@ -39,6 +47,12 @@ module SpatialStats
         -1.0 / (@weights.n - 1)
       end
 
+      ##
+      # Variance of I for each observation.
+      #
+      # @see https://pro.arcgis.com/en/pro-app/tool-reference/spatial-statistics/h-local-morans-i-additional-math.htm
+      #
+      # @return [Array] of variances for each observation
       def variance
         # formula is A - B - (E[I])**2
         wt = w.row_standardized
@@ -54,19 +68,20 @@ module SpatialStats
         vars
       end
 
-      def mc_i(wi, perms, idx)
-        # compute i for a single index given DFloat of neighbor weights
-        # and DFloat of neighbor z perms
-        z_lag_i = (wi * perms).sum(1)
-        z[idx] * z_lag_i
-      end
-
+      ##
+      # Values of the +field+ queried from the +scope+
+      #
+      # @return [Array]
       def x
         @x ||= SpatialStats::Queries::Variables.query_field(@scope, @field)
                                                .standardize
       end
       alias z x
 
+      ##
+      # Spatially lagged x variable at each observation.
+      #
+      # @return [Array]
       def z_lag
         # w is already row_standardized, so we are using
         # neighbor sum instead of neighbor_average to save cost
@@ -74,6 +89,18 @@ module SpatialStats
       end
 
       private
+
+      def stat_i(idx)
+        sum_term = z_lag[idx]
+        (z[idx] / si2) * sum_term
+      end
+
+      def mc_i(wi, perms, idx)
+        # compute i for a single index given DFloat of neighbor weights
+        # and DFloat of neighbor z perms
+        z_lag_i = (wi * perms).sum(1)
+        z[idx] * z_lag_i
+      end
 
       def si2
         # @si2 ||= z.sample_variance

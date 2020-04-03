@@ -7,13 +7,13 @@ module Numo
   # Extension to Numo::NArray base class.
   class NArray
     ##
-    # For a 2-D NArray, change the non-zero values so that the sum of each row
-    # is 1.
+    # For a 2-D NArray, transform the non-zero values so that the sum of each
+    # row is 1.
     #
     # @ example
     #
-    #   Numo::DFloat [[0,1,1], [1,1,1]].row_standardized
-    #   Numo::DFloat [[0,0.5,0.5], [0.33333,0.33333,0.33333]]
+    #   Numo::DFloat [[0, 1, 1], [1, 1, 1]].row_standardized
+    #   Numo::DFloat [[0, 0.5, 0.5], [0.33333, 0.33333, 0.33333]]
     #
     # @return [Numo::NArray]
     def row_standardized
@@ -32,6 +32,21 @@ module Numo
       self.class.cast(standardized)
     end
 
+    ##
+    # For a 2-D, n x n NArray, if the trace is 0, add an n x n eye matrix to the matrix
+    # and return the result.
+    #
+    # @ example
+    #
+    #   Numo::DFloat [[0, 1, 0], [1, 0, 1], [0, 1, 0]].windowed
+    #   Numo::DFloat [[1, 1, 0], [1, 1, 1], [0, 1, 1]]
+    #
+    # @ example
+    #   # Input will be equivalent to output in this case
+    #   Numo::DFloat [[1, 1, 0], [1, 0, 1], [0, 1, 0]].windowed
+    #   Numo::DFloat [[1, 1, 0], [1, 0, 1], [0, 1, 0]]
+    #
+    # @return [Numo::NArray]
     def windowed
       # in windowed calculations, the diagonal is set to 1
       # if trace (sum of diag) is 0, add it, else return input

@@ -1,4 +1,5 @@
 .vscode/
+.yardoc/
 .bundle/
 log/*.log
 pkg/

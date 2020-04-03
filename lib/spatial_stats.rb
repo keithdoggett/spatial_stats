@@ -9,10 +9,13 @@ require 'spatial_stats/queries'
 require 'spatial_stats/utils'
 require 'spatial_stats/weights'
 
+##
+# SpatialStats is an ActiveRecord/PostGIS gem that provides descriptive spatial
+# stats to your application.
 module SpatialStats
-  def self.included(klass)
-    puts 'here', klass
-    # klass.extend(SpatialStats::Queries::Weights)
-  end
+  # def self.included(klass)
+  #   puts 'here', klass
+  #   # klass.extend(SpatialStats::Queries::Weights)
+  # end
   # Your code goes here...
 end

@@ -2,16 +2,33 @@
 
 module SpatialStats
   module Global
+    ##
+    # Moran's I statistic computes the spatial autocorrelation of variable x.
+    # It does this by computing a spatially lagged version of itself and
+    # comparing that with each observation based on the weights matrix.
     class Moran < Stat
+      ##
+      # A new instance of Moran
+      #
+      # @param [ActiveRecord::Relation] scope
+      # @param [Symbol, String] field to query from scope
+      # @param [WeightsMatrix] weights to define relationship between observations in scope
+      #
+      # @return [Moran]
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
       attr_writer :x
 
+      ##
+      # Computes the global spatial autocorrelation of x against a spatially
+      # lagged x.
+      #
+      # @return [Float]
       def stat
         # compute's Moran's I. numerator is sum of zi * spatial lag of zi
         # denominator is sum of zi**2.
-        # have to use row-standardized
+        # have to use row-standardized weights
         w = @weights.standardized
         z_lag = SpatialStats::Utils::Lag.neighbor_sum(w, z)
         numerator = 0
@@ -25,13 +42,22 @@ module SpatialStats
       end
       alias i stat
 
+      ##
+      # The expected value of +#stat+.
+      # @see https://en.wikipedia.org/wiki/Moran%27s_I#Expected_value
+      #
+      # @return [Float]
       def expectation
         # -1/(n-1)
         -1.0 / (@weights.n - 1)
       end
 
+      ##
+      # The variance of the spatial correlation.
+      # @see https://en.wikipedia.org/wiki/Moran%27s_I#Expected_value
+      #
+      # @return [Float]
       def variance
-        # https://en.wikipedia.org/wiki/Moran%27s_I#Expected_value
         n = @weights.n
         wij = @weights.full
         w = wij.sum
@@ -49,18 +75,43 @@ module SpatialStats
         var_left - var_right
       end
 
+      ##
+      # Permutation test to determine a pseudo p-value of the computed I stat.
+      # Shuffles x values recomputes I for each variation, then compares that I
+      # value to the computed one. The ratio of more extreme values to
+      # permutations is returned.
+      #
+      # @see https://geodacenter.github.io/glossary.html#perm
+      #
+      # @param [Integer] permutations to run. Last digit should be 9 to produce round numbers.
+      # @param [Integer] seed used in random number generator for shuffles.
+      #
+      # @return [Float]
       def mc(permutations = 99, seed = nil)
         super(permutations, seed)
       end
 
+      ##
+      # Values of the +field+ queried from the +scope+
+      #
+      # @return [Array]
       def x
         @x ||= SpatialStats::Queries::Variables.query_field(@scope, @field)
       end
 
+      # TODO: remove these last 2 methods and just standardize x.
+      ##
+      # Mean of x
+      #
+      # @return [Float]
       def zbar
         x.sum / x.size
       end
 
+      ##
+      # Array of xi - zbar for i: [0:n-1]
+      #
+      # @return [Array]
       def z
         x.map { |val| val - zbar }
       end

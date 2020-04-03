@@ -165,7 +165,7 @@ moran.i
 # => [0.888, 0.675, 0.2345, -0.987, -0.42, ...]
 ```
 
-#### Compute Moran's I Z-Score
+#### Compute Moran's I Z-Scores
 
 Note: Many classes do not have a variance or expectation method implemented and this will raise a `NotImplementedError`.
 
@@ -239,9 +239,10 @@ RGeo::Geos.supported?
 - ~~Memoize expensive functions within classes~~
 - ~~Make star a parameter to getis-ord class~~
 - ~~Add examples/usage to docs~~
-- Create RDocs
+- ~~Create RDocs~~
 - Refactor Global Moran and BVMoran
-- Support non-numeric keys in WeightsMatrix
+- Support non-numeric keys in WeightsMatrix/General refactor
+- Write SparseMatrix C ext
 
 ## Future Work
 
