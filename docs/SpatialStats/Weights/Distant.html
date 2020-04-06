@@ -318,30 +318,24 @@
 27
 28
 29
-30
-31
-32
-33</pre>
+30</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/distant.rb', line 17</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_distance_band'>distance_band</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_bandwidth'>bandwidth</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_p_key'>p_key</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_primary_key'>primary_key</span>
-  <span class='id identifier rubyid_keys'>keys</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_pluck'>pluck</span><span class='lparen'>(</span><span class='id identifier rubyid_p_key'>p_key</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
-
   <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Weights.html" title="SpatialStats::Queries::Weights (module)">Weights</a></span></span>
               <span class='period'>.</span><span class='id identifier rubyid_distance_band_neighbors'>distance_band_neighbors</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_bandwidth'>bandwidth</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_group_by'>group_by</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:i_id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_weights'>weights</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_transform_values'>transform_values</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
     <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_neighbor'>neighbor</span><span class='op'>|</span>
-      <span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='period'>.</span><span class='id identifier rubyid_as_json'>as_json</span><span class='lparen'>(</span><span class='label'>only:</span> <span class='lbracket'>[</span><span class='symbol'>:j_id</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+      <span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>id:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:j_id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
       <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='int'>1</span>
       <span class='id identifier rubyid_hash'>hash</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
-  <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Weights.html" title="SpatialStats::Weights (module)">Weights</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="WeightsMatrix.html" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="WeightsMatrix.html#initialize-instance_method" title="SpatialStats::Weights::WeightsMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_keys'>keys</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Weights.html" title="SpatialStats::Weights (module)">Weights</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="WeightsMatrix.html" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="WeightsMatrix.html#initialize-instance_method" title="SpatialStats::Weights::WeightsMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -457,30 +451,24 @@
       <pre class="lines">
 
 
+64
+65
+66
+67
+68
+69
 70
 71
 72
 73
 74
 75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85</pre>
+76</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/distant.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/distant.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_idw_band'>idw_band</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_bandwidth'>bandwidth</span><span class='comma'>,</span> <span class='id identifier rubyid_alpha'>alpha</span> <span class='op'>=</span> <span class='int'>1</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_p_key'>p_key</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_primary_key'>primary_key</span>
-  <span class='id identifier rubyid_keys'>keys</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_pluck'>pluck</span><span class='lparen'>(</span><span class='id identifier rubyid_p_key'>p_key</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
-
   <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Weights.html" title="SpatialStats::Queries::Weights (module)">Weights</a></span></span>
               <span class='period'>.</span><span class='id identifier rubyid_idw_band'>idw_band</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_bandwidth'>bandwidth</span><span class='comma'>,</span> <span class='id identifier rubyid_alpha'>alpha</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_group_by'>group_by</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_pair'>pair</span><span class='op'>|</span> <span class='id identifier rubyid_pair'>pair</span><span class='lbracket'>[</span><span class='symbol'>:i_id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
@@ -488,10 +476,10 @@
   <span class='comment'># only keep j_id and weight
 </span>  <span class='id identifier rubyid_weights'>weights</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_transform_values'>transform_values</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
     <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_neighbor'>neighbor</span><span class='op'>|</span>
-      <span class='lbrace'>{</span> <span class='label'>weight:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>j_id:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:j_id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+      <span class='lbrace'>{</span> <span class='label'>weight:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:j_id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
-  <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Weights.html" title="SpatialStats::Weights (module)">Weights</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="WeightsMatrix.html" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="WeightsMatrix.html#initialize-instance_method" title="SpatialStats::Weights::WeightsMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_keys'>keys</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Weights.html" title="SpatialStats::Weights (module)">Weights</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="WeightsMatrix.html" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="WeightsMatrix.html#initialize-instance_method" title="SpatialStats::Weights::WeightsMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -607,30 +595,24 @@
       <pre class="lines">
 
 
+87
+88
+89
+90
+91
+92
+93
+94
+95
 96
 97
 98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111</pre>
+99</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/distant.rb', line 96</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/distant.rb', line 87</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_idw_knn'>idw_knn</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid_alpha'>alpha</span> <span class='op'>=</span> <span class='int'>1</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_p_key'>p_key</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_primary_key'>primary_key</span>
-  <span class='id identifier rubyid_keys'>keys</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_pluck'>pluck</span><span class='lparen'>(</span><span class='id identifier rubyid_p_key'>p_key</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
-
   <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Weights.html" title="SpatialStats::Queries::Weights (module)">Weights</a></span></span>
               <span class='period'>.</span><span class='id identifier rubyid_idw_knn'>idw_knn</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid_alpha'>alpha</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_group_by'>group_by</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_pair'>pair</span><span class='op'>|</span> <span class='id identifier rubyid_pair'>pair</span><span class='lbracket'>[</span><span class='symbol'>:i_id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
@@ -638,10 +620,10 @@
   <span class='comment'># only keep j_id and weight
 </span>  <span class='id identifier rubyid_weights'>weights</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_transform_values'>transform_values</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
     <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_neighbor'>neighbor</span><span class='op'>|</span>
-      <span class='lbrace'>{</span> <span class='label'>weight:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>j_id:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:j_id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+      <span class='lbrace'>{</span> <span class='label'>weight:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:j_id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
-  <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Weights.html" title="SpatialStats::Weights (module)">Weights</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="WeightsMatrix.html" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="WeightsMatrix.html#initialize-instance_method" title="SpatialStats::Weights::WeightsMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_keys'>keys</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Weights.html" title="SpatialStats::Weights (module)">Weights</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="WeightsMatrix.html" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="WeightsMatrix.html#initialize-instance_method" title="SpatialStats::Weights::WeightsMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -739,6 +721,9 @@
       <pre class="lines">
 
 
+40
+41
+42
 43
 44
 45
@@ -749,33 +734,24 @@
 50
 51
 52
-53
-54
-55
-56
-57
-58
-59</pre>
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/distant.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/distant.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_knn'>knn</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_k'>k</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_p_key'>p_key</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_primary_key'>primary_key</span>
-  <span class='id identifier rubyid_keys'>keys</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_pluck'>pluck</span><span class='lparen'>(</span><span class='id identifier rubyid_p_key'>p_key</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
-
   <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Weights.html" title="SpatialStats::Queries::Weights (module)">Weights</a></span></span>
               <span class='period'>.</span><span class='id identifier rubyid_knn'>knn</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_k'>k</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_neighbors'>neighbors</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_group_by'>group_by</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:i_id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_weights'>weights</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbors'>neighbors</span><span class='period'>.</span><span class='id identifier rubyid_transform_values'>transform_values</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
     <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_neighbor'>neighbor</span><span class='op'>|</span>
-      <span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='period'>.</span><span class='id identifier rubyid_as_json'>as_json</span><span class='lparen'>(</span><span class='label'>only:</span> <span class='lbracket'>[</span><span class='symbol'>:j_id</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+      <span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>id:</span> <span class='id identifier rubyid_neighbor'>neighbor</span><span class='lbracket'>[</span><span class='symbol'>:j_id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
       <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='int'>1</span>
       <span class='id identifier rubyid_hash'>hash</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
-  <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Weights.html" title="SpatialStats::Weights (module)">Weights</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="WeightsMatrix.html" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="WeightsMatrix.html#initialize-instance_method" title="SpatialStats::Weights::WeightsMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_keys'>keys</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Weights.html" title="SpatialStats::Weights (module)">Weights</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="WeightsMatrix.html" title="SpatialStats::Weights::WeightsMatrix (class)">WeightsMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="WeightsMatrix.html#initialize-instance_method" title="SpatialStats::Weights::WeightsMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -787,7 +763,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr  3 09:41:51 2020 by
+  Generated on Mon Apr  6 18:51:32 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

@@ -23,10 +23,10 @@ class LocalGetisOrdTest < ActiveSupport::TestCase
 
   def test_star_with_diag
     neighbors = {
-      1 => [{ j_id: 1, weight: 1 }, { j_id: 2, weight: 1 }],
-      2 => [{ j_id: 1, weight: 1 }, { j_id: 2, weight: 1 }]
+      1 => [{ id: 1, weight: 1 }, { id: 2, weight: 1 }],
+      2 => [{ id: 1, weight: 1 }, { id: 2, weight: 1 }]
     }
-    weights = SpatialStats::Weights::WeightsMatrix.new([1, 2], neighbors)
+    weights = SpatialStats::Weights::WeightsMatrix.new(neighbors)
     g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, weights)
 
     assert g.star?

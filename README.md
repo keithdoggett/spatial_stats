@@ -240,9 +240,10 @@ RGeo::Geos.supported?
 - ~~Make star a parameter to getis-ord class~~
 - ~~Add examples/usage to docs~~
 - ~~Create RDocs~~
-- Refactor Global Moran and BVMoran
-- Support non-numeric keys in WeightsMatrix/General refactor
+- ~~Refactor Global Moran and BVMoran~~
+- ~~Support non-numeric keys in WeightsMatrix/General refactor~~
 - Write SparseMatrix C ext
+- Add `#summary` method to statistics that will combine stat vals with p-vals, and quads or hot/cold spot info
 
 ## Future Work
 

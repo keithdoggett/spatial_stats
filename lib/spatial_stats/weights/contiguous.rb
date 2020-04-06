@@ -15,21 +15,18 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.rook(scope, field)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .rook_contiguity_neighbors(scope, field)
 
         neighbors = neighbors.group_by(&:i_id)
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            hash = neighbor.as_json(only: [:j_id]).symbolize_keys
+            hash = { id: neighbor[:j_id] }
             hash[:weight] = 1
             hash
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
 
       ##
@@ -40,21 +37,18 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.queen(scope, field)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .queen_contiguity_neighbors(scope, field)
 
         neighbors = neighbors.group_by(&:i_id)
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            hash = neighbor.as_json(only: [:j_id]).symbolize_keys
+            hash = { id: neighbor[:j_id] }
             hash[:weight] = 1
             hash
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
     end
   end

@@ -15,21 +15,18 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.distance_band(scope, field, bandwidth)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .distance_band_neighbors(scope, field, bandwidth)
 
         neighbors = neighbors.group_by(&:i_id)
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            hash = neighbor.as_json(only: [:j_id]).symbolize_keys
+            hash = { id: neighbor[:j_id] }
             hash[:weight] = 1
             hash
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
 
       ##
@@ -41,21 +38,18 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.knn(scope, field, k)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .knn(scope, field, k)
 
         neighbors = neighbors.group_by(&:i_id)
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            hash = neighbor.as_json(only: [:j_id]).symbolize_keys
+            hash = { id: neighbor[:j_id] }
             hash[:weight] = 1
             hash
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
 
       ##
@@ -68,9 +62,6 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.idw_band(scope, field, bandwidth, alpha = 1)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .idw_band(scope, field, bandwidth, alpha)
         neighbors = neighbors.group_by { |pair| pair[:i_id] }
@@ -78,10 +69,10 @@ module SpatialStats
         # only keep j_id and weight
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            { weight: neighbor[:weight], j_id: neighbor[:j_id] }
+            { weight: neighbor[:weight], id: neighbor[:j_id] }
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
 
       ##
@@ -94,9 +85,6 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.idw_knn(scope, field, k, alpha = 1)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .idw_knn(scope, field, k, alpha)
         neighbors = neighbors.group_by { |pair| pair[:i_id] }
@@ -104,10 +92,10 @@ module SpatialStats
         # only keep j_id and weight
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            { weight: neighbor[:weight], j_id: neighbor[:j_id] }
+            { weight: neighbor[:weight], id: neighbor[:j_id] }
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
     end
   end

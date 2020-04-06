@@ -11,13 +11,12 @@ module SpatialStats
       ##
       # A new instance of WeightsMatrix
       #
-      # @param [Array] keys ordered list of keys used in weights
-      # @param [Hash] weights hash of format +{key: [{j_id: neighbor_key, weight: 1}]}+ that describe the relations between neighbors
+      # @param [Hash] weights hash of format +{key: [{id: neighbor_key, weight: 1}]}+ that describe the relations between neighbors
       #
       # @return [WeightsMatrix]
-      def initialize(keys, weights)
-        @keys = keys
+      def initialize(weights)
         @weights = weights
+        @keys = weights.keys
         @n = keys.size
       end
       attr_accessor :keys, :weights, :n
@@ -26,8 +25,8 @@ module SpatialStats
       # Compute the n x n Numo::Narray of the weights hash.
       #
       # @example
-      #   hash = {1 => [{j_id: 2, weight: 1}], 2 => [{j_id: 1, weight: 1},
-      #       {j_id: 3, weight: 1}], 3 => [{j_id: 2, weight: 1}]}
+      #   hash = {1 => [{id: 2, weight: 1}], 2 => [{id: 1, weight: 1},
+      #       {id: 3, weight: 1}], 3 => [{id: 2, weight: 1}]}
       #   wm = WeightsMatrix.new(hash.keys, hash)
       #   wm.full
       #   # => Numo::DFloat[[0, 1, 0], [1, 0, 1], [0, 1, 0]]
@@ -41,7 +40,7 @@ module SpatialStats
             # iterate through each key to get the data for the row
             row = @keys.map do |j|
               neighbors = @weights[i]
-              match = neighbors.find { |neighbor| neighbor[:j_id] == j }
+              match = neighbors.find { |neighbor| neighbor[:id] == j }
               if match
                 match[:weight]
               else
