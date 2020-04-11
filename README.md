@@ -262,7 +262,7 @@ RGeo::Geos.supported?
 - Rate smoothing
 - Bayes smoothing
 
-### Global
+#### Global
 
 - Geary class
 - GetisOrd class
@@ -271,7 +271,7 @@ RGeo::Geos.supported?
 
 - Join Count Statistic
 
-### PPA
+#### PPA
 
 - Add descriptive stat methods for point clusters.
 

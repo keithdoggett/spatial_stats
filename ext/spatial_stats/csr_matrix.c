@@ -1,77 +1,51 @@
 #include <ruby.h>
-#include "extconf.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-typedef struct csr_matrix
-{
-    int m;
-    int n;
-    int nnz;
-    float *values;
-    int *col_index;
-    int *row_index;
-} CSRMatrix;
+#include "csr_matrix.h"
 
 void csr_matrix_free(void *mat)
 {
-    CSRMatrix *csr = (CSRMatrix *)mat;
+    csr_matrix *csr = (csr_matrix *)mat;
 
-    if (csr->values)
+    if (csr->init == 1)
     {
         free(csr->values);
-    }
-
-    if (csr->row_index)
-    {
+        free(csr->col_index);
         free(csr->row_index);
     }
-
-    if (csr->col_index)
-    {
-        free(csr->col_index);
-    }
-
     free(mat);
 }
 
 size_t csr_matrix_memsize(const void *ptr)
 {
-    const CSRMatrix *csr = (const CSRMatrix *)ptr;
+    const csr_matrix *csr = (const csr_matrix *)ptr;
     return sizeof(csr);
 }
 
-static const rb_data_type_t csr_matrix_type = {
-    "SpatialStats::Weights::CSRMatrix",
-    {NULL, csr_matrix_free, csr_matrix_memsize},
-    0,
-    0,
-    RUBY_TYPED_FREE_IMMEDIATELY};
-
 VALUE csr_matrix_alloc(VALUE self)
 {
-    CSRMatrix *csr = malloc(sizeof(CSRMatrix));
+    csr_matrix *csr = malloc(sizeof(csr_matrix));
     return TypedData_Wrap_Struct(self, &csr_matrix_type, csr);
 }
 
 VALUE csr_matrix_p_nnz(VALUE self)
 {
-    CSRMatrix *csr;
-    TypedData_Get_Struct(self, CSRMatrix, &csr_matrix_type, csr);
+    csr_matrix *csr;
+    TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
     rb_p(INT2NUM(csr->nnz));
     return Qnil;
 }
 
 VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
 {
-    CSRMatrix *csr;
+    csr_matrix *csr;
     VALUE result;
 
     int i;
     int jj;
     float tmp;
 
-    TypedData_Get_Struct(self, CSRMatrix, &csr_matrix_type, csr);
+    TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
 
     if (rb_array_len(vec) != csr->n)
     {
@@ -95,7 +69,7 @@ VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
     return result;
 }
 
-void mat_to_sparse(CSRMatrix *csr, VALUE data, VALUE num_rows, VALUE num_cols)
+void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE num_rows, VALUE num_cols)
 {
     // first get count of nnz values in data
     int nnz = 0;
@@ -152,16 +126,15 @@ void mat_to_sparse(CSRMatrix *csr, VALUE data, VALUE num_rows, VALUE num_cols)
     csr->values = values;
     csr->col_index = col_index;
     csr->row_index = row_index;
+    csr->init = 1;
 }
 
 VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows, VALUE num_cols)
 {
 
-    CSRMatrix *csr;
-    TypedData_Get_Struct(self, CSRMatrix, &csr_matrix_type, csr);
-    csr->values = NULL;
-    csr->col_index = NULL;
-    csr->row_index = NULL;
+    csr_matrix *csr;
+    TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
+    csr->init = 0;
 
     Check_Type(data, T_ARRAY);
     Check_Type(num_rows, T_FIXNUM);
@@ -180,20 +153,4 @@ VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows, VALUE num_co
     rb_iv_set(self, "@nnz", INT2NUM(csr->nnz));
 
     return self;
-}
-
-void Init_csr_matrix()
-{
-    VALUE spatial_stats_mod = rb_define_module("SpatialStats");
-    VALUE weights_mod = rb_define_module_under(spatial_stats_mod, "Weights");
-    VALUE csr_matrix_class = rb_define_class_under(weights_mod, "CSRMatrix", rb_cData);
-
-    rb_define_alloc_func(csr_matrix_class, csr_matrix_alloc);
-    rb_define_method(csr_matrix_class, "initialize", csr_matrix_initialize, 3);
-    rb_define_method(csr_matrix_class, "p_nnz", csr_matrix_p_nnz, 0);
-    rb_define_method(csr_matrix_class, "mulvec", csr_matrix_mulvec, 1);
-
-    rb_define_attr(csr_matrix_class, "m", 1, 0);
-    rb_define_attr(csr_matrix_class, "n", 1, 0);
-    rb_define_attr(csr_matrix_class, "nnz", 1, 0);
 }

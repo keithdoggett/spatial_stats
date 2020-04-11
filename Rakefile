@@ -18,6 +18,12 @@ end
 
 require 'bundler/gem_tasks'
 
+require 'rake/extensiontask'
+
+Rake::ExtensionTask.new 'spatial_stats' do |ext|
+  ext.lib_dir = 'lib/spatial_stats'
+end
+
 require 'rake/testtask'
 
 Rake::TestTask.new(:test) do |t|
@@ -27,4 +33,5 @@ Rake::TestTask.new(:test) do |t|
   t.warning = false # shut up annoying warnings
 end
 
+task test: :compile
 task default: :test
