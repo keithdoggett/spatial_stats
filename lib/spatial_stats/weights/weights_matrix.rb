@@ -32,34 +32,68 @@ module SpatialStats
       #   # => Numo::DFloat[[0, 1, 0], [1, 0, 1], [0, 1, 0]]
       #
       # @return [Numo::DFloat]
-      def full
-        # returns a square matrix Wij using @keys as the order of items
-        @full ||= begin
-          rows = []
-          @keys.each do |i|
-            # iterate through each key to get the data for the row
-            row = @keys.map do |j|
-              neighbors = @weights[i]
-              match = neighbors.find { |neighbor| neighbor[:id] == j }
-              if match
-                match[:weight]
-              else
-                0
-              end
+      def dense
+        @dense ||= begin
+          mat = Numo::DFloat.zeros(n, n)
+          keys.each_with_index do |key, i|
+            neighbors = weights[key]
+            neighbors.each do |neighbor|
+              j = keys.index(neighbor[:id])
+              weight = neighbor[:weight]
+
+              # assign the weight to row and column
+              mat[i, j] = weight
             end
-            rows << row
           end
 
-          Numo::DFloat.cast(rows)
+          mat
         end
       end
 
       ##
-      # Row standardized version of +#full+
+      # Compute the CSR representation of the weights.
       #
-      # @return [Numo::DFloat]
+      # @return [CSRMatrix]
+      def sparse
+        @sparse ||= CSRMatrix.new(dense.to_a.flatten, n, n)
+      end
+
+      ##
+      # Row standardized version of the weights matrix.
+      # Will return a new version of the weights matrix standardized weights.
+      #
+      # @return [WeightsMatrix]
       def standardized
-        @standardized ||= full.row_standardized
+        new_weights = weights
+
+        new_weights.transform_values do |neighbors|
+          sum = neighbors.reduce(0.0) { |acc, neighbor| acc + neighbor[:weight] }
+
+          neighbors.map do |neighbor|
+            hash = neighbor
+            hash[:weight] /= sum
+          end
+        end
+
+        self.class.new(new_weights)
+      end
+
+      ##
+      # Windowed version of the weights matrix.
+      # If a row already has an entry for itself, it will be skipped.
+      #
+      # @return [WeightsMatrix]
+      def windowed
+        new_weights = weights
+
+        new_weights.each do |key, neighbors|
+          unless neighbors.find { |neighbor| neighbor[:id] == key }
+            new_neighbors = (neighbors << { id: key, weight: 1 })
+            new_weights[key] = new_neighbors.sort_by { |neighbor| neighbor[:id] }
+          end
+        end
+
+        self.class.new(new_weights)
       end
     end
   end
