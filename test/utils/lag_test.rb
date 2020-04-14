@@ -5,7 +5,12 @@ require 'test_helper'
 
 class LaggedVariablesTest < ActiveSupport::TestCase
   def setup
-    @matrix = Numo::DFloat[[0, 1, 0], [1, 0, 1], [0, 1, 0]]
+    @weights = {
+      1 => [{ id: 2, weight: 1 }],
+      2 => [{ id: 1, weight: 1 }, { id: 3, weight: 1 }],
+      3 => [{ id: 2, weight: 1 }]
+    }
+    @matrix = SpatialStats::Weights::WeightsMatrix.new(@weights)
     @values = [1, 2, 3]
   end
 
@@ -22,7 +27,12 @@ class LaggedVariablesTest < ActiveSupport::TestCase
   end
 
   def test_neighbor_sum_idw
-    mat = Numo::DFloat[[0, 0.5, 0], [0.3, 0, 0.2], [0, 0.5, 0]]
+    weights = {
+      1 => [{ id: 2, weight: 0.5 }],
+      2 => [{ id: 1, weight: 0.3 }, { id: 3, weight: 0.2 }],
+      3 => [{ id: 2, weight: 0.5 }]
+    }
+    mat = SpatialStats::Weights::WeightsMatrix.new(weights)
     expected = [1, 0.9, 1]
     result = SpatialStats::Utils::Lag.neighbor_sum(mat, @values)
 

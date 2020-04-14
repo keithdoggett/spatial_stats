@@ -11,36 +11,36 @@ module SpatialStats
       # Dot product of the row_standardized input matrix
       # by the input vector, variables.
       #
-      # @param [Numo::NArray] matrix 2-D square matrix.
+      # @param [WeightsMatrix] matrix holding target weights.
       # @param [Array] variables vector multiplying the matrix
       #
       # @return [Array] resultant vector
       def self.neighbor_average(matrix, variables)
-        matrix = matrix.row_standardized
+        matrix = matrix.standardized
         neighbor_sum(matrix, variables)
       end
 
       ##
       # Dot product of the input matrix by the input vector, variables.
       #
-      # @param [Numo::NArray] matrix 2-D square matrix.
+      # @param [WeightsMatrix] matrix holding target weights.
       # @param [Array] variables vector multiplying the matrix
       #
       # @return [Array] resultant vector
       def self.neighbor_sum(matrix, variables)
-        matrix.dot(variables).to_a
+        matrix.sparse.mulvec(variables)
       end
 
       ##
-      # Dot product of the input windowed, row standardizd matrix by
+      # Dot product of the input windowed, row standardized matrix by
       # the input vector, variables.
       #
-      # @param [Numo::NArray] matrix 2-D square matrix.
+      # @param [WeightsMatrix] matrix holding target weights.
       # @param [Array] variables vector multiplying the matrix
       #
       # @return [Array] resultant vector
       def self.window_average(matrix, variables)
-        matrix = matrix.windowed.row_standardized
+        matrix = matrix.windowed.standardized
         window_sum(matrix, variables)
       end
 
@@ -48,13 +48,13 @@ module SpatialStats
       # Dot product of the input windowed matrix by
       # the input vector, variables.
       #
-      # @param [Numo::NArray] matrix 2-D square matrix.
+      # @param [WeightsMatrix] matrix holding target weights.
       # @param [Array] variables vector multiplying the matrix
       #
       # @return [Array] resultant vector
       def self.window_sum(matrix, variables)
         matrix = matrix.windowed
-        matrix.dot(variables).to_a
+        matrix.sparse.mulvec(variables)
       end
     end
   end

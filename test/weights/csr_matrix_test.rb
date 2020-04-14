@@ -58,4 +58,15 @@ class CSRMatrixTest < ActiveSupport::TestCase
 
     assert_raises(ArgumentError) { csr.mulvec(vec) }
   end
+
+  def test_coordinates
+    csr = SpatialStats::Weights::CSRMatrix.new(@values, @m, @n)
+    expected = {
+      [0, 2] => 1,
+      [1, 1] => 1,
+      [2, 0] => 1
+    }
+
+    assert_equal(expected, csr.coordinates)
+  end
 end

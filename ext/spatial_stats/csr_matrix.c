@@ -202,3 +202,45 @@ VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
 
     return result;
 }
+
+VALUE csr_matrix_coordinates(VALUE self)
+{
+    csr_matrix *csr;
+    VALUE result;
+
+    int i;
+    int k;
+
+    VALUE key;
+    VALUE val;
+    int row_end;
+
+    TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
+
+    result = rb_hash_new();
+
+    // iterate through every value in the matrix and assign it's coordinates
+    // [x,y] as the key to the hash, with the value as the value.
+    // Use i to keep track of what row we are on.
+    i = 0;
+    row_end = csr->row_index[1];
+    for (k = 0; k < csr->nnz; k++)
+    {
+        if (k == row_end)
+        {
+            i++;
+            row_end = csr->row_index[i + 1];
+        }
+
+        // store i,j coordinates j is col_index[k]
+        key = rb_ary_new_capa(2);
+        rb_ary_store(key, 0, INT2NUM(i));
+        rb_ary_store(key, 1, INT2NUM(csr->col_index[k]));
+
+        val = DBL2NUM(csr->values[k]);
+
+        rb_hash_aset(result, key, val);
+    }
+
+    return result;
+}

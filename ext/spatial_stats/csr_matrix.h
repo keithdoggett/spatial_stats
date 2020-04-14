@@ -30,4 +30,5 @@ VALUE csr_matrix_values(VALUE self);
 VALUE csr_matrix_col_index(VALUE self);
 VALUE csr_matrix_row_index(VALUE self);
 VALUE csr_matrix_mulvec(VALUE self, VALUE vec);
+VALUE csr_matrix_coordinates(VALUE self);
 #endif
