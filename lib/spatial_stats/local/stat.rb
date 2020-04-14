@@ -12,7 +12,7 @@ module SpatialStats
       def initialize(scope, field, weights)
         @scope = scope
         @field = field
-        @weights = weights
+        @weights = weights.standardized
       end
       attr_accessor :scope, :field, :weights
 
@@ -121,7 +121,10 @@ module SpatialStats
 
         idx = 0
         while idx < n
-          stat_i_orig = stat_orig[idx]
+          # need to truncate because floats from
+          # c in sparse matrix are inconsistent with
+          # dfloats
+          stat_i_orig = stat_orig[idx].truncate(6)
 
           wi = Numo::DFloat.cast(ws[idx])
           stat_i_new = mc_i(wi, shuffles[idx], idx)
@@ -200,8 +203,7 @@ module SpatialStats
       # @return [Array] of labels
       def quads
         # https://github.com/pysal/esda/blob/master/esda/moran.py#L925
-        w = @weights.full
-        z_lag = SpatialStats::Utils::Lag.neighbor_average(w, z)
+        z_lag = SpatialStats::Utils::Lag.neighbor_average(weights, z)
         zp = z.map(&:positive?)
         lp = z_lag.map(&:positive?)
 
@@ -232,7 +234,7 @@ module SpatialStats
       end
 
       def w
-        weights.standardized
+        @w ||= weights.dense
       end
 
       def gen_rng(seed = nil)

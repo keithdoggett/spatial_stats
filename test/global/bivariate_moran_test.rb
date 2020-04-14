@@ -54,7 +54,7 @@ class GlobalBivariateMoranTest < ActiveSupport::TestCase
     moran = SpatialStats::Global::BivariateMoran
             .new(@poly_scope, :value, :second_value, @weights)
     var = moran.variance
-    expected = 0.0671875
+    expected = 0.07316
     assert_in_delta(expected, var, 0.0005)
   end
 
@@ -62,7 +62,7 @@ class GlobalBivariateMoranTest < ActiveSupport::TestCase
     moran = SpatialStats::Global::BivariateMoran
             .new(@poly_scope, :value, :second_value, @weights)
     var = moran.z_score
-    expected = 0.14335711
+    expected = 0.1373
     assert_in_delta(expected, var, 0.0005)
   end
 

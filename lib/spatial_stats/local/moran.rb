@@ -85,7 +85,7 @@ module SpatialStats
       def z_lag
         # w is already row_standardized, so we are using
         # neighbor sum instead of neighbor_average to save cost
-        @z_lag ||= SpatialStats::Utils::Lag.neighbor_sum(w, z)
+        @z_lag ||= SpatialStats::Utils::Lag.neighbor_sum(weights, z)
       end
 
       private
