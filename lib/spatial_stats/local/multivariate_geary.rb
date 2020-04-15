@@ -23,7 +23,7 @@ module SpatialStats
       def initialize(scope, fields, weights)
         @scope = scope
         @fields = fields
-        @weights = weights
+        @weights = weights.standardized
       end
       attr_accessor :scope, :fields, :weights
 

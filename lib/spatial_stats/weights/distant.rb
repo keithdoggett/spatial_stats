@@ -22,9 +22,11 @@ module SpatialStats
         # some entries don't have neighbors.
         # define a new hash that has all the keys from scope
         keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
-        hash = Hash[keys.map { |key| [key, []] }]
 
-        neighbors = hash.merge(neighbors.group_by(&:i_id))
+        neighbors = neighbors.group_by(&:i_id)
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
+
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
             hash = { id: neighbor[:j_id] }
@@ -51,9 +53,11 @@ module SpatialStats
         # some entries don't have neighbors.
         # define a new hash that has all the keys from scope
         keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
-        hash = Hash[keys.map { |key| [key, []] }]
 
-        neighbors = hash.merge(neighbors.group_by(&:i_id))
+        neighbors = neighbors.group_by(&:i_id)
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
+
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
             hash = { id: neighbor[:j_id] }
@@ -81,9 +85,9 @@ module SpatialStats
         # some entries don't have neighbors.
         # define a new hash that has all the keys from scope
         keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
-        hash = Hash[keys.map { |key| [key, []] }]
         neighbors = neighbors.group_by { |pair| pair[:i_id] }
-        neighbors = hash.merge(neighbors)
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
 
         # only keep j_id and weight
         weights = neighbors.transform_values do |value|
@@ -111,9 +115,9 @@ module SpatialStats
         # some entries don't have neighbors.
         # define a new hash that has all the keys from scope
         keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
-        hash = Hash[keys.map { |key| [key, []] }]
         neighbors = neighbors.group_by { |pair| pair[:i_id] }
-        neighbors = hash.merge(neighbors)
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
 
         # only keep j_id and weight
         weights = neighbors.transform_values do |value|

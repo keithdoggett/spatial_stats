@@ -19,7 +19,7 @@ module SpatialStats
         @scope = scope
         @x_field = x_field
         @y_field = y_field
-        @weights = weights
+        @weights = weights.standardized
       end
       attr_accessor :scope, :x_field, :y_field, :weights
 
@@ -80,7 +80,7 @@ module SpatialStats
       end
 
       def y_lag
-        @y_lag ||= SpatialStats::Utils::Lag.neighbor_sum(w, y)
+        @y_lag ||= SpatialStats::Utils::Lag.neighbor_sum(weights, y)
       end
     end
   end
