@@ -13,6 +13,7 @@ void Init_spatial_stats()
     rb_define_method(csr_matrix_class, "col_index", csr_matrix_col_index, 0);
     rb_define_method(csr_matrix_class, "row_index", csr_matrix_row_index, 0);
     rb_define_method(csr_matrix_class, "mulvec", csr_matrix_mulvec, 1);
+    rb_define_method(csr_matrix_class, "dot_row", csr_matrix_dot_row, 2);
     rb_define_method(csr_matrix_class, "coordinates", csr_matrix_coordinates, 0);
 
     rb_define_attr(csr_matrix_class, "m", 1, 0);

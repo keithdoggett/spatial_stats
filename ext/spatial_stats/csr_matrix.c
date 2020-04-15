@@ -34,12 +34,12 @@ void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE num_rows, VALUE num_cols)
     int m = NUM2INT(num_rows);
     int n = NUM2INT(num_cols);
 
-    float *values;
+    double *values;
     int *col_index;
     int *row_index;
 
     int nz_idx;
-    float entry;
+    double entry;
 
     int i;
     int j;
@@ -58,7 +58,7 @@ void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE num_rows, VALUE num_cols)
         }
     }
 
-    values = malloc(sizeof(float) * nnz);
+    values = malloc(sizeof(double) * nnz);
     col_index = malloc(sizeof(int) * nnz);
     row_index = malloc(sizeof(int) * (m + 1));
 
@@ -177,7 +177,7 @@ VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
 
     int i;
     int jj;
-    float tmp;
+    double tmp;
 
     TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
 
@@ -200,6 +200,38 @@ VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
         rb_ary_store(result, i, DBL2NUM(tmp));
     }
 
+    return result;
+}
+
+VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row)
+{
+    csr_matrix *csr;
+    VALUE result;
+
+    int i;
+    int jj;
+    double tmp;
+
+    TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
+
+    if (rb_array_len(vec) != csr->n)
+    {
+        rb_raise(rb_eArgError, "Dimension Mismatch CSRMatrix.n != vec.size");
+    }
+
+    i = NUM2INT(row);
+    if (!(i >= 0 && i < csr->m))
+    {
+        rb_raise(rb_eArgError, "Index Error row_idx >= m or idx < 0");
+    }
+
+    tmp = 0;
+    for (jj = csr->row_index[i]; jj < csr->row_index[i + 1]; jj++)
+    {
+        tmp += csr->values[jj] * NUM2DBL(rb_ary_entry(vec, csr->col_index[jj]));
+    }
+
+    result = DBL2NUM(tmp);
     return result;
 }
 

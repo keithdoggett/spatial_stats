@@ -14,11 +14,15 @@ module SpatialStats
       # @param [ActiveRecord::Relation] scope
       # @param [Symbol, String] field to query from scope
       # @param [WeightsMatrix] weights to define relationship between observations in scope
+      # @param [Boolean] star to preset if star will be true or false. Will be calculated otherwise.
       #
       # @return [GetisOrd]
       def initialize(scope, field, weights, star = nil)
-        super(scope, field, weights)
+        @scope = scope
+        @field = field
+        @weights = weights
         @star = star
+        calc_weights
       end
       attr_accessor :star
 
@@ -50,7 +54,7 @@ module SpatialStats
       # @return [Boolean] of star
       def star?
         if @star.nil?
-          @star = weights.full.trace.positive?
+          @star = weights.dense.trace.positive?
         else
           @star
         end
@@ -67,24 +71,23 @@ module SpatialStats
         x_lag_i / denominators[idx]
       end
 
-      def w
-        @w ||= begin
-          if star?
-            weights.full.windowed.row_standardized
-          else
-            weights.standardized
-          end
-        end
+      def calc_weights
+        @weights = if star?
+                     weights.windowed.standardized
+                   else
+                     weights.standardized
+                   end
       end
 
       def z_lag
         # window if star is true
         @z_lag ||= begin
-          if star?
-            SpatialStats::Utils::Lag.window_sum(w, x)
-          else
-            SpatialStats::Utils::Lag.neighbor_sum(w, x)
-          end
+          SpatialStats::Utils::Lag.neighbor_sum(weights, x)
+          # if star?
+          #   SpatialStats::Utils::Lag.window_sum(w, x)
+          # else
+          #   SpatialStats::Utils::Lag.neighbor_sum(w, x)
+          # end
         end
       end
       alias x_lag z_lag

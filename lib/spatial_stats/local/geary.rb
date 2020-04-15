@@ -45,18 +45,18 @@ module SpatialStats
       private
 
       def stat_i(idx)
-        zs = Numo::DFloat.cast(z)
-        zi = (z[idx] - zs)**2
-        (w[idx, true] * zi).sum
+        # TODO: maybe don't even use stat_i
+        # just form all of the modified zs and then
+        # pass it to a loop of mulvec all implemented in c ext
+        zi = z.map { |val| (z[idx] - val)**2 }
+        # zs = Numo::DFloat.cast(z)
+        # zi = ((z[idx] - zs)**2).to_a
+        weights.sparse.dot_row(zi, idx)
       end
 
       def mc_i(wi, perms, idx)
         zi = (z[idx] - perms)**2
         (wi * zi).sum(1)
-      end
-
-      def w
-        @w ||= weights.full.row_standardized
       end
     end
   end

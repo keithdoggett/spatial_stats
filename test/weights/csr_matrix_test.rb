@@ -44,7 +44,7 @@ class CSRMatrixTest < ActiveSupport::TestCase
     assert_equal(expected, csr.row_index)
   end
 
-  def test_mulvec_succes
+  def test_mulvec_success
     csr = SpatialStats::Weights::CSRMatrix.new(@values, @m, @n)
     vec = [1, 2, 3]
     expected = [3, 2, 1]
@@ -57,6 +57,30 @@ class CSRMatrixTest < ActiveSupport::TestCase
     vec = [1, 2, 3, 4]
 
     assert_raises(ArgumentError) { csr.mulvec(vec) }
+  end
+
+  def test_dot_row_success
+    csr = SpatialStats::Weights::CSRMatrix.new(@values, @m, @n)
+    vec = [1, 2, 3]
+    expected = 3
+
+    # dot first row with vec
+    assert_equal(expected, csr.dot_row(vec, 0))
+  end
+
+  def test_dot_row_failure
+    csr = SpatialStats::Weights::CSRMatrix.new(@values, @m, @n)
+    vec = [1, 2, 3, 4]
+
+    assert_raises(ArgumentError) { csr.dot_row(vec, 0) }
+  end
+
+  def test_dot_row_failure_index
+    csr = SpatialStats::Weights::CSRMatrix.new(@values, @m, @n)
+    vec = [1, 2, 3]
+    idx = 5 # out of range
+
+    assert_raises(ArgumentError) { csr.dot_row(vec, idx) }
   end
 
   def test_coordinates

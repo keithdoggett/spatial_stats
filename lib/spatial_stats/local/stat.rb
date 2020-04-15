@@ -124,8 +124,7 @@ module SpatialStats
           # need to truncate because floats from
           # c in sparse matrix are inconsistent with
           # dfloats
-          stat_i_orig = stat_orig[idx].truncate(6)
-
+          stat_i_orig = stat_orig[idx]
           wi = Numo::DFloat.cast(ws[idx])
           stat_i_new = mc_i(wi, shuffles[idx], idx)
 

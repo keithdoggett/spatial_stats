@@ -7,7 +7,7 @@ typedef struct csr_matrix
     int m;
     int n;
     int nnz;
-    float *values;
+    double *values;
     int *col_index;
     int *row_index;
 } csr_matrix;
@@ -30,5 +30,6 @@ VALUE csr_matrix_values(VALUE self);
 VALUE csr_matrix_col_index(VALUE self);
 VALUE csr_matrix_row_index(VALUE self);
 VALUE csr_matrix_mulvec(VALUE self, VALUE vec);
+VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row);
 VALUE csr_matrix_coordinates(VALUE self);
 #endif
