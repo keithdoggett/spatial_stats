@@ -18,7 +18,13 @@ module SpatialStats
         neighbors = SpatialStats::Queries::Weights
                     .rook_contiguity_neighbors(scope, field)
 
-        neighbors = neighbors.group_by(&:i_id)
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+        hash = Hash[keys.map { |k| [k, []] }]
+
+        neighbors = hash.merge(neighbors.group_by(&:i_id))
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
             hash = { id: neighbor[:j_id] }
@@ -40,7 +46,13 @@ module SpatialStats
         neighbors = SpatialStats::Queries::Weights
                     .queen_contiguity_neighbors(scope, field)
 
-        neighbors = neighbors.group_by(&:i_id)
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+        hash = Hash[keys.map { |k| [k, []] }]
+
+        neighbors = hash.merge(neighbors.group_by(&:i_id))
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
             hash = { id: neighbor[:j_id] }

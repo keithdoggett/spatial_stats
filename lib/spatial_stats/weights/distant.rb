@@ -18,7 +18,13 @@ module SpatialStats
         neighbors = SpatialStats::Queries::Weights
                     .distance_band_neighbors(scope, field, bandwidth)
 
-        neighbors = neighbors.group_by(&:i_id)
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+        hash = Hash[keys.map { |key| [key, []] }]
+
+        neighbors = hash.merge(neighbors.group_by(&:i_id))
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
             hash = { id: neighbor[:j_id] }
@@ -41,7 +47,13 @@ module SpatialStats
         neighbors = SpatialStats::Queries::Weights
                     .knn(scope, field, k)
 
-        neighbors = neighbors.group_by(&:i_id)
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+        hash = Hash[keys.map { |key| [key, []] }]
+
+        neighbors = hash.merge(neighbors.group_by(&:i_id))
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
             hash = { id: neighbor[:j_id] }
@@ -64,7 +76,14 @@ module SpatialStats
       def self.idw_band(scope, field, bandwidth, alpha = 1)
         neighbors = SpatialStats::Queries::Weights
                     .idw_band(scope, field, bandwidth, alpha)
+
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+        hash = Hash[keys.map { |key| [key, []] }]
         neighbors = neighbors.group_by { |pair| pair[:i_id] }
+        neighbors = hash.merge(neighbors)
 
         # only keep j_id and weight
         weights = neighbors.transform_values do |value|
@@ -87,7 +106,14 @@ module SpatialStats
       def self.idw_knn(scope, field, k, alpha = 1)
         neighbors = SpatialStats::Queries::Weights
                     .idw_knn(scope, field, k, alpha)
+
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+        hash = Hash[keys.map { |key| [key, []] }]
         neighbors = neighbors.group_by { |pair| pair[:i_id] }
+        neighbors = hash.merge(neighbors)
 
         # only keep j_id and weight
         weights = neighbors.transform_values do |value|

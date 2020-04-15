@@ -15,7 +15,7 @@ class ContiguousWeightsTest < ActiveSupport::TestCase
               .queen(scope, :geom)
 
     assert_equal(9, weights.n)
-    assert_equal(40, weights.full.sum)
+    assert_equal(40, weights.dense.sum)
   end
 
   def test_rook
@@ -24,6 +24,6 @@ class ContiguousWeightsTest < ActiveSupport::TestCase
               .rook(scope, :geom)
 
     assert_equal(9, weights.n)
-    assert_equal(24, weights.full.sum)
+    assert_equal(24, weights.dense.sum)
   end
 end
