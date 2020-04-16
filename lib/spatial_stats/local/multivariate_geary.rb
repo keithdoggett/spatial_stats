@@ -73,7 +73,14 @@ module SpatialStats
         idx = 0
         while idx < n
           stat_i_orig = stat_orig[idx]
-          wi = Numo::DFloat.cast(ws[row_index[idx]..(row_index[idx + 1] - 1)])
+
+          row_range = row_index[idx]..(row_index[idx + 1] - 1)
+          if row_range.size.zero?
+            rs[idx] = 1.0
+            idx += 1
+            next
+          end
+          wi = Numo::DFloat.cast(ws[row_range])
 
           # for each field, compute the C value at that index.
           stat_i_new = mc_i(wi, shuffles[idx], idx)

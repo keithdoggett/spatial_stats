@@ -62,7 +62,7 @@ module SpatialStats
         # need to get k for max_neighbors
         # and wc for cardinalities of each item
         # this returns an array of length n with
-        # (permutations x neighborz) Numo Arrays.
+        # (permutations x neighbors) Numo Arrays.
         # This helps reduce computation time because
         # we are only dealing with neighbors for each
         # entry not the entire list of permutations for each entry.
@@ -130,9 +130,21 @@ module SpatialStats
           # c in sparse matrix are inconsistent with
           # dfloats
           stat_i_orig = stat_orig[idx]
-          wi = Numo::DFloat.cast(ws[row_index[idx]..(row_index[idx + 1] - 1)])
-          stat_i_new = mc_i(wi, shuffles[idx], idx)
 
+          # account for case where there are no neighbors
+          # the way Numo handles negative ranges, it returns the max
+          # so there will be a len 0 z array being multiplied by a
+          # max_neighbor width permutation matrix.
+          # Need to skip.
+          row_range = row_index[idx]..(row_index[idx + 1] - 1)
+          if row_range.size.zero?
+            rs[idx] = 1.0
+            idx += 1
+            next
+          end
+          wi = Numo::DFloat.cast(ws[row_range])
+
+          stat_i_new = mc_i(wi, shuffles[idx], idx)
           rs[idx] = if stat_i_orig.positive?
                       (stat_i_new >= stat_i_orig).count
                     else
@@ -173,7 +185,15 @@ module SpatialStats
         idx = 0
         while idx < n
           stat_i_orig = stat_orig[idx]
-          wi = Numo::DFloat.cast(ws[row_index[idx]..(row_index[idx + 1] - 1)])
+
+          row_range = row_index[idx]..(row_index[idx + 1] - 1)
+          if row_range.size.zero?
+            rs[idx] = 1.0
+            idx += 1
+            next
+          end
+          wi = Numo::DFloat.cast(ws[row_range])
+
           stat_i_new = mc_i(wi, shuffles[idx], idx)
 
           rs[idx] = if stat_i_orig.positive?
