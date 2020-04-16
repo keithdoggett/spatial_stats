@@ -76,7 +76,7 @@ module SpatialStats
 
           row_range = row_index[idx]..(row_index[idx + 1] - 1)
           if row_range.size.zero?
-            rs[idx] = 1.0
+            rs[idx] = permutations
             idx += 1
             next
           end

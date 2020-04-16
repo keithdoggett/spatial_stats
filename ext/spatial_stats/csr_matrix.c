@@ -179,6 +179,8 @@ VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
     int jj;
     double tmp;
 
+    Check_Type(vec, T_ARRAY);
+
     TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
 
     if (rb_array_len(vec) != csr->n)
@@ -211,6 +213,9 @@ VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row)
     int i;
     int jj;
     double tmp;
+
+    Check_Type(vec, T_ARRAY);
+    Check_Type(row, T_FIXNUM);
 
     TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
 
