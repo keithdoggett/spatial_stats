@@ -68,11 +68,14 @@ module SpatialStats
         # entry not the entire list of permutations for each entry.
         n_1 = weights.n - 1
 
+        sparse = weights.sparse
+        row_index = sparse.row_index
+
         # weight counts
-        wc = [0] * weights.n
+        wc = Array.new(weights.n)
         k = 0
         (0..n_1).each do |idx|
-          wc[idx] = (w[idx, true] > 0).count
+          wc[idx] = row_index[idx + 1] - row_index[idx]
         end
 
         k = wc.max + 1
@@ -112,12 +115,14 @@ module SpatialStats
         # of the entire set. This will be done for each item.
         rng = gen_rng(seed)
         shuffles = crand(x, permutations, rng)
+
         n = weights.n
         # r is the number of equal to or more extreme samples
         stat_orig = stat
         rs = [0] * n
 
-        ws = neighbor_weights
+        row_index = weights.sparse.row_index
+        ws = weights.sparse.values
 
         idx = 0
         while idx < n
@@ -125,7 +130,7 @@ module SpatialStats
           # c in sparse matrix are inconsistent with
           # dfloats
           stat_i_orig = stat_orig[idx]
-          wi = Numo::DFloat.cast(ws[idx])
+          wi = Numo::DFloat.cast(ws[row_index[idx]..(row_index[idx + 1] - 1)])
           stat_i_new = mc_i(wi, shuffles[idx], idx)
 
           rs[idx] = if stat_i_orig.positive?
@@ -162,12 +167,13 @@ module SpatialStats
         stat_orig = stat
         rs = [0] * n
 
-        ws = neighbor_weights
+        row_index = weights.sparse.row_index
+        ws = weights.sparse.values
 
         idx = 0
         while idx < n
           stat_i_orig = stat_orig[idx]
-          wi = Numo::DFloat.cast(ws[idx])
+          wi = Numo::DFloat.cast(ws[row_index[idx]..(row_index[idx + 1] - 1)])
           stat_i_new = mc_i(wi, shuffles[idx], idx)
 
           rs[idx] = if stat_i_orig.positive?
@@ -242,20 +248,6 @@ module SpatialStats
         else
           Random.new
         end
-      end
-
-      def neighbor_weights
-        # record the non-zero weights in variable length arrays for each
-        # row in the weights table
-        ws = [[]] * weights.n
-        (0..weights.n - 1).each do |idx|
-          neighbors = []
-          w[idx, true].each do |wij|
-            neighbors << wij if wij != 0
-          end
-          ws[idx] = neighbors
-        end
-        ws
       end
     end
   end

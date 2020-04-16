@@ -67,12 +67,13 @@ module SpatialStats
         stat_orig = stat
         rs = [0] * n
 
-        ws = neighbor_weights
+        row_index = weights.sparse.row_index
+        ws = weights.sparse.values
 
         idx = 0
         while idx < n
           stat_i_orig = stat_orig[idx]
-          wi = Numo::DFloat.cast(ws[idx])
+          wi = Numo::DFloat.cast(ws[row_index[idx]..(row_index[idx + 1] - 1)])
 
           # for each field, compute the C value at that index.
           stat_i_new = mc_i(wi, shuffles[idx], idx)
