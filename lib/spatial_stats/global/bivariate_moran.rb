@@ -19,7 +19,7 @@ module SpatialStats
         @scope = scope
         @x_field = x_field
         @y_field = y_field
-        @weights = weights.standardized
+        @weights = weights.standardize
       end
       attr_writer :x, :y
 
@@ -29,8 +29,7 @@ module SpatialStats
       #
       # @return [Float]
       def stat
-        w = @weights.standardized
-        y_lag = SpatialStats::Utils::Lag.neighbor_sum(w, y)
+        y_lag = SpatialStats::Utils::Lag.neighbor_sum(weights, y)
         numerator = 0
         x.each_with_index do |xi, idx|
           numerator += xi * y_lag[idx]

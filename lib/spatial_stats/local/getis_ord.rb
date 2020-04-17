@@ -73,9 +73,9 @@ module SpatialStats
 
       def calc_weights
         @weights = if star?
-                     weights.windowed.standardized
+                     weights.window.standardize
                    else
-                     weights.standardized
+                     weights.standardize
                    end
       end
 

@@ -19,7 +19,7 @@ module SpatialStats
         @scope = scope
         @x_field = x_field
         @y_field = y_field
-        @weights = weights.standardized
+        @weights = weights.standardize
       end
       attr_accessor :scope, :x_field, :y_field, :weights
 

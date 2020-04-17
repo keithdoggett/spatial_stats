@@ -49,9 +49,9 @@ class WeightsMatrixTest < ActiveSupport::TestCase
     assert_equal(expected.row_index, result.row_index)
   end
 
-  def test_standardized
+  def test_standardize
     mat = SpatialStats::Weights::WeightsMatrix.new(@weights)
-    standardized_mat = mat.standardized
+    standardized_mat = mat.standardize
 
     expected = {
       1 => [{ id: 2, weight: 1.0 / 2 }, { id: 4, weight: 1.0 / 2 }],
@@ -62,9 +62,9 @@ class WeightsMatrixTest < ActiveSupport::TestCase
     assert_equal(expected, standardized_mat.weights)
   end
 
-  def test_windowed
+  def test_window
     mat = SpatialStats::Weights::WeightsMatrix.new(@weights)
-    windowed_mat = mat.windowed
+    windowed_mat = mat.window
 
     expected = {
       1 => [{ id: 1, weight: 1 }, { id: 2, weight: 1 }, { id: 4, weight: 1 }],

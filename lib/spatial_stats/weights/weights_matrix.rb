@@ -60,10 +60,11 @@ module SpatialStats
 
       ##
       # Row standardized version of the weights matrix.
-      # Will return a new version of the weights matrix standardized weights.
+      # Will return a new version of the weights matrix with standardized
+      # weights.
       #
       # @return [WeightsMatrix]
-      def standardized
+      def standardize
         new_weights = weights
 
         new_weights.transform_values do |neighbors|
@@ -83,7 +84,7 @@ module SpatialStats
       # If a row already has an entry for itself, it will be skipped.
       #
       # @return [WeightsMatrix]
-      def windowed
+      def window
         new_weights = weights
 
         new_weights.each do |key, neighbors|

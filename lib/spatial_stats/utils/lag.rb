@@ -16,7 +16,7 @@ module SpatialStats
       #
       # @return [Array] resultant vector
       def self.neighbor_average(matrix, variables)
-        matrix = matrix.standardized
+        matrix = matrix.standardize
         neighbor_sum(matrix, variables)
       end
 
@@ -40,7 +40,7 @@ module SpatialStats
       #
       # @return [Array] resultant vector
       def self.window_average(matrix, variables)
-        matrix = matrix.windowed.standardized
+        matrix = matrix.window.standardize
         window_sum(matrix, variables)
       end
 
@@ -53,7 +53,7 @@ module SpatialStats
       #
       # @return [Array] resultant vector
       def self.window_sum(matrix, variables)
-        matrix = matrix.windowed
+        matrix = matrix.window
         matrix.sparse.mulvec(variables)
       end
     end

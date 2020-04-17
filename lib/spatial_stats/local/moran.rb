@@ -55,12 +55,11 @@ module SpatialStats
       # @return [Array] of variances for each observation
       def variance
         # formula is A - B - (E[I])**2
-        wt = w.row_standardized
         exp = expectation
 
         vars = []
-        a_terms = a_calc(wt)
-        b_terms = b_calc(wt)
+        a_terms = a_calc
+        b_terms = b_calc
 
         a_terms.each_with_index do |a_term, idx|
           vars << (a_term - b_terms[idx] - (exp**2))
@@ -109,20 +108,27 @@ module SpatialStats
       end
 
       # https://pro.arcgis.com/en/pro-app/tool-reference/spatial-statistics/h-local-morans-i-additional-math.htm
-      def a_calc(wt)
-        n = wt.shape[0]
+      # TODO: sparse
+      def a_calc
+        n = weights.n
         b2i = b2i_calc
+
+        wts = weights.sparse.values
+        row_index = weights.sparse.row_index
+
         a_terms = []
 
         (0..n - 1).each do |idx|
-          sigma_term = wt[idx, true].to_a.sum { |v| v**2 }
+          row_range = row_index[idx]..(row_index[idx + 1] - 1)
+          wt = wts[row_range]
+          sigma_term = wt.sum { |v| v**2 }
           a_terms << (n - b2i) * sigma_term / (n - 1)
         end
         a_terms
       end
 
-      def b_calc(wt)
-        n = wt.shape[0]
+      def b_calc
+        n = weights.n
         b2i = b2i_calc
         b_terms = []
 
