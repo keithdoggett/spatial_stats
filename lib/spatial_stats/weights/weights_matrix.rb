@@ -11,13 +11,12 @@ module SpatialStats
       ##
       # A new instance of WeightsMatrix
       #
-      # @param [Array] keys ordered list of keys used in weights
-      # @param [Hash] weights hash of format +{key: [{j_id: neighbor_key, weight: 1}]}+ that describe the relations between neighbors
+      # @param [Hash] weights hash of format +{key: [{id: neighbor_key, weight: 1}]}+ that describe the relations between neighbors
       #
       # @return [WeightsMatrix]
-      def initialize(keys, weights)
-        @keys = keys
+      def initialize(weights)
         @weights = weights
+        @keys = weights.keys
         @n = keys.size
       end
       attr_accessor :keys, :weights, :n
@@ -26,41 +25,76 @@ module SpatialStats
       # Compute the n x n Numo::Narray of the weights hash.
       #
       # @example
-      #   hash = {1 => [{j_id: 2, weight: 1}], 2 => [{j_id: 1, weight: 1},
-      #       {j_id: 3, weight: 1}], 3 => [{j_id: 2, weight: 1}]}
+      #   hash = {1 => [{id: 2, weight: 1}], 2 => [{id: 1, weight: 1},
+      #       {id: 3, weight: 1}], 3 => [{id: 2, weight: 1}]}
       #   wm = WeightsMatrix.new(hash.keys, hash)
       #   wm.full
       #   # => Numo::DFloat[[0, 1, 0], [1, 0, 1], [0, 1, 0]]
       #
       # @return [Numo::DFloat]
-      def full
-        # returns a square matrix Wij using @keys as the order of items
-        @full ||= begin
-          rows = []
-          @keys.each do |i|
-            # iterate through each key to get the data for the row
-            row = @keys.map do |j|
-              neighbors = @weights[i]
-              match = neighbors.find { |neighbor| neighbor[:j_id] == j }
-              if match
-                match[:weight]
-              else
-                0
-              end
+      def dense
+        @dense ||= begin
+          mat = Numo::DFloat.zeros(n, n)
+          keys.each_with_index do |key, i|
+            neighbors = weights[key]
+            neighbors.each do |neighbor|
+              j = keys.index(neighbor[:id])
+              weight = neighbor[:weight]
+
+              # assign the weight to row and column
+              mat[i, j] = weight
             end
-            rows << row
           end
 
-          Numo::DFloat.cast(rows)
+          mat
         end
       end
 
       ##
-      # Row standardized version of +#full+
+      # Compute the CSR representation of the weights.
       #
-      # @return [Numo::DFloat]
-      def standardized
-        @standardized ||= full.row_standardized
+      # @return [CSRMatrix]
+      def sparse
+        @sparse ||= CSRMatrix.new(dense.to_a.flatten, n, n)
+      end
+
+      ##
+      # Row standardized version of the weights matrix.
+      # Will return a new version of the weights matrix with standardized
+      # weights.
+      #
+      # @return [WeightsMatrix]
+      def standardize
+        new_weights = weights
+
+        new_weights.transform_values do |neighbors|
+          sum = neighbors.reduce(0.0) { |acc, neighbor| acc + neighbor[:weight] }
+
+          neighbors.map do |neighbor|
+            hash = neighbor
+            hash[:weight] /= sum
+          end
+        end
+
+        self.class.new(new_weights)
+      end
+
+      ##
+      # Windowed version of the weights matrix.
+      # If a row already has an entry for itself, it will be skipped.
+      #
+      # @return [WeightsMatrix]
+      def window
+        new_weights = weights
+
+        new_weights.each do |key, neighbors|
+          unless neighbors.find { |neighbor| neighbor[:id] == key }
+            new_neighbors = (neighbors << { id: key, weight: 1 })
+            new_weights[key] = new_neighbors.sort_by { |neighbor| neighbor[:id] }
+          end
+        end
+
+        self.class.new(new_weights)
       end
     end
   end

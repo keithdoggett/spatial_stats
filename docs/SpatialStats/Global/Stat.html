@@ -421,7 +421,7 @@
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
   <span class='ivar'>@scope</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span>
   <span class='ivar'>@field</span> <span class='op'>=</span> <span class='id identifier rubyid_field'>field</span>
-  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span>
+  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -685,21 +685,21 @@
   <span class='id identifier rubyid_permutations'>permutations</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span>
     <span class='id identifier rubyid_shuffles'>shuffles</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_shuffle'>shuffle</span><span class='lparen'>(</span><span class='label'>random:</span> <span class='id identifier rubyid_rng'>rng</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
+  <span class='id identifier rubyid_shuffles'>shuffles</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_shuffles'>shuffles</span><span class='rparen'>)</span>
+
   <span class='comment'># r is the number of equal to or more extreme samples
 </span>  <span class='comment'># one sided
-</span>  <span class='id identifier rubyid_stat_orig'>stat_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat'>stat</span>
-  <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='int'>0</span>
-  <span class='id identifier rubyid_shuffles'>shuffles</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_shuffle'>shuffle</span><span class='op'>|</span>
-    <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@scope</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='comma'>,</span> <span class='ivar'>@weights</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='id identifier rubyid_shuffle'>shuffle</span>
+</span>  <span class='id identifier rubyid_stat_orig'>stat_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat'>stat</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='int'>5</span><span class='rparen'>)</span>
+  <span class='comment'># r = 0
+</span>
+  <span class='comment'># compute new stat values
+</span>  <span class='id identifier rubyid_stat_new'>stat_new</span> <span class='op'>=</span> <span class='id identifier rubyid_stat_mc'>stat_mc</span><span class='lparen'>(</span><span class='id identifier rubyid_shuffles'>shuffles</span><span class='rparen'>)</span>
 
-    <span class='comment'># https://geodacenter.github.io/glossary.html#ppvalue
-</span>    <span class='kw'>if</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
-      <span class='id identifier rubyid_r'>r</span> <span class='op'>+=</span> <span class='int'>1</span> <span class='kw'>if</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_stat'>stat</span> <span class='op'>&gt;=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span>
-    <span class='kw'>else</span>
-      <span class='id identifier rubyid_r'>r</span> <span class='op'>+=</span> <span class='int'>1</span> <span class='kw'>if</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_stat'>stat</span> <span class='op'>&lt;=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
+  <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
+        <span class='lparen'>(</span><span class='id identifier rubyid_stat_new'>stat_new</span> <span class='op'>&gt;=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
+      <span class='kw'>else</span>
+        <span class='lparen'>(</span><span class='id identifier rubyid_stat_new'>stat_new</span> <span class='op'>&lt;=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
+      <span class='kw'>end</span>
 
   <span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span> <span class='op'>+</span> <span class='float'>1.0</span><span class='rparen'>)</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span> <span class='op'>+</span> <span class='float'>1.0</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
@@ -743,11 +743,7 @@
 84
 85
 86
-87
-88
-89
-90
-91</pre>
+87</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 67</span>
@@ -759,21 +755,17 @@
   <span class='id identifier rubyid_permutations'>permutations</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span>
     <span class='id identifier rubyid_shuffles'>shuffles</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_y'>y</span><span class='period'>.</span><span class='id identifier rubyid_shuffle'>shuffle</span><span class='lparen'>(</span><span class='label'>random:</span> <span class='id identifier rubyid_rng'>rng</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
+  <span class='id identifier rubyid_shuffles'>shuffles</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_shuffles'>shuffles</span><span class='rparen'>)</span>
 
   <span class='comment'># r is the number of equal to or more extreme samples
-</span>  <span class='id identifier rubyid_stat_orig'>stat_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat'>stat</span>
-  <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='int'>0</span>
-  <span class='id identifier rubyid_shuffles'>shuffles</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_shuffle'>shuffle</span><span class='op'>|</span>
-    <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@scope</span><span class='comma'>,</span> <span class='ivar'>@x_field</span><span class='comma'>,</span> <span class='ivar'>@y_field</span><span class='comma'>,</span> <span class='ivar'>@weights</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span>
-    <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_shuffle'>shuffle</span>
+</span>  <span class='id identifier rubyid_stat_orig'>stat_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat'>stat</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='int'>5</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_stat_new'>stat_new</span> <span class='op'>=</span> <span class='id identifier rubyid_stat_mc'>stat_mc</span><span class='lparen'>(</span><span class='id identifier rubyid_shuffles'>shuffles</span><span class='rparen'>)</span>
 
-    <span class='kw'>if</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
-      <span class='id identifier rubyid_r'>r</span> <span class='op'>+=</span> <span class='int'>1</span> <span class='kw'>if</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_stat'>stat</span> <span class='op'>&gt;=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span>
-    <span class='kw'>else</span>
-      <span class='id identifier rubyid_r'>r</span> <span class='op'>+=</span> <span class='int'>1</span> <span class='kw'>if</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_stat'>stat</span> <span class='op'>&lt;=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
+  <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
+        <span class='lparen'>(</span><span class='id identifier rubyid_stat_new'>stat_new</span> <span class='op'>&gt;=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
+      <span class='kw'>else</span>
+        <span class='lparen'>(</span><span class='id identifier rubyid_stat_new'>stat_new</span> <span class='op'>&lt;=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
+      <span class='kw'>end</span>
 
   <span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span> <span class='op'>+</span> <span class='float'>1.0</span><span class='rparen'>)</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span> <span class='op'>+</span> <span class='float'>1.0</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
@@ -950,7 +942,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr  3 09:41:51 2020 by
+  Generated on Fri Apr 17 14:11:14 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

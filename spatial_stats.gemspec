@@ -32,13 +32,15 @@ Gem::Specification.new do |spec|
   #     "public gem pushes."
   # end
 
-  spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
+  spec.files = Dir['{app,config,db,lib,ext}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
+  spec.extensions = ['ext/spatial_stats/extconf.rb']
 
   spec.add_dependency 'numo-narray', '~>0.9.1'
   spec.add_dependency 'rails', '~> 6.0.0'
   spec.add_development_dependency 'activerecord-postgis-adapter', '~> 6.0.0'
   spec.add_development_dependency 'database_cleaner', '~> 1.8.3'
   spec.add_development_dependency 'pg', '~> 1.0'
+  spec.add_development_dependency 'rake-compiler', '~>1.1.0'
   spec.add_development_dependency 'ruby-prof', '~> 1.3.1'
   spec.add_development_dependency 'tzinfo', '~> 1.2.6'
 end

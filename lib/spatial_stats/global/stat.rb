@@ -11,7 +11,7 @@ module SpatialStats
       def initialize(scope, field, weights)
         @scope = scope
         @field = field
-        @weights = weights
+        @weights = weights.standardize
       end
       attr_accessor :scope, :field, :weights
 
@@ -93,7 +93,7 @@ module SpatialStats
       end
 
       def w
-        @w ||= weights.standardized
+        @w ||= weights.dense
       end
 
       def gen_rng(seed)

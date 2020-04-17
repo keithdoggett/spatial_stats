@@ -15,21 +15,26 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.rook(scope, field)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .rook_contiguity_neighbors(scope, field)
 
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+
         neighbors = neighbors.group_by(&:i_id)
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
+
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            hash = neighbor.as_json(only: [:j_id]).symbolize_keys
+            hash = { id: neighbor[:j_id] }
             hash[:weight] = 1
             hash
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
 
       ##
@@ -40,21 +45,26 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.queen(scope, field)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .queen_contiguity_neighbors(scope, field)
 
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+
         neighbors = neighbors.group_by(&:i_id)
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
+
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            hash = neighbor.as_json(only: [:j_id]).symbolize_keys
+            hash = { id: neighbor[:j_id] }
             hash[:weight] = 1
             hash
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
     end
   end

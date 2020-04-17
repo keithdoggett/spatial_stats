@@ -18,6 +18,7 @@ env:
     - PGHOST=""
 before_install: gem install bundler -v 2.1.4
 script:
+  - bundle exec rake compile
   - cd test/dummy
   - bundle exec rake db:create
   - bundle exec rake db:migrate

@@ -19,7 +19,7 @@ module SpatialStats
         @scope = scope
         @x_field = x_field
         @y_field = y_field
-        @weights = weights
+        @weights = weights.standardize
       end
       attr_writer :x, :y
 
@@ -29,8 +29,7 @@ module SpatialStats
       #
       # @return [Float]
       def stat
-        w = @weights.standardized
-        y_lag = SpatialStats::Utils::Lag.neighbor_sum(w, y)
+        y_lag = SpatialStats::Utils::Lag.neighbor_sum(weights, y)
         numerator = 0
         x.each_with_index do |xi, idx|
           numerator += xi * y_lag[idx]
@@ -55,19 +54,20 @@ module SpatialStats
       #
       # @return [Float]
       def variance
-        n = @weights.n
-        wij = @weights.full
-        w = wij.sum
+        n = weights.n
+        w_sum = n.to_f
         e = expectation
 
-        s1 = s1_calc(n, wij)
-        s2 = s2_calc(n, wij)
+        wij = weights.sparse.coordinates
+
+        s1 = s1_calc(wij)
+        s2 = s2_calc(n, wij, weights.sparse.row_index)
         s3 = s3_calc(n, x)
 
-        s4 = (n**2 - 3 * n + 3) * s1 - n * s2 + 3 * (w**2)
-        s5 = (n**2 - n) * s1 - 2 * n * s2 + 6 * (w**2)
+        s4 = (n**2 - 3 * n + 3) * s1 - n * s2 + 3 * (w_sum**2)
+        s5 = (n**2 - n) * s1 - 2 * n * s2 + 6 * (w_sum**2)
 
-        var_left = (n * s4 - s3 * s5) / ((n - 1) * (n - 2) * (n - 3) * w**2)
+        var_left = (n * s4 - s3 * s5) / ((n - 1) * (n - 2) * (n - 3) * w_sum**2)
         var_right = e**2
         var_left - var_right
       end
@@ -120,26 +120,29 @@ module SpatialStats
         numerator / denominator
       end
 
-      def s2_calc(n, wij)
+      def s2_calc(n, wij, row_index)
         s2 = 0
-        (0..n - 1).each do |i|
+        wij_arr = wij.to_a # for row slicing
+        (0..n - 1).each do |idx|
+          row = wij_arr[row_index[idx]..(row_index[idx + 1] - 1)]
           left_term = 0
           right_term = 0
-          (0..n - 1).each do |j|
-            left_term += wij[i, j]
-            right_term += wij[j, i]
+
+          row.each do |coords, val|
+            left_term += val
+            right_term += wij[coords.reverse] || 0
           end
           s2 += (left_term + right_term)**2
         end
         s2
       end
 
-      def s1_calc(n, wij)
+      def s1_calc(wij)
         s1 = 0
-        (0..n - 1).each do |i|
-          (0..n - 1).each do |j|
-            s1 += (wij[i, j] + wij[j, i])**2
-          end
+        wij.each do |coords, val|
+          # (wij + wji)**2
+          wji = wij[coords.reverse] || 0
+          s1 += (val + wji)**2
         end
         s1 / 2
       end

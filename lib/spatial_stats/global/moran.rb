@@ -29,7 +29,7 @@ module SpatialStats
         # compute's Moran's I. numerator is sum of zi * spatial lag of zi
         # denominator is sum of zi**2.
         # have to use row-standardized weights
-        z_lag = SpatialStats::Utils::Lag.neighbor_sum(w, z)
+        z_lag = SpatialStats::Utils::Lag.neighbor_sum(weights, z)
         numerator = 0
         z.each_with_index do |zi, j|
           row_sum = zi * z_lag[j]
@@ -58,11 +58,13 @@ module SpatialStats
       # @return [Float]
       def variance
         n = weights.n
-        w_sum = w.sum
+        w_sum = n # standardized weights
         e = expectation
 
-        s1 = s1_calc(n, w)
-        s2 = s2_calc(n, w)
+        wij = weights.sparse.coordinates
+
+        s1 = s1_calc(wij)
+        s2 = s2_calc(n, wij, weights.sparse.row_index)
         s3 = s3_calc(n, z)
 
         s4 = (n**2 - 3 * n + 3) * s1 - n * s2 + 3 * (w_sum**2)
@@ -113,26 +115,30 @@ module SpatialStats
         numerator / denominator
       end
 
-      def s2_calc(n, wij)
+      # use row_index to take slices of wij
+      def s2_calc(n, wij, row_index)
         s2 = 0
+        wij_arr = wij.to_a # for row slicing
         (0..n - 1).each do |idx|
+          row = wij_arr[row_index[idx]..(row_index[idx + 1] - 1)]
           left_term = 0
           right_term = 0
-          (0..n - 1).each do |j|
-            left_term += wij[idx, j]
-            right_term += wij[j, idx]
+
+          row.each do |coords, val|
+            left_term += val
+            right_term += wij[coords.reverse] || 0
           end
           s2 += (left_term + right_term)**2
         end
         s2
       end
 
-      def s1_calc(n, wij)
+      def s1_calc(wij)
         s1 = 0
-        (0..n - 1).each do |idx|
-          (0..n - 1).each do |j|
-            s1 += (wij[idx, j] + wij[j, idx])**2
-          end
+        wij.each do |coords, val|
+          # (wij + wji)**2
+          wji = wij[coords.reverse] || 0
+          s1 += (val + wji)**2
         end
         s1 / 2
       end

@@ -240,9 +240,12 @@ RGeo::Geos.supported?
 - ~~Make star a parameter to getis-ord class~~
 - ~~Add examples/usage to docs~~
 - ~~Create RDocs~~
-- Refactor Global Moran and BVMoran
-- Support non-numeric keys in WeightsMatrix/General refactor
-- Write SparseMatrix C ext
+- ~~Refactor Global Moran and BVMoran~~
+- ~~Support non-numeric keys in WeightsMatrix/General refactor~~
+- ~~Write SparseMatrix C ext~~
+- ~~Change instances of `standardized` and `windowed` to `standardize` and `window`, respectively.~~
+- Add `positive` and `negative` groups for `GetisOrd` and `Geary`, similar to how `#quads` is implemented.
+- Add `#summary` method to statistics that will combine stat vals with p-vals, and quads or hot/cold spot info
 
 ## Future Work
 
@@ -261,7 +264,7 @@ RGeo::Geos.supported?
 - Rate smoothing
 - Bayes smoothing
 
-### Global
+#### Global
 
 - Geary class
 - GetisOrd class
@@ -270,7 +273,7 @@ RGeo::Geos.supported?
 
 - Join Count Statistic
 
-### PPA
+#### PPA
 
 - Add descriptive stat methods for point clusters.
 

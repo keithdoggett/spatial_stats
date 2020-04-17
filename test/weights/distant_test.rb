@@ -22,7 +22,7 @@ class DistantWeightsTest < ActiveSupport::TestCase
 
     # same as rook contiguity, so 24 matches
     assert_equal(9, weights.n)
-    assert_equal(24, weights.full.sum.round)
+    assert_equal(24, weights.dense.sum.round)
   end
 
   def test_knn
@@ -33,7 +33,7 @@ class DistantWeightsTest < ActiveSupport::TestCase
               .knn(scope, :position, neighbors)
 
     assert_equal(9, weights.n)
-    assert_equal(36, weights.full.sum.round)
+    assert_equal(36, weights.dense.sum.round)
   end
 
   def test_idw_band
@@ -45,7 +45,7 @@ class DistantWeightsTest < ActiveSupport::TestCase
               .idw_band(scope, :position, bandwidth, alpha)
 
     assert_equal(9, weights.n)
-    assert_equal(32.0, weights.full.sum.round)
+    assert_equal(32.0, weights.dense.sum.round)
   end
 
   def test_idw_knn
@@ -57,6 +57,6 @@ class DistantWeightsTest < ActiveSupport::TestCase
               .idw_knn(scope, :position, neighbors, alpha)
 
     assert_equal(9, weights.n)
-    assert_equal(29.0, weights.full.sum.round)
+    assert_equal(29.0, weights.dense.sum.round)
   end
 end

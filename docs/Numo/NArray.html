@@ -128,7 +128,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#row_standardized-instance_method" title="#row_standardized (instance method)">#<strong>row_standardized</strong>  &#x21d2; Numo::NArray </a>
+      <a href="#row_standardize-instance_method" title="#row_standardize (instance method)">#<strong>row_standardize</strong>  &#x21d2; Numo::NArray </a>
     
 
     
@@ -152,7 +152,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#windowed-instance_method" title="#windowed (instance method)">#<strong>windowed</strong>  &#x21d2; Numo::NArray </a>
+      <a href="#window-instance_method" title="#window (instance method)">#<strong>window</strong>  &#x21d2; Numo::NArray </a>
     
 
     
@@ -183,9 +183,9 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="row_standardized-instance_method">
+  <h3 class="signature first" id="row_standardize-instance_method">
   
-    #<strong>row_standardized</strong>  &#x21d2; <tt><span class='object_link'><a href="" title="Numo::NArray (class)">Numo::NArray</a></span></tt> 
+    #<strong>row_standardize</strong>  &#x21d2; <tt><span class='object_link'><a href="" title="Numo::NArray (class)">Numo::NArray</a></span></tt> 
   
 
   
@@ -198,7 +198,7 @@
 
 <p>@ example</p>
 
-<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_row_standardized'>row_standardized</span>
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_row_standardize'>row_standardize</span>
 <span class='const'><span class='object_link'><a href="../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='float'>0.5</span><span class='comma'>,</span> <span class='float'>0.5</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='float'>0.33333</span><span class='comma'>,</span> <span class='float'>0.33333</span><span class='comma'>,</span> <span class='float'>0.33333</span><span class='rbracket'>]</span><span class='rbracket'>]</span>
 </code></pre>
 
@@ -246,7 +246,7 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/narray_ext.rb', line 19</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_row_standardized'>row_standardized</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_row_standardize'>row_standardize</span>
   <span class='comment'># every row will sum up to 1, or if they are all 0, do nothing
 </span>  <span class='id identifier rubyid_standardized'>standardized</span> <span class='op'>=</span> <span class='id identifier rubyid_each_over_axis'>each_over_axis</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_row'>row</span><span class='op'>|</span>
     <span class='id identifier rubyid_sum'>sum</span> <span class='op'>=</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
@@ -267,9 +267,9 @@
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="windowed-instance_method">
+  <h3 class="signature " id="window-instance_method">
   
-    #<strong>windowed</strong>  &#x21d2; <tt><span class='object_link'><a href="" title="Numo::NArray (class)">Numo::NArray</a></span></tt> 
+    #<strong>window</strong>  &#x21d2; <tt><span class='object_link'><a href="" title="Numo::NArray (class)">Numo::NArray</a></span></tt> 
   
 
   
@@ -282,14 +282,14 @@
 
 <p>@ example</p>
 
-<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_windowed'>windowed</span>
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_window'>window</span>
 <span class='const'><span class='object_link'><a href="../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='rbracket'>]</span>
 </code></pre>
 
 <p>@ example</p>
 
 <pre class="code ruby"><code class="ruby"><span class='comment'># Input will be equivalent to output in this case
-</span><span class='const'><span class='object_link'><a href="../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_windowed'>windowed</span>
+</span><span class='const'><span class='object_link'><a href="../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_window'>window</span>
 <span class='const'><span class='object_link'><a href="../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='rbracket'>]</span>
 </code></pre>
 
@@ -331,7 +331,7 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/narray_ext.rb', line 50</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_windowed'>windowed</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_window'>window</span>
   <span class='comment'># in windowed calculations, the diagonal is set to 1
 </span>  <span class='comment'># if trace (sum of diag) is 0, add it, else return input
 </span>  <span class='kw'>if</span> <span class='id identifier rubyid_trace'>trace</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
@@ -350,7 +350,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr  3 09:41:51 2020 by
+  Generated on Fri Apr 17 14:11:14 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

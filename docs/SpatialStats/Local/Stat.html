@@ -471,7 +471,7 @@
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
   <span class='ivar'>@scope</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span>
   <span class='ivar'>@field</span> <span class='op'>=</span> <span class='id identifier rubyid_field'>field</span>
-  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span>
+  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -708,7 +708,10 @@
 91
 92
 93
-94</pre>
+94
+95
+96
+97</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/stat.rb', line 60</span>
@@ -718,17 +721,20 @@
 </span>  <span class='comment'># need to get k for max_neighbors
 </span>  <span class='comment'># and wc for cardinalities of each item
 </span>  <span class='comment'># this returns an array of length n with
-</span>  <span class='comment'># (permutations x neighborz) Numo Arrays.
+</span>  <span class='comment'># (permutations x neighbors) Numo Arrays.
 </span>  <span class='comment'># This helps reduce computation time because
 </span>  <span class='comment'># we are only dealing with neighbors for each
 </span>  <span class='comment'># entry not the entire list of permutations for each entry.
 </span>  <span class='id identifier rubyid_n_1'>n_1</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>1</span>
 
+  <span class='id identifier rubyid_sparse'>sparse</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span>
+  <span class='id identifier rubyid_row_index'>row_index</span> <span class='op'>=</span> <span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_row_index'>row_index</span>
+
   <span class='comment'># weight counts
-</span>  <span class='id identifier rubyid_wc'>wc</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_n'>n</span>
+</span>  <span class='id identifier rubyid_wc'>wc</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_n'>n</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_k'>k</span> <span class='op'>=</span> <span class='int'>0</span>
   <span class='lparen'>(</span><span class='int'>0</span><span class='op'>..</span><span class='id identifier rubyid_n_1'>n_1</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_idx'>idx</span><span class='op'>|</span>
-    <span class='id identifier rubyid_wc'>wc</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_w'>w</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span> <span class='op'>&gt;</span> <span class='int'>0</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
+    <span class='id identifier rubyid_wc'>wc</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_row_index'>row_index</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span> <span class='op'>+</span> <span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='id identifier rubyid_row_index'>row_index</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span>
   <span class='kw'>end</span>
 
   <span class='id identifier rubyid_k'>k</span> <span class='op'>=</span> <span class='id identifier rubyid_wc'>wc</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span> <span class='op'>+</span> <span class='int'>1</span>
@@ -896,9 +902,6 @@
       <pre class="lines">
 
 
-108
-109
-110
 111
 112
 113
@@ -929,10 +932,29 @@
 138
 139
 140
-141</pre>
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/stat.rb', line 108</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/stat.rb', line 111</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_mc'>mc</span><span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span> <span class='op'>=</span> <span class='int'>99</span><span class='comma'>,</span> <span class='id identifier rubyid_seed'>seed</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='comment'># For local tests, we need to shuffle the values
@@ -941,20 +963,36 @@
 </span>  <span class='comment'># of the entire set. This will be done for each item.
 </span>  <span class='id identifier rubyid_rng'>rng</span> <span class='op'>=</span> <span class='id identifier rubyid_gen_rng'>gen_rng</span><span class='lparen'>(</span><span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_shuffles'>shuffles</span> <span class='op'>=</span> <span class='id identifier rubyid_crand'>crand</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_permutations'>permutations</span><span class='comma'>,</span> <span class='id identifier rubyid_rng'>rng</span><span class='rparen'>)</span>
+
   <span class='id identifier rubyid_n'>n</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_n'>n</span>
   <span class='comment'># r is the number of equal to or more extreme samples
 </span>  <span class='id identifier rubyid_stat_orig'>stat_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat'>stat</span>
   <span class='id identifier rubyid_rs'>rs</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_n'>n</span>
 
-  <span class='id identifier rubyid_ws'>ws</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbor_weights'>neighbor_weights</span>
+  <span class='id identifier rubyid_row_index'>row_index</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_row_index'>row_index</span>
+  <span class='id identifier rubyid_ws'>ws</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span>
 
   <span class='id identifier rubyid_idx'>idx</span> <span class='op'>=</span> <span class='int'>0</span>
   <span class='kw'>while</span> <span class='id identifier rubyid_idx'>idx</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_n'>n</span>
-    <span class='id identifier rubyid_stat_i_orig'>stat_i_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span>
+    <span class='comment'># need to truncate because floats from
+</span>    <span class='comment'># c in sparse matrix are inconsistent with
+</span>    <span class='comment'># dfloats
+</span>    <span class='id identifier rubyid_stat_i_orig'>stat_i_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span>
 
-    <span class='id identifier rubyid_wi'>wi</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_ws'>ws</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='comment'># account for case where there are no neighbors
+</span>    <span class='comment'># the way Numo handles negative ranges, it returns the max
+</span>    <span class='comment'># so there will be a len 0 z array being multiplied by a
+</span>    <span class='comment'># max_neighbor width permutation matrix.
+</span>    <span class='comment'># Need to skip.
+</span>    <span class='id identifier rubyid_row_range'>row_range</span> <span class='op'>=</span> <span class='id identifier rubyid_row_index'>row_index</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='op'>..</span><span class='lparen'>(</span><span class='id identifier rubyid_row_index'>row_index</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span> <span class='op'>+</span> <span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_row_range'>row_range</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
+      <span class='id identifier rubyid_rs'>rs</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_permutations'>permutations</span>
+      <span class='id identifier rubyid_idx'>idx</span> <span class='op'>+=</span> <span class='int'>1</span>
+      <span class='kw'>next</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_wi'>wi</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_ws'>ws</span><span class='lbracket'>[</span><span class='id identifier rubyid_row_range'>row_range</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
     <span class='id identifier rubyid_stat_i_new'>stat_i_new</span> <span class='op'>=</span> <span class='id identifier rubyid_mc_i'>mc_i</span><span class='lparen'>(</span><span class='id identifier rubyid_wi'>wi</span><span class='comma'>,</span> <span class='id identifier rubyid_shuffles'>shuffles</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='rparen'>)</span>
-
     <span class='id identifier rubyid_rs'>rs</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_stat_i_orig'>stat_i_orig</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
                 <span class='lparen'>(</span><span class='id identifier rubyid_stat_i_new'>stat_i_new</span> <span class='op'>&gt;=</span> <span class='id identifier rubyid_stat_i_orig'>stat_i_orig</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
               <span class='kw'>else</span>
@@ -1060,25 +1098,6 @@
       <pre class="lines">
 
 
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
 174
 175
 176
@@ -1088,10 +1107,38 @@
 180
 181
 182
-183</pre>
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/stat.rb', line 155</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/stat.rb', line 174</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_mc_bv'>mc_bv</span><span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span><span class='comma'>,</span> <span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_rng'>rng</span> <span class='op'>=</span> <span class='id identifier rubyid_gen_rng'>gen_rng</span><span class='lparen'>(</span><span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
@@ -1101,12 +1148,21 @@
   <span class='id identifier rubyid_stat_orig'>stat_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat'>stat</span>
   <span class='id identifier rubyid_rs'>rs</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_n'>n</span>
 
-  <span class='id identifier rubyid_ws'>ws</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbor_weights'>neighbor_weights</span>
+  <span class='id identifier rubyid_row_index'>row_index</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_row_index'>row_index</span>
+  <span class='id identifier rubyid_ws'>ws</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span>
 
   <span class='id identifier rubyid_idx'>idx</span> <span class='op'>=</span> <span class='int'>0</span>
   <span class='kw'>while</span> <span class='id identifier rubyid_idx'>idx</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_n'>n</span>
     <span class='id identifier rubyid_stat_i_orig'>stat_i_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_wi'>wi</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_ws'>ws</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+    <span class='id identifier rubyid_row_range'>row_range</span> <span class='op'>=</span> <span class='id identifier rubyid_row_index'>row_index</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='op'>..</span><span class='lparen'>(</span><span class='id identifier rubyid_row_index'>row_index</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span> <span class='op'>+</span> <span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_row_range'>row_range</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
+      <span class='id identifier rubyid_rs'>rs</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_permutations'>permutations</span>
+      <span class='id identifier rubyid_idx'>idx</span> <span class='op'>+=</span> <span class='int'>1</span>
+      <span class='kw'>next</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_wi'>wi</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_ws'>ws</span><span class='lbracket'>[</span><span class='id identifier rubyid_row_range'>row_range</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
     <span class='id identifier rubyid_stat_i_new'>stat_i_new</span> <span class='op'>=</span> <span class='id identifier rubyid_mc_i'>mc_i</span><span class='lparen'>(</span><span class='id identifier rubyid_wi'>wi</span><span class='comma'>,</span> <span class='id identifier rubyid_shuffles'>shuffles</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='rparen'>)</span>
 
     <span class='id identifier rubyid_rs'>rs</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_stat_i_orig'>stat_i_orig</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
@@ -1188,36 +1244,34 @@
       <pre class="lines">
 
 
-201
-202
-203
-204
-205
-206
-207
-208
-209
-210
-211
-212
-213
-214
-215
-216
-217
-218
-219
-220
-221
-222</pre>
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/stat.rb', line 201</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/stat.rb', line 229</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quads'>quads</span>
   <span class='comment'># https://github.com/pysal/esda/blob/master/esda/moran.py#L925
-</span>  <span class='id identifier rubyid_w'>w</span> <span class='op'>=</span> <span class='ivar'>@weights</span><span class='period'>.</span><span class='id identifier rubyid_full'>full</span>
-  <span class='id identifier rubyid_z_lag'>z_lag</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils.html" title="SpatialStats::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils/Lag.html" title="SpatialStats::Utils::Lag (module)">Lag</a></span></span><span class='period'>.</span><span class='id identifier rubyid_neighbor_average'><span class='object_link'><a href="../Utils/Lag.html#neighbor_average-class_method" title="SpatialStats::Utils::Lag.neighbor_average (method)">neighbor_average</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_w'>w</span><span class='comma'>,</span> <span class='id identifier rubyid_z'>z</span><span class='rparen'>)</span>
+</span>  <span class='id identifier rubyid_z_lag'>z_lag</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils.html" title="SpatialStats::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils/Lag.html" title="SpatialStats::Utils::Lag (module)">Lag</a></span></span><span class='period'>.</span><span class='id identifier rubyid_neighbor_average'><span class='object_link'><a href="../Utils/Lag.html#neighbor_average-class_method" title="SpatialStats::Utils::Lag.neighbor_average (method)">neighbor_average</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='comma'>,</span> <span class='id identifier rubyid_z'>z</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_zp'>zp</span> <span class='op'>=</span> <span class='id identifier rubyid_z'>z</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:positive?</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_lp'>lp</span> <span class='op'>=</span> <span class='id identifier rubyid_z_lag'>z_lag</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:positive?</span><span class='rparen'>)</span>
 
@@ -1417,7 +1471,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr  3 09:41:51 2020 by
+  Generated on Fri Apr 17 14:11:14 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

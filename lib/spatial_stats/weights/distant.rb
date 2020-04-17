@@ -15,21 +15,26 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.distance_band(scope, field, bandwidth)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .distance_band_neighbors(scope, field, bandwidth)
 
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+
         neighbors = neighbors.group_by(&:i_id)
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
+
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            hash = neighbor.as_json(only: [:j_id]).symbolize_keys
+            hash = { id: neighbor[:j_id] }
             hash[:weight] = 1
             hash
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
 
       ##
@@ -41,21 +46,26 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.knn(scope, field, k)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .knn(scope, field, k)
 
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
+
         neighbors = neighbors.group_by(&:i_id)
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
+
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            hash = neighbor.as_json(only: [:j_id]).symbolize_keys
+            hash = { id: neighbor[:j_id] }
             hash[:weight] = 1
             hash
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
 
       ##
@@ -68,20 +78,24 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.idw_band(scope, field, bandwidth, alpha = 1)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .idw_band(scope, field, bandwidth, alpha)
+
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
         neighbors = neighbors.group_by { |pair| pair[:i_id] }
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
 
         # only keep j_id and weight
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            { weight: neighbor[:weight], j_id: neighbor[:j_id] }
+            { weight: neighbor[:weight], id: neighbor[:j_id] }
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
 
       ##
@@ -94,20 +108,24 @@ module SpatialStats
       #
       # @return [WeightsMatrix]
       def self.idw_knn(scope, field, k, alpha = 1)
-        p_key = scope.primary_key
-        keys = scope.pluck(p_key).sort
-
         neighbors = SpatialStats::Queries::Weights
                     .idw_knn(scope, field, k, alpha)
+
+        # get keys to make sure we have consistent dimensions when
+        # some entries don't have neighbors.
+        # define a new hash that has all the keys from scope
+        keys = SpatialStats::Queries::Variables.query_field(scope, scope.klass.primary_key)
         neighbors = neighbors.group_by { |pair| pair[:i_id] }
+        missing_neighbors = Hash[(keys - neighbors.keys).map { |key| [key, []] }]
+        neighbors = neighbors.merge(missing_neighbors)
 
         # only keep j_id and weight
         weights = neighbors.transform_values do |value|
           value.map do |neighbor|
-            { weight: neighbor[:weight], j_id: neighbor[:j_id] }
+            { weight: neighbor[:weight], id: neighbor[:j_id] }
           end
         end
-        SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+        SpatialStats::Weights::WeightsMatrix.new(weights)
       end
     end
   end

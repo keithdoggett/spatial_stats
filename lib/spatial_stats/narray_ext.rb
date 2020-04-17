@@ -12,11 +12,11 @@ module Numo
     #
     # @ example
     #
-    #   Numo::DFloat [[0, 1, 1], [1, 1, 1]].row_standardized
+    #   Numo::DFloat [[0, 1, 1], [1, 1, 1]].row_standardize
     #   Numo::DFloat [[0, 0.5, 0.5], [0.33333, 0.33333, 0.33333]]
     #
     # @return [Numo::NArray]
-    def row_standardized
+    def row_standardize
       # every row will sum up to 1, or if they are all 0, do nothing
       standardized = each_over_axis.map do |row|
         sum = row.sum
@@ -38,16 +38,16 @@ module Numo
     #
     # @ example
     #
-    #   Numo::DFloat [[0, 1, 0], [1, 0, 1], [0, 1, 0]].windowed
+    #   Numo::DFloat [[0, 1, 0], [1, 0, 1], [0, 1, 0]].window
     #   Numo::DFloat [[1, 1, 0], [1, 1, 1], [0, 1, 1]]
     #
     # @ example
     #   # Input will be equivalent to output in this case
-    #   Numo::DFloat [[1, 1, 0], [1, 0, 1], [0, 1, 0]].windowed
+    #   Numo::DFloat [[1, 1, 0], [1, 0, 1], [0, 1, 0]].window
     #   Numo::DFloat [[1, 1, 0], [1, 0, 1], [0, 1, 0]]
     #
     # @return [Numo::NArray]
-    def windowed
+    def window
       # in windowed calculations, the diagonal is set to 1
       # if trace (sum of diag) is 0, add it, else return input
       if trace.zero?

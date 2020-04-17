@@ -12,7 +12,7 @@ module SpatialStats
       def initialize(scope, field, weights)
         @scope = scope
         @field = field
-        @weights = weights
+        @weights = weights.standardize
       end
       attr_accessor :scope, :field, :weights
 
@@ -62,17 +62,20 @@ module SpatialStats
         # need to get k for max_neighbors
         # and wc for cardinalities of each item
         # this returns an array of length n with
-        # (permutations x neighborz) Numo Arrays.
+        # (permutations x neighbors) Numo Arrays.
         # This helps reduce computation time because
         # we are only dealing with neighbors for each
         # entry not the entire list of permutations for each entry.
         n_1 = weights.n - 1
 
+        sparse = weights.sparse
+        row_index = sparse.row_index
+
         # weight counts
-        wc = [0] * weights.n
+        wc = Array.new(weights.n)
         k = 0
         (0..n_1).each do |idx|
-          wc[idx] = (w[idx, true] > 0).count
+          wc[idx] = row_index[idx + 1] - row_index[idx]
         end
 
         k = wc.max + 1
@@ -112,20 +115,36 @@ module SpatialStats
         # of the entire set. This will be done for each item.
         rng = gen_rng(seed)
         shuffles = crand(x, permutations, rng)
+
         n = weights.n
         # r is the number of equal to or more extreme samples
         stat_orig = stat
         rs = [0] * n
 
-        ws = neighbor_weights
+        row_index = weights.sparse.row_index
+        ws = weights.sparse.values
 
         idx = 0
         while idx < n
+          # need to truncate because floats from
+          # c in sparse matrix are inconsistent with
+          # dfloats
           stat_i_orig = stat_orig[idx]
 
-          wi = Numo::DFloat.cast(ws[idx])
-          stat_i_new = mc_i(wi, shuffles[idx], idx)
+          # account for case where there are no neighbors
+          # the way Numo handles negative ranges, it returns the max
+          # so there will be a len 0 z array being multiplied by a
+          # max_neighbor width permutation matrix.
+          # Need to skip.
+          row_range = row_index[idx]..(row_index[idx + 1] - 1)
+          if row_range.size.zero?
+            rs[idx] = permutations
+            idx += 1
+            next
+          end
+          wi = Numo::DFloat.cast(ws[row_range])
 
+          stat_i_new = mc_i(wi, shuffles[idx], idx)
           rs[idx] = if stat_i_orig.positive?
                       (stat_i_new >= stat_i_orig).count
                     else
@@ -160,12 +179,21 @@ module SpatialStats
         stat_orig = stat
         rs = [0] * n
 
-        ws = neighbor_weights
+        row_index = weights.sparse.row_index
+        ws = weights.sparse.values
 
         idx = 0
         while idx < n
           stat_i_orig = stat_orig[idx]
-          wi = Numo::DFloat.cast(ws[idx])
+
+          row_range = row_index[idx]..(row_index[idx + 1] - 1)
+          if row_range.size.zero?
+            rs[idx] = permutations
+            idx += 1
+            next
+          end
+          wi = Numo::DFloat.cast(ws[row_range])
+
           stat_i_new = mc_i(wi, shuffles[idx], idx)
 
           rs[idx] = if stat_i_orig.positive?
@@ -200,8 +228,7 @@ module SpatialStats
       # @return [Array] of labels
       def quads
         # https://github.com/pysal/esda/blob/master/esda/moran.py#L925
-        w = @weights.full
-        z_lag = SpatialStats::Utils::Lag.neighbor_average(w, z)
+        z_lag = SpatialStats::Utils::Lag.neighbor_average(weights, z)
         zp = z.map(&:positive?)
         lp = z_lag.map(&:positive?)
 
@@ -232,7 +259,7 @@ module SpatialStats
       end
 
       def w
-        weights.standardized
+        @w ||= weights.dense
       end
 
       def gen_rng(seed = nil)
@@ -241,20 +268,6 @@ module SpatialStats
         else
           Random.new
         end
-      end
-
-      def neighbor_weights
-        # record the non-zero weights in variable length arrays for each
-        # row in the weights table
-        ws = [[]] * weights.n
-        (0..weights.n - 1).each do |idx|
-          neighbors = []
-          w[idx, true].each do |wij|
-            neighbors << wij if wij != 0
-          end
-          ws[idx] = neighbors
-        end
-        ws
       end
     end
   end

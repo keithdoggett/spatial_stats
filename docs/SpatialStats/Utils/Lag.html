@@ -175,7 +175,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Dot product of the input windowed, row standardizd matrix by the input vector, variables.</p>
+<p>Dot product of the input windowed, row standardized matrix by the input vector, variables.</p>
 </div></span>
   
 </li>
@@ -240,13 +240,13 @@
         <span class='name'>matrix</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../../Numo/NArray.html" title="Numo::NArray (class)">Numo::NArray</a></span></tt>)</span>
+        <span class='type'>(<tt>WeightsMatrix</tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>2-D square matrix.</p>
+<p>holding target weights.</p>
 </div>
       
     </li>
@@ -303,7 +303,7 @@
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/utils/lag.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_neighbor_average'>neighbor_average</span><span class='lparen'>(</span><span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_matrix'>matrix</span> <span class='op'>=</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_row_standardized'>row_standardized</span>
+  <span class='id identifier rubyid_matrix'>matrix</span> <span class='op'>=</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
   <span class='id identifier rubyid_neighbor_sum'>neighbor_sum</span><span class='lparen'>(</span><span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -337,13 +337,13 @@
         <span class='name'>matrix</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../../Numo/NArray.html" title="Numo::NArray (class)">Numo::NArray</a></span></tt>)</span>
+        <span class='type'>(<tt>WeightsMatrix</tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>2-D square matrix.</p>
+<p>holding target weights.</p>
 </div>
       
     </li>
@@ -399,7 +399,7 @@
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/utils/lag.rb', line 30</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_neighbor_sum'>neighbor_sum</span><span class='lparen'>(</span><span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_dot'>dot</span><span class='lparen'>(</span><span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
+  <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_mulvec'>mulvec</span><span class='lparen'>(</span><span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -418,7 +418,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Dot product of the input windowed, row standardizd matrix by the input vector, variables.</p>
+<p>Dot product of the input windowed, row standardized matrix by the input vector, variables.</p>
 
 
   </div>
@@ -432,13 +432,13 @@
         <span class='name'>matrix</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../../Numo/NArray.html" title="Numo::NArray (class)">Numo::NArray</a></span></tt>)</span>
+        <span class='type'>(<tt>WeightsMatrix</tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>2-D square matrix.</p>
+<p>holding target weights.</p>
 </div>
       
     </li>
@@ -495,7 +495,7 @@
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/utils/lag.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_window_average'>window_average</span><span class='lparen'>(</span><span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_matrix'>matrix</span> <span class='op'>=</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_windowed'>windowed</span><span class='period'>.</span><span class='id identifier rubyid_row_standardized'>row_standardized</span>
+  <span class='id identifier rubyid_matrix'>matrix</span> <span class='op'>=</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_window'>window</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
   <span class='id identifier rubyid_window_sum'>window_sum</span><span class='lparen'>(</span><span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -529,13 +529,13 @@
         <span class='name'>matrix</span>
       
       
-        <span class='type'>(<tt><span class='object_link'><a href="../../Numo/NArray.html" title="Numo::NArray (class)">Numo::NArray</a></span></tt>)</span>
+        <span class='type'>(<tt>WeightsMatrix</tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>2-D square matrix.</p>
+<p>holding target weights.</p>
 </div>
       
     </li>
@@ -592,8 +592,8 @@
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/utils/lag.rb', line 55</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_window_sum'>window_sum</span><span class='lparen'>(</span><span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_matrix'>matrix</span> <span class='op'>=</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_windowed'>windowed</span>
-  <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_dot'>dot</span><span class='lparen'>(</span><span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
+  <span class='id identifier rubyid_matrix'>matrix</span> <span class='op'>=</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_window'>window</span>
+  <span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_mulvec'>mulvec</span><span class='lparen'>(</span><span class='id identifier rubyid_variables'>variables</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -605,7 +605,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr  3 09:41:51 2020 by
+  Generated on Fri Apr 17 14:11:14 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>
