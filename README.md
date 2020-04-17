@@ -242,8 +242,9 @@ RGeo::Geos.supported?
 - ~~Create RDocs~~
 - ~~Refactor Global Moran and BVMoran~~
 - ~~Support non-numeric keys in WeightsMatrix/General refactor~~
-- Write SparseMatrix C ext
-- Change instances of `standardized` and `windowed` to `standardize` and `window`, respectively.
+- ~~Write SparseMatrix C ext~~
+- ~~Change instances of `standardized` and `windowed` to `standardize` and `window`, respectively.~~
+- Add `positive` and `negative` groups for `GetisOrd` and `Geary`, similar to how `#quads` is implemented.
 - Add `#summary` method to statistics that will combine stat vals with p-vals, and quads or hot/cold spot info
 
 ## Future Work

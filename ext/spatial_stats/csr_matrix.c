@@ -90,6 +90,28 @@ void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE num_rows, VALUE num_cols)
     csr->init = 1;
 }
 
+/**
+ *  A new instance of CSRMatrix.
+ *  Uses a 1-D representation of a 2-D array as input.
+ *  @example
+ *      dummy_data = [
+ *                      [0, 1, 2]
+ *                      [3, 4, 5],
+ *                      [6, 7, 8]   
+ *                   ]
+ *      num_rows = 3
+ *      num_cols = 3
+ *      data = dummy_data.flatten
+ *      # => [0, 1, 2, 3, 4, 5, 6, 7, 8]
+ *      
+ *      csr = CSRMatrix.new(data, num_rows, num_cols)
+ * 
+ *  @param [Array] data in 1-D format
+ *  @param [Integer] num_rows in the 2-D representation
+ *  @param [Integer] num_cols in the 2-D representation
+ *  
+ *  @return [CSRMatrix]
+ */
 VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows, VALUE num_cols)
 {
 
@@ -116,6 +138,11 @@ VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows, VALUE num_co
     return self;
 }
 
+/**
+ *  Non-zero values in the matrix.
+ *  
+ *  @return [Array] of the non-zero values.
+ */
 VALUE csr_matrix_values(VALUE self)
 {
     csr_matrix *csr;
@@ -134,6 +161,11 @@ VALUE csr_matrix_values(VALUE self)
     return result;
 }
 
+/**
+ *  Column indices of the non-zero values.
+ *  
+ *  @return [Array] of the column indices.
+ */
 VALUE csr_matrix_col_index(VALUE self)
 {
     csr_matrix *csr;
@@ -152,6 +184,16 @@ VALUE csr_matrix_col_index(VALUE self)
     return result;
 }
 
+/**
+ *  Row indices of the non-zero values. Represents the start index
+ *  of values in a row. For example [0,2,3] would represent a matrix
+ *  with 2 rows, the first containing 2 non-zero values and the second
+ *  containing 1. Length is num_rows + 1.
+ * 
+ *  Used for row slicing operations.
+ *  
+ *  @return [Array] of the row indices.
+ */
 VALUE csr_matrix_row_index(VALUE self)
 {
     csr_matrix *csr;
@@ -170,6 +212,15 @@ VALUE csr_matrix_row_index(VALUE self)
     return result;
 }
 
+/**
+ *  Multiply matrix by the input vector.
+ *  
+ *  @see https://github.com/scipy/scipy/blob/53fac7a1d8a81d48be757632ad285b6fc76529ba/scipy/sparse/sparsetools/csr.h#L1120
+ *  
+ *  @param [Array] vec of length n. 
+ * 
+ *  @return [Array] of the result of the multiplication.
+ */
 VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
 {
     csr_matrix *csr;
@@ -205,6 +256,15 @@ VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
     return result;
 }
 
+/**
+ *  Compute the dot product of the given row with the input vector.
+ *  Equivalent to +mulvec(vec)[row]+.
+ *  
+ *  @param [Array] vec of length n. 
+ *  @param [Integer] row of the dot product.
+ * 
+ *  @return [Float] of the result of the dot product.
+ */
 VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row)
 {
     csr_matrix *csr;
@@ -240,6 +300,28 @@ VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row)
     return result;
 }
 
+/** 
+ *  A hash representation of the matrix with coordinates as keys.
+ *  @example
+ *      data = [
+ *              [0, 1, 0]
+ *              [0, 0, 0],
+ *              [1, 0, 1]   
+ *             ]
+ *      num_rows = 3
+ *      num_cols = 3
+ *      data = data.flatten!
+ *      csr = CSRMatrix.new(data, num_rows, num_cols)
+ *  
+ *      csr.coordinates
+ *      # => {
+ *              [0,1] => 1,
+ *              [2,0] => 1,
+ *              [2,2] => 1
+ *           }
+ *  
+ *  @return [Hash]
+ */
 VALUE csr_matrix_coordinates(VALUE self)
 {
     csr_matrix *csr;

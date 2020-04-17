@@ -398,7 +398,7 @@
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_fields'>fields</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
   <span class='ivar'>@scope</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span>
   <span class='ivar'>@fields</span> <span class='op'>=</span> <span class='id identifier rubyid_fields'>fields</span>
-  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span>
+  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -672,7 +672,15 @@
 89
 90
 91
-92</pre>
+92
+93
+94
+95
+96
+97
+98
+99
+100</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/multivariate_geary.rb', line 57</span>
@@ -690,12 +698,20 @@
   <span class='id identifier rubyid_stat_orig'>stat_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat'>stat</span>
   <span class='id identifier rubyid_rs'>rs</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_n'>n</span>
 
-  <span class='id identifier rubyid_ws'>ws</span> <span class='op'>=</span> <span class='id identifier rubyid_neighbor_weights'>neighbor_weights</span>
+  <span class='id identifier rubyid_row_index'>row_index</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_row_index'>row_index</span>
+  <span class='id identifier rubyid_ws'>ws</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span>
 
   <span class='id identifier rubyid_idx'>idx</span> <span class='op'>=</span> <span class='int'>0</span>
   <span class='kw'>while</span> <span class='id identifier rubyid_idx'>idx</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_n'>n</span>
     <span class='id identifier rubyid_stat_i_orig'>stat_i_orig</span> <span class='op'>=</span> <span class='id identifier rubyid_stat_orig'>stat_orig</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_wi'>wi</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_ws'>ws</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+    <span class='id identifier rubyid_row_range'>row_range</span> <span class='op'>=</span> <span class='id identifier rubyid_row_index'>row_index</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='op'>..</span><span class='lparen'>(</span><span class='id identifier rubyid_row_index'>row_index</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span> <span class='op'>+</span> <span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_row_range'>row_range</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
+      <span class='id identifier rubyid_rs'>rs</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_permutations'>permutations</span>
+      <span class='id identifier rubyid_idx'>idx</span> <span class='op'>+=</span> <span class='int'>1</span>
+      <span class='kw'>next</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_wi'>wi</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_ws'>ws</span><span class='lbracket'>[</span><span class='id identifier rubyid_row_range'>row_range</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 
     <span class='comment'># for each field, compute the C value at that index.
 </span>    <span class='id identifier rubyid_stat_i_new'>stat_i_new</span> <span class='op'>=</span> <span class='id identifier rubyid_mc_i'>mc_i</span><span class='lparen'>(</span><span class='id identifier rubyid_wi'>wi</span><span class='comma'>,</span> <span class='id identifier rubyid_shuffles'>shuffles</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='rparen'>)</span>
@@ -801,7 +817,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Apr  6 18:51:32 2020 by
+  Generated on Fri Apr 17 14:11:15 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

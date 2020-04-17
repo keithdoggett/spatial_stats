@@ -586,20 +586,18 @@
 65
 66
 67
-68
-69</pre>
+68</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/moran.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_variance'>variance</span>
   <span class='comment'># formula is A - B - (E[I])**2
-</span>  <span class='id identifier rubyid_wt'>wt</span> <span class='op'>=</span> <span class='id identifier rubyid_w'>w</span><span class='period'>.</span><span class='id identifier rubyid_row_standardized'>row_standardized</span>
-  <span class='id identifier rubyid_exp'>exp</span> <span class='op'>=</span> <span class='id identifier rubyid_expectation'>expectation</span>
+</span>  <span class='id identifier rubyid_exp'>exp</span> <span class='op'>=</span> <span class='id identifier rubyid_expectation'>expectation</span>
 
   <span class='id identifier rubyid_vars'>vars</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-  <span class='id identifier rubyid_a_terms'>a_terms</span> <span class='op'>=</span> <span class='id identifier rubyid_a_calc'>a_calc</span><span class='lparen'>(</span><span class='id identifier rubyid_wt'>wt</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_b_terms'>b_terms</span> <span class='op'>=</span> <span class='id identifier rubyid_b_calc'>b_calc</span><span class='lparen'>(</span><span class='id identifier rubyid_wt'>wt</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_a_terms'>a_terms</span> <span class='op'>=</span> <span class='id identifier rubyid_a_calc'>a_calc</span>
+  <span class='id identifier rubyid_b_terms'>b_terms</span> <span class='op'>=</span> <span class='id identifier rubyid_b_calc'>b_calc</span>
 
   <span class='id identifier rubyid_a_terms'>a_terms</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_a_term'>a_term</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='op'>|</span>
     <span class='id identifier rubyid_vars'>vars</span> <span class='op'>&lt;&lt;</span> <span class='lparen'>(</span><span class='id identifier rubyid_a_term'>a_term</span> <span class='op'>-</span> <span class='id identifier rubyid_b_terms'>b_terms</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='lparen'>(</span><span class='id identifier rubyid_exp'>exp</span><span class='op'>**</span><span class='int'>2</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -654,13 +652,13 @@
       <pre class="lines">
 
 
+74
 75
 76
-77
-78</pre>
+77</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/moran.rb', line 75</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/moran.rb', line 74</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_x'>x</span>
   <span class='ivar'>@x</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Variables.html" title="SpatialStats::Queries::Variables (module)">Variables</a></span></span><span class='period'>.</span><span class='id identifier rubyid_query_field'><span class='object_link'><a href="../Queries/Variables.html#query_field-class_method" title="SpatialStats::Queries::Variables.query_field (method)">query_field</a></span></span><span class='lparen'>(</span><span class='ivar'>@scope</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='rparen'>)</span>
@@ -710,19 +708,19 @@
       <pre class="lines">
 
 
+84
 85
 86
 87
-88
-89</pre>
+88</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/moran.rb', line 85</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/moran.rb', line 84</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_z_lag'>z_lag</span>
   <span class='comment'># w is already row_standardized, so we are using
 </span>  <span class='comment'># neighbor sum instead of neighbor_average to save cost
-</span>  <span class='ivar'>@z_lag</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils.html" title="SpatialStats::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils/Lag.html" title="SpatialStats::Utils::Lag (module)">Lag</a></span></span><span class='period'>.</span><span class='id identifier rubyid_neighbor_sum'><span class='object_link'><a href="../Utils/Lag.html#neighbor_sum-class_method" title="SpatialStats::Utils::Lag.neighbor_sum (method)">neighbor_sum</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_w'>w</span><span class='comma'>,</span> <span class='id identifier rubyid_z'>z</span><span class='rparen'>)</span>
+</span>  <span class='ivar'>@z_lag</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils.html" title="SpatialStats::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils/Lag.html" title="SpatialStats::Utils::Lag (module)">Lag</a></span></span><span class='period'>.</span><span class='id identifier rubyid_neighbor_sum'><span class='object_link'><a href="../Utils/Lag.html#neighbor_sum-class_method" title="SpatialStats::Utils::Lag.neighbor_sum (method)">neighbor_sum</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='comma'>,</span> <span class='id identifier rubyid_z'>z</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -734,7 +732,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Apr  6 18:51:32 2020 by
+  Generated on Fri Apr 17 14:11:14 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

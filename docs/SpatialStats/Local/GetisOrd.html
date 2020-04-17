@@ -347,6 +347,24 @@
       
     </li>
   
+    <li>
+      
+        <span class='name'>star</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>to preset if star will be true or false. Will be calculated otherwise.</p>
+</div>
+      
+    </li>
+  
 </ul>
 
 
@@ -356,17 +374,23 @@
       <pre class="lines">
 
 
-19
 20
 21
-22</pre>
+22
+23
+24
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 20</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='comma'>,</span> <span class='id identifier rubyid_star'>star</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_field'>field</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
+  <span class='ivar'>@scope</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span>
+  <span class='ivar'>@field</span> <span class='op'>=</span> <span class='id identifier rubyid_field'>field</span>
+  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span>
   <span class='ivar'>@star</span> <span class='op'>=</span> <span class='id identifier rubyid_star'>star</span>
+  <span class='id identifier rubyid_calc_weights'>calc_weights</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -406,12 +430,12 @@
       <pre class="lines">
 
 
-23
-24
-25</pre>
+27
+28
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_star'>star</span>
   <span class='ivar'>@star</span>
@@ -472,20 +496,20 @@
       <pre class="lines">
 
 
-51
-52
-53
-54
 55
 56
-57</pre>
+57
+58
+59
+60
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 51</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 55</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_star?'>star?</span>
   <span class='kw'>if</span> <span class='ivar'>@star</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
-    <span class='ivar'>@star</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_full'>full</span><span class='period'>.</span><span class='id identifier rubyid_trace'>trace</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
+    <span class='ivar'>@star</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_dense'>dense</span><span class='period'>.</span><span class='id identifier rubyid_trace'>trace</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
   <span class='kw'>else</span>
     <span class='ivar'>@star</span>
   <span class='kw'>end</span>
@@ -543,14 +567,14 @@
       <pre class="lines">
 
 
-29
-30
-31
-32
-33</pre>
+33
+34
+35
+36
+37</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 29</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_stat'>stat</span>
   <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid__x_val'>_x_val</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='op'>|</span>
@@ -605,12 +629,12 @@
       <pre class="lines">
 
 
-40
-41
-42</pre>
+44
+45
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 44</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_x'>x</span>
   <span class='ivar'>@x</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Variables.html" title="SpatialStats::Queries::Variables (module)">Variables</a></span></span><span class='period'>.</span><span class='id identifier rubyid_query_field'><span class='object_link'><a href="../Queries/Variables.html#query_field-class_method" title="SpatialStats::Queries::Variables.query_field (method)">query_field</a></span></span><span class='lparen'>(</span><span class='ivar'>@scope</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='rparen'>)</span>
@@ -625,7 +649,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Apr  6 18:51:32 2020 by
+  Generated on Fri Apr 17 14:11:14 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

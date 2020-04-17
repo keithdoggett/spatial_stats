@@ -435,7 +435,7 @@
   <span class='ivar'>@scope</span> <span class='op'>=</span> <span class='id identifier rubyid_scope'>scope</span>
   <span class='ivar'>@x_field</span> <span class='op'>=</span> <span class='id identifier rubyid_x_field'>x_field</span>
   <span class='ivar'>@y_field</span> <span class='op'>=</span> <span class='id identifier rubyid_y_field'>y_field</span>
-  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span>
+  <span class='ivar'>@weights</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -616,12 +616,12 @@
       <pre class="lines">
 
 
+47
 48
-49
-50</pre>
+49</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/bivariate_moran.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/bivariate_moran.rb', line 47</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_expectation'>expectation</span>
   <span class='op'>-</span><span class='float'>1.0</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='ivar'>@weights</span><span class='period'>.</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span>
@@ -784,15 +784,13 @@
 37
 38
 39
-40
-41</pre>
+40</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/bivariate_moran.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_stat'>stat</span>
-  <span class='id identifier rubyid_w'>w</span> <span class='op'>=</span> <span class='ivar'>@weights</span><span class='period'>.</span><span class='id identifier rubyid_standardized'>standardized</span>
-  <span class='id identifier rubyid_y_lag'>y_lag</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils.html" title="SpatialStats::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils/Lag.html" title="SpatialStats::Utils::Lag (module)">Lag</a></span></span><span class='period'>.</span><span class='id identifier rubyid_neighbor_sum'><span class='object_link'><a href="../Utils/Lag.html#neighbor_sum-class_method" title="SpatialStats::Utils::Lag.neighbor_sum (method)">neighbor_sum</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_w'>w</span><span class='comma'>,</span> <span class='id identifier rubyid_y'>y</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_y_lag'>y_lag</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils.html" title="SpatialStats::Utils (module)">Utils</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Utils/Lag.html" title="SpatialStats::Utils::Lag (module)">Lag</a></span></span><span class='period'>.</span><span class='id identifier rubyid_neighbor_sum'><span class='object_link'><a href="../Utils/Lag.html#neighbor_sum-class_method" title="SpatialStats::Utils::Lag.neighbor_sum (method)">neighbor_sum</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='comma'>,</span> <span class='id identifier rubyid_y'>y</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_numerator'>numerator</span> <span class='op'>=</span> <span class='int'>0</span>
   <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_xi'>xi</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='op'>|</span>
     <span class='id identifier rubyid_numerator'>numerator</span> <span class='op'>+=</span> <span class='id identifier rubyid_xi'>xi</span> <span class='op'>*</span> <span class='id identifier rubyid_y_lag'>y_lag</span><span class='lbracket'>[</span><span class='id identifier rubyid_idx'>idx</span><span class='rbracket'>]</span>
@@ -852,6 +850,7 @@
       <pre class="lines">
 
 
+56
 57
 58
 59
@@ -871,22 +870,23 @@
 73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/bivariate_moran.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/bivariate_moran.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_variance'>variance</span>
-  <span class='id identifier rubyid_n'>n</span> <span class='op'>=</span> <span class='ivar'>@weights</span><span class='period'>.</span><span class='id identifier rubyid_n'>n</span>
-  <span class='id identifier rubyid_wij'>wij</span> <span class='op'>=</span> <span class='ivar'>@weights</span><span class='period'>.</span><span class='id identifier rubyid_full'>full</span>
-  <span class='id identifier rubyid_w'>w</span> <span class='op'>=</span> <span class='id identifier rubyid_wij'>wij</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
+  <span class='id identifier rubyid_n'>n</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_n'>n</span>
+  <span class='id identifier rubyid_w_sum'>w_sum</span> <span class='op'>=</span> <span class='id identifier rubyid_n'>n</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
   <span class='id identifier rubyid_e'>e</span> <span class='op'>=</span> <span class='id identifier rubyid_expectation'>expectation</span>
 
-  <span class='id identifier rubyid_s1'>s1</span> <span class='op'>=</span> <span class='id identifier rubyid_s1_calc'>s1_calc</span><span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span><span class='comma'>,</span> <span class='id identifier rubyid_wij'>wij</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_s2'>s2</span> <span class='op'>=</span> <span class='id identifier rubyid_s2_calc'>s2_calc</span><span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span><span class='comma'>,</span> <span class='id identifier rubyid_wij'>wij</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_wij'>wij</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_coordinates'>coordinates</span>
+
+  <span class='id identifier rubyid_s1'>s1</span> <span class='op'>=</span> <span class='id identifier rubyid_s1_calc'>s1_calc</span><span class='lparen'>(</span><span class='id identifier rubyid_wij'>wij</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_s2'>s2</span> <span class='op'>=</span> <span class='id identifier rubyid_s2_calc'>s2_calc</span><span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span><span class='comma'>,</span> <span class='id identifier rubyid_wij'>wij</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_sparse'>sparse</span><span class='period'>.</span><span class='id identifier rubyid_row_index'>row_index</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_s3'>s3</span> <span class='op'>=</span> <span class='id identifier rubyid_s3_calc'>s3_calc</span><span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_s4'>s4</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span><span class='op'>**</span><span class='int'>2</span> <span class='op'>-</span> <span class='int'>3</span> <span class='op'>*</span> <span class='id identifier rubyid_n'>n</span> <span class='op'>+</span> <span class='int'>3</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_s1'>s1</span> <span class='op'>-</span> <span class='id identifier rubyid_n'>n</span> <span class='op'>*</span> <span class='id identifier rubyid_s2'>s2</span> <span class='op'>+</span> <span class='int'>3</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='id identifier rubyid_w'>w</span><span class='op'>**</span><span class='int'>2</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_s5'>s5</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span><span class='op'>**</span><span class='int'>2</span> <span class='op'>-</span> <span class='id identifier rubyid_n'>n</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_s1'>s1</span> <span class='op'>-</span> <span class='int'>2</span> <span class='op'>*</span> <span class='id identifier rubyid_n'>n</span> <span class='op'>*</span> <span class='id identifier rubyid_s2'>s2</span> <span class='op'>+</span> <span class='int'>6</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='id identifier rubyid_w'>w</span><span class='op'>**</span><span class='int'>2</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_s4'>s4</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span><span class='op'>**</span><span class='int'>2</span> <span class='op'>-</span> <span class='int'>3</span> <span class='op'>*</span> <span class='id identifier rubyid_n'>n</span> <span class='op'>+</span> <span class='int'>3</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_s1'>s1</span> <span class='op'>-</span> <span class='id identifier rubyid_n'>n</span> <span class='op'>*</span> <span class='id identifier rubyid_s2'>s2</span> <span class='op'>+</span> <span class='int'>3</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='id identifier rubyid_w_sum'>w_sum</span><span class='op'>**</span><span class='int'>2</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_s5'>s5</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span><span class='op'>**</span><span class='int'>2</span> <span class='op'>-</span> <span class='id identifier rubyid_n'>n</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_s1'>s1</span> <span class='op'>-</span> <span class='int'>2</span> <span class='op'>*</span> <span class='id identifier rubyid_n'>n</span> <span class='op'>*</span> <span class='id identifier rubyid_s2'>s2</span> <span class='op'>+</span> <span class='int'>6</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='id identifier rubyid_w_sum'>w_sum</span><span class='op'>**</span><span class='int'>2</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_var_left'>var_left</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>*</span> <span class='id identifier rubyid_s4'>s4</span> <span class='op'>-</span> <span class='id identifier rubyid_s3'>s3</span> <span class='op'>*</span> <span class='id identifier rubyid_s5'>s5</span><span class='rparen'>)</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>2</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>3</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_w'>w</span><span class='op'>**</span><span class='int'>2</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_var_left'>var_left</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>*</span> <span class='id identifier rubyid_s4'>s4</span> <span class='op'>-</span> <span class='id identifier rubyid_s3'>s3</span> <span class='op'>*</span> <span class='id identifier rubyid_s5'>s5</span><span class='rparen'>)</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>2</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>3</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_w_sum'>w_sum</span><span class='op'>**</span><span class='int'>2</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_var_right'>var_right</span> <span class='op'>=</span> <span class='id identifier rubyid_e'>e</span><span class='op'>**</span><span class='int'>2</span>
   <span class='id identifier rubyid_var_left'>var_left</span> <span class='op'>-</span> <span class='id identifier rubyid_var_right'>var_right</span>
 <span class='kw'>end</span></pre>
@@ -900,7 +900,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Apr  6 18:51:32 2020 by
+  Generated on Fri Apr 17 14:11:15 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

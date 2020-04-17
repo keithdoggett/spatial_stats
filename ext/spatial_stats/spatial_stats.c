@@ -1,6 +1,16 @@
 #include <ruby.h>
 #include "csr_matrix.h"
 
+/**
+ * Document-class: SpatialStats::Weights::CSRMatrix
+ * 
+ * CSRMatrix partially implements a compressed sparse row matrix to perform
+ * spatial lag and other calculations. This will generally be used 
+ * to store the weights of an observation set.
+ * 
+ * @see https://en.wikipedia.org/wiki/Sparse_matrix#Compressed_sparse_row_(CSR,_CRS_or_Yale_format) 
+ * 
+ */
 void Init_spatial_stats()
 {
     VALUE spatial_stats_mod = rb_define_module("SpatialStats");
