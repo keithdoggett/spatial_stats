@@ -71,6 +71,19 @@ module SpatialStats
         x_lag_i / denominators[idx]
       end
 
+      def mc_observation_calc(stat_i_orig, stat_i_new, permutations)
+        # GetisOrd cannot be negative, so we have to use this technique from
+        # ESDA to determine if we should select p or 1-p.
+        # https://github.com/pysal/esda/blob/master/esda/getisord.py#L388
+        num_larger = (stat_i_new >= stat_i_orig).count
+        is_low = (permutations - num_larger) < num_larger
+        if is_low
+          permutations - num_larger
+        else
+          num_larger
+        end
+      end
+
       def calc_weights
         @weights = if star?
                      weights.window.standardize

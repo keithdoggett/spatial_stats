@@ -49,14 +49,25 @@ module SpatialStats
         # just form all of the modified zs and then
         # pass it to a loop of mulvec all implemented in c ext
         zi = z.map { |val| (z[idx] - val)**2 }
-        # zs = Numo::DFloat.cast(z)
-        # zi = ((z[idx] - zs)**2).to_a
         weights.sparse.dot_row(zi, idx)
       end
 
       def mc_i(wi, perms, idx)
         zi = (z[idx] - perms)**2
         (wi * zi).sum(1)
+      end
+
+      def mc_observation_calc(stat_i_orig, stat_i_new, _permutations)
+        # Geary cannot be negative, so we have to use this technique from
+        # GeoDa to determine p values. Note I slightly modified it to be inclusive
+        # on both tails not just the lower tail.
+        # https://github.com/GeoDaCenter/geoda/blob/master/Explore/LocalGearyCoordinator.cpp#L981        mean = stat_i_new.mean
+        mean = stat_i_new.mean
+        if stat_i_orig <= mean
+          (stat_i_new <= stat_i_orig).count
+        else
+          (stat_i_new >= stat_i_orig).count
+        end
       end
     end
   end

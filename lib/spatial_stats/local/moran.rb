@@ -101,6 +101,15 @@ module SpatialStats
         z[idx] * z_lag_i
       end
 
+      def mc_observation_calc(stat_i_orig, stat_i_new, _permutations)
+        # Since moran can be positive or negative, go by this definition
+        if stat_i_orig.positive?
+          (stat_i_new >= stat_i_orig).count
+        else
+          (stat_i_new <= stat_i_orig).count
+        end
+      end
+
       def si2
         # @si2 ||= z.sample_variance
         # we standardize so sample_variance is 1

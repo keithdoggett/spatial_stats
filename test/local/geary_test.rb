@@ -61,8 +61,31 @@ class LocalGearyTest < ActiveSupport::TestCase
     geary = SpatialStats::Local::Geary.new(@poly_scope, :value, @weights)
     seed = 123_456
     p_vals = geary.mc(999, seed)
+
     expected = [0.216, 0.165, 0.224, 0.184, 0.02, 0.17, 0.224, 0.195, 0.215]
 
+    expected.each_with_index do |v, i|
+      assert_in_delta(v, p_vals[i], 0.0005)
+    end
+  end
+
+  def test_mc_clustered
+    # run this test to make sure the p value calculation still works
+    # for cases where the result is always positive.
+    # If we only go on the >= comparison, it ignores the fact that
+    # something could be very significantly low and end up with PVals
+    # > 95. Have to perform a swap on those and essentially do 1 - p.
+    values = [1, 1, 1, 1, 1, 1, 0, 0, 0]
+    Polygon.all.each_with_index do |poly, i|
+      poly.value = values[i]
+      poly.save
+    end
+
+    geary = SpatialStats::Local::Geary.new(@poly_scope, :value, @weights)
+    seed = 123_456
+    p_vals = geary.mc(999, seed)
+
+    expected = [0.343, 0.187, 0.355, 0.721, 0.477, 0.712, 0.457, 0.109, 0.468]
     expected.each_with_index do |v, i|
       assert_in_delta(v, p_vals[i], 0.0005)
     end

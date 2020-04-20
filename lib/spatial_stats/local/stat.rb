@@ -143,14 +143,15 @@ module SpatialStats
             next
           end
           wi = Numo::DFloat.cast(ws[row_range])
-
           stat_i_new = mc_i(wi, shuffles[idx], idx)
-          rs[idx] = if stat_i_orig.positive?
-                      (stat_i_new >= stat_i_orig).count
-                    else
-                      (stat_i_new <= stat_i_orig).count
-                    end
 
+          rs[idx] = mc_observation_calc(stat_i_orig, stat_i_new,
+                                        permutations)
+          # rs[idx] = if stat_i_orig.positive?
+          #             (stat_i_new >= stat_i_orig).count
+          #           else
+          #             (stat_i_new <= stat_i_orig).count
+          #           end
           idx += 1
         end
 
@@ -196,11 +197,13 @@ module SpatialStats
 
           stat_i_new = mc_i(wi, shuffles[idx], idx)
 
-          rs[idx] = if stat_i_orig.positive?
-                      (stat_i_new >= stat_i_orig).count
-                    else
-                      (stat_i_new <= stat_i_orig).count
-                    end
+          rs[idx] = mc_observation_calc(stat_i_orig, stat_i_new,
+                                        permutations)
+          # if stat_i_orig.positive?
+          #             (stat_i_new >= stat_i_orig).count
+          #           else
+          #             (stat_i_new <= stat_i_orig).count
+          #           end
 
           idx += 1
         end
@@ -256,6 +259,10 @@ module SpatialStats
 
       def mc_i
         raise NotImplementedError, 'method mc_i not defined'
+      end
+
+      def mc_observation_calc(_stat_i_orig, _stat_i_new, _permutations)
+        raise NotImplementedError, 'method mc_observation_calc not defined'
       end
 
       def w
