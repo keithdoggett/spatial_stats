@@ -25,6 +25,7 @@ module SpatialStats
         calc_weights
       end
       attr_accessor :star
+      attr_writer :x
 
       ##
       # Computes the G or G* statistic for every observation in x.
@@ -36,6 +37,25 @@ module SpatialStats
         end
       end
       alias g stat
+
+      ##
+      # Computes the groups each observation belongs to.
+      # Potential groups for G are:
+      # [H] High
+      # [L] Low
+      #
+      # Group is high when standardized z is positive, low otherwise.
+      #
+      # @return [Array] groups for each observation
+      def groups
+        z.standardize.map do |val|
+          if val.positive?
+            'H'
+          else
+            'L'
+          end
+        end
+      end
 
       ##
       # Values of the +field+ queried from the +scope+
@@ -69,6 +89,19 @@ module SpatialStats
       def mc_i(wi, perms, idx)
         x_lag_i = (wi * perms).sum(1)
         x_lag_i / denominators[idx]
+      end
+
+      def mc_observation_calc(stat_i_orig, stat_i_new, permutations)
+        # GetisOrd cannot be negative, so we have to use this technique from
+        # ESDA to determine if we should select p or 1-p.
+        # https://github.com/pysal/esda/blob/master/esda/getisord.py#L388
+        num_larger = (stat_i_new >= stat_i_orig).count
+        is_low = (permutations - num_larger) < num_larger
+        if is_low
+          permutations - num_larger
+        else
+          num_larger
+        end
       end
 
       def calc_weights

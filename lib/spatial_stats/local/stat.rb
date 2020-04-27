@@ -143,14 +143,15 @@ module SpatialStats
             next
           end
           wi = Numo::DFloat.cast(ws[row_range])
-
           stat_i_new = mc_i(wi, shuffles[idx], idx)
-          rs[idx] = if stat_i_orig.positive?
-                      (stat_i_new >= stat_i_orig).count
-                    else
-                      (stat_i_new <= stat_i_orig).count
-                    end
 
+          rs[idx] = mc_observation_calc(stat_i_orig, stat_i_new,
+                                        permutations)
+          # rs[idx] = if stat_i_orig.positive?
+          #             (stat_i_new >= stat_i_orig).count
+          #           else
+          #             (stat_i_new <= stat_i_orig).count
+          #           end
           idx += 1
         end
 
@@ -196,11 +197,13 @@ module SpatialStats
 
           stat_i_new = mc_i(wi, shuffles[idx], idx)
 
-          rs[idx] = if stat_i_orig.positive?
-                      (stat_i_new >= stat_i_orig).count
-                    else
-                      (stat_i_new <= stat_i_orig).count
-                    end
+          rs[idx] = mc_observation_calc(stat_i_orig, stat_i_new,
+                                        permutations)
+          # if stat_i_orig.positive?
+          #             (stat_i_new >= stat_i_orig).count
+          #           else
+          #             (stat_i_new <= stat_i_orig).count
+          #           end
 
           idx += 1
         end
@@ -248,6 +251,22 @@ module SpatialStats
         end
       end
 
+      ##
+      # Summary of the statistic. Computes +stat+, +mc+, and +groups+ then returns the values
+      # in a hash array.
+      #
+      # @param [Integer] permutations to run. Last digit should be 9 to produce round numbers.
+      # @param [Integer] seed used in random number generator for shuffles.
+      #
+      # @return [Array]
+      def summary(permutations = 99, seed = nil)
+        p_vals = mc(permutations, seed)
+        data = weights.keys.zip(stat, p_vals, groups)
+        data.map do |row|
+          { key: row[0], stat: row[1], p: row[2], group: row[3] }
+        end
+      end
+
       private
 
       def stat_i
@@ -256,6 +275,10 @@ module SpatialStats
 
       def mc_i
         raise NotImplementedError, 'method mc_i not defined'
+      end
+
+      def mc_observation_calc(_stat_i_orig, _stat_i_new, _permutations)
+        raise NotImplementedError, 'method mc_observation_calc not defined'
       end
 
       def w

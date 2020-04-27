@@ -18,6 +18,7 @@ module SpatialStats
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
+      attr_writer :x
 
       ##
       # Computes Geary's C for every observation in the +scoe+.
@@ -31,6 +32,25 @@ module SpatialStats
         end
       end
       alias c stat
+
+      ##
+      # Computes the groups each observation belongs to.
+      # Potential groups for Geary's C are:
+      # [HH] High-High
+      # [LL] Low-Low
+      # [N] Negative - Group traditionally for HL and LH, but since the difference is squared they are in the same group.
+      #
+      #
+      # @return [Array] groups for each observation
+      def groups
+        quads.map do |quad|
+          if %w[HL LH].include?(quad)
+            'N'
+          else
+            quad
+          end
+        end
+      end
 
       ##
       # Values of the +field+ queried from the +scope+
@@ -49,14 +69,25 @@ module SpatialStats
         # just form all of the modified zs and then
         # pass it to a loop of mulvec all implemented in c ext
         zi = z.map { |val| (z[idx] - val)**2 }
-        # zs = Numo::DFloat.cast(z)
-        # zi = ((z[idx] - zs)**2).to_a
         weights.sparse.dot_row(zi, idx)
       end
 
       def mc_i(wi, perms, idx)
         zi = (z[idx] - perms)**2
         (wi * zi).sum(1)
+      end
+
+      def mc_observation_calc(stat_i_orig, stat_i_new, _permutations)
+        # Geary cannot be negative, so we have to use this technique from
+        # GeoDa to determine p values. Note I slightly modified it to be inclusive
+        # on both tails not just the lower tail.
+        # https://github.com/GeoDaCenter/geoda/blob/master/Explore/LocalGearyCoordinator.cpp#L981        mean = stat_i_new.mean
+        mean = stat_i_new.mean
+        if stat_i_orig <= mean
+          (stat_i_new <= stat_i_orig).count
+        else
+          (stat_i_new >= stat_i_orig).count
+        end
       end
     end
   end

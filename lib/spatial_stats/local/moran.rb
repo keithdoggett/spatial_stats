@@ -20,6 +20,7 @@ module SpatialStats
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
+      attr_writer :x
 
       ##
       # Computes the local indicator of spatial autocorrelation (lisa) for
@@ -68,6 +69,21 @@ module SpatialStats
       end
 
       ##
+      # Computes the groups each observation belongs to.
+      # Potential groups for Moran's I are:
+      # [HH] High-High
+      # [HL] High-Low
+      # [LH] Low-High
+      # [LL] Low-Low
+      #
+      # This is the same as the +#quads+ method in the +Stat+ class.
+      #
+      # @return [Array] groups for each observation
+      def groups
+        quads
+      end
+
+      ##
       # Values of the +field+ queried from the +scope+
       #
       # @return [Array]
@@ -99,6 +115,15 @@ module SpatialStats
         # and DFloat of neighbor z perms
         z_lag_i = (wi * perms).sum(1)
         z[idx] * z_lag_i
+      end
+
+      def mc_observation_calc(stat_i_orig, stat_i_new, _permutations)
+        # Since moran can be positive or negative, go by this definition
+        if stat_i_orig.positive?
+          (stat_i_new >= stat_i_orig).count
+        else
+          (stat_i_new <= stat_i_orig).count
+        end
       end
 
       def si2

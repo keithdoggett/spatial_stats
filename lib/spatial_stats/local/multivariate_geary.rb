@@ -84,19 +84,17 @@ module SpatialStats
 
           # for each field, compute the C value at that index.
           stat_i_new = mc_i(wi, shuffles[idx], idx)
-
-          rs[idx] = if stat_i_orig.positive?
-                      (stat_i_new >= stat_i_orig).count
-                    else
-                      (stat_i_new <= stat_i_orig).count
-                    end
-
+          rs[idx] = mc_observation_calc(stat_i_orig, stat_i_new, permutations)
           idx += 1
         end
 
         rs.map do |ri|
           (ri + 1.0) / (permutations + 1.0)
         end
+      end
+
+      def groups
+        raise NotImplementedError, 'groups not implemented'
       end
 
       private
@@ -114,6 +112,19 @@ module SpatialStats
           cs[mi, true] = (wi * c).sum(1)
         end
         cs.mean(0)
+      end
+
+      def mc_observation_calc(stat_i_orig, stat_i_new, _permutations)
+        # Geary cannot be negative, so we have to use this technique from
+        # GeoDa to determine p values. Note I slightly modified it to be inclusive
+        # on both tails not just the lower tail.
+        # https://github.com/GeoDaCenter/geoda/blob/master/Explore/LocalGearyCoordinator.cpp#L981        mean = stat_i_new.mean
+        mean = stat_i_new.mean
+        if stat_i_orig <= mean
+          (stat_i_new <= stat_i_orig).count
+        else
+          (stat_i_new >= stat_i_orig).count
+        end
       end
 
       def field_data

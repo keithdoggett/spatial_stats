@@ -123,10 +123,10 @@ weights = SpatialStats::Weights::Distant.idw_knn(scope, :geom, 5)
 
 <p>```ruby
 weights = {
-    1 =&gt; [{ j_id: 2, weight: 1 }, { j_id: 4, weight: 1 }],
-    2 =&gt; [{ j_id: 1, weight: 1 }],
-    3 =&gt; [{ j_id: 4, weight: 1 }],
-    4 =&gt; [{ j_id: 1, weight: 1 }, { j_id: 3, weight: 1 }]
+    1 =&gt; [{ id: 2, weight: 1 }, { id: 4, weight: 1 }],
+    2 =&gt; [{ id: 1, weight: 1 }],
+    3 =&gt; [{ id: 4, weight: 1 }],
+    4 =&gt; [{ id: 1, weight: 1 }, { id: 3, weight: 1 }]
 }
 keys = weights.keys
 wm = SpatialStats::Weights::WeightsMatrix.new(keys, weights)
@@ -177,6 +177,26 @@ moran = SpatialStats::Global::Moran.new(scope, :avg_income, weights)
 # =&gt; 0.834
 ```</p>
 
+<h4 id="compute-morans-i-without-querying-data">Compute Moran’s I without Querying Data</h4>
+
+<p>To calculate the statistic by using an array of data and not querying a database field. The order of the data must correspond to the order of <code>weights.keys</code>.</p>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)</p>
+
+<p>field = nil
+moran = SpatialStats::Global::Moran.new(scope, field, weights)
+# =&gt; &lt;SpatialStats::Global::Moran&gt;</p>
+
+<h1 id="important-to-standardize-the-data">important to standardize the data!</h1>
+<p>data = [1,2,3,4,5,6].standardize
+moran.x = data</p>
+
+<p>moran.stat
+# =&gt; 0.521
+```</p>
+
 <h4 id="compute-morans-i-z-score">Compute Moran’s I Z-Score</h4>
 
 <p>```ruby
@@ -203,6 +223,20 @@ moran = SpatialStats::Global::Moran.new(scope, :avg_income, weights)
 # =&gt; 0.003
 ```</p>
 
+<h4 id="get-summary-of-permutation-test">Get Summary of Permutation Test</h4>
+
+<p>All stat classes have the <code>summary</code> method which takes <code>permutations</code> and <code>seed</code> as its parameters. <code>summary</code> runs <code>stat</code> and <code>mc</code> then combines the results into a hash.</p>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)
+moran = SpatialStats::Global::Moran.new(scope, :avg_income, weights)
+# =&gt; &lt;SpatialStats::Global::Moran&gt;</p>
+
+<p>moran.summary(999, 123_456)
+# =&gt; 0.834, p: 0.003
+```</p>
+
 <h3 id="local-stats">Local Stats</h3>
 
 <p>Local stats compute a value each observation in the dataset, like how similar its neighbors are to itself. Local stats operate similarly to global stats, except that almost every operation will return an array of length <code>n</code> where <code>n</code> is the number of observations in the dataset.</p>
@@ -222,6 +256,26 @@ moran = SpatialStats::Local::Moran.new(scope, :avg_income, weights)
 
 <p>moran.i
 # =&gt; [0.888, 0.675, 0.2345, -0.987, -0.42, …]
+```</p>
+
+<h4 id="compute-morans-i-without-querying-data-1">Compute Moran’s I without Querying Data</h4>
+
+<p>To calculate the statistic by using an array of data and not querying a database field. The order of the data must correspond to the order of <code>weights.keys</code>.</p>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)</p>
+
+<p>field = nil
+moran = SpatialStats::Local::Moran.new(scope, field, weights)
+# =&gt; &lt;SpatialStats::Local::Moran&gt;</p>
+
+<h1 id="important-to-standardize-the-data-1">important to standardize the data!</h1>
+<p>data = [1,2,3,4,5,6].standardize
+moran.x = data</p>
+
+<p>moran.stat
+# =&gt; [0.521, 0.123, -0.432, -0.56,. …]
 ```</p>
 
 <h4 id="compute-morans-i-z-scores">Compute Moran’s I Z-Scores</h4>
@@ -250,6 +304,20 @@ moran = SpatialStats::Local::Moran.new(scope, :avg_income, weights)
 
 <p>moran.mc(999, 123_456)
 # =&gt; [0.24, 0.13, 0.53, 0.023, 0.65, …]
+```</p>
+
+<h4 id="get-summary-of-permutation-test-1">Get Summary of Permutation Test</h4>
+
+<p>All stat classes have the <code>summary</code> method which takes <code>permutations</code> and <code>seed</code> as its parameters. <code>summary</code> runs <code>stat</code>, <code>mc</code>, and <code>groups</code> then combines the results into a hash array indexed by <code>weight.keys</code>.</p>
+
+<p>```ruby
+scope = County.all
+weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)
+moran = SpatialStats::Local::Moran.new(scope, :avg_income, weights)
+# =&gt; &lt;SpatialStats::Local::Moran&gt;</p>
+
+<p>moran.summary(999, 123_456)
+# =&gt; [1, stat: 0.521, p: 0.24, group: ‘HH’, …]
 ```</p>
 
 <h2 id="contributing">Contributing</h2>
@@ -304,7 +372,9 @@ rails c</p>
   <li>~~Support non-numeric keys in WeightsMatrix/General refactor~~</li>
   <li>~~Write SparseMatrix C ext~~</li>
   <li>~~Change instances of <code>standardized</code> and <code>windowed</code> to <code>standardize</code> and <code>window</code>, respectively.~~</li>
-  <li>Add <code>#summary</code> method to statistics that will combine stat vals with p-vals, and quads or hot/cold spot info</li>
+  <li>~~Add <code>positive</code> and <code>negative</code> groups for <code>GetisOrd</code> and <code>Geary</code>, similar to how <code>#quads</code> is implemented.~~</li>
+  <li>~~Add <code>#summary</code> method to statistics that will combine stat vals with p-vals, and quads or hot/cold spot info.~~</li>
+  <li>~~Add ability to assign <code>x</code> or <code>z</code> on stat classes so users are not forced to query data to input it into models. Add example to README.~~</li>
 </ul>
 
 <h2 id="future-work">Future Work</h2>
@@ -313,7 +383,7 @@ rails c</p>
 
 <ul>
   <li>~~Refactor stats to inherit an abstract class.~~</li>
-  <li>Change WeightsMatrix class and Stat classes to utilize sparse matrix methods.</li>
+  <li>~~Change WeightsMatrix class and Stat classes to utilize sparse matrix methods.~~</li>
   <li>Split into two separate gems spatial_stats and spatial_stats-activerecord</li>
 </ul>
 
@@ -355,7 +425,7 @@ rails c</p>
 </div></div>
 
       <div id="footer">
-  Generated on Fri Apr 17 14:11:14 2020 by
+  Generated on Mon Apr 27 11:49:54 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

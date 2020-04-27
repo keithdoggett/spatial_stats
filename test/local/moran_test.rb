@@ -127,4 +127,16 @@ class LocalMoranTest < ActiveSupport::TestCase
       assert_in_delta(v, p_vals[i], 0.0005)
     end
   end
+
+  def test_summary
+    moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
+    seed = 123_456
+    summary = moran.summary(999, seed)
+
+    assert_equal(9, summary.size)
+    assert summary[0].key?(:key)
+    assert summary[0].key?(:stat)
+    assert summary[0].key?(:p)
+    assert summary[0].key?(:group)
+  end
 end
