@@ -58,8 +58,6 @@ weights = SpatialStats::Weights::Distant.idw_knn(scope, :geom, 5)
 
 Weight matrices can be defined by a hash that describes each key's neighbor and weight.
 
-Note: Currently, the keys must be numeric.
-
 Example: Define WeightsMatrix and get the matrix in row_standardized format.
 
 ```ruby
@@ -70,15 +68,22 @@ weights = {
     4 => [{ id: 1, weight: 1 }, { id: 3, weight: 1 }]
 }
 keys = weights.keys
-wm = SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+wm = SpatialStats::Weights::WeightsMatrix.new(weights)
 #  => #<SpatialStats::Weights::WeightsMatrix:0x0000561e205677c0 @keys=[1, 2, 3, 4], @weights={1=>[{:id=>2, :weight=>1}, {:id=>4, :weight=>1}], 2=>[{:id=>1, :weight=>1}], 3=>[{:id=>4, :weight=>1}], 4=>[{:id=>1, :weight=>1}, {:id=>3, :weight=>1}]}, @n=4>
 
-wm.standardized
-#  => Numo::DFloat#shape=[4,4]
-#[[0, 0.5, 0, 0.5],
-# [1, 0, 0, 0],
-# [0, 0, 0, 1],
-# [0.5, 0, 0.5, 0]]
+wm = wm.standardize
+#  => #<SpatialStats::Weights::WeightsMatrix:0x0000561e205677c0 @keys=[1, 2, 3, 4], @weights={1=>[{:id=>2, :weight=>0.5}, {:id=>4, :weight=>0.5}], 2=>[{:id=>1, :weight=>1}], 3=>[{:id=>4, :weight=>1}], 4=>[{:id=>1, :weight=>0.5}, {:id=>3, :weight=>0.5}]}, @n=4>
+
+wm.dense
+# => Numo::DFloat[
+#    [0, 0.5, 0, 0.5],
+#    [1, 0, 0, 0],
+#    [0, 0, 0, 1],
+#    [0.5, 0, 0.5, 0]
+#   ]
+
+wm.sparse
+# => #<SpatialStats::Weights::CSRMatrix @m=4, @n=4, @nnz=6>
 ```
 
 ### Lagged Variables
@@ -88,12 +93,15 @@ Spatially lagged variables can be computed with a 2-D n x n `Numo::NArray` and 1
 #### Compute a Lagged Variable
 
 ```ruby
-w = Numo::DFloat[[0, 0.5, 0, 0.5],
-                 [1, 0, 0, 0],
-                 [0, 0, 0, 1],
-                 [0.5, 0, 0.5, 0]]
+weights = {
+    1 => [{ id: 2, weight: 1 }, { id: 4, weight: 1 }],
+    2 => [{ id: 1, weight: 1 }],
+    3 => [{ id: 4, weight: 1 }],
+    4 => [{ id: 1, weight: 1 }, { id: 3, weight: 1 }]
+}
+wm = SpatialStats::Weights::WeightsMatrix.new(weights).standardize
 vec = [1, 2, 3, 4]
-lagged_var = SpatialStats::Utils::Lag.neighbor_sum(w, vec)
+lagged_var = SpatialStats::Utils::Lag.neighbor_sum(wm, vec)
 # => [3.0, 1.0, 4.0, 2.0]
 ```
 
