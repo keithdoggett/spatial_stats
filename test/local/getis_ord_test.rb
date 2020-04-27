@@ -116,4 +116,11 @@ class LocalGetisOrdTest < ActiveSupport::TestCase
       assert_in_delta(v, p_vals[i], 0.0005)
     end
   end
+
+  def test_groups
+    g = SpatialStats::Local::GetisOrd.new(@poly_scope, :value, @weights)
+    groups = g.groups
+    expected = %w[L H L H L H L H L]
+    assert_equal(expected, groups)
+  end
 end

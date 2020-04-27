@@ -52,4 +52,17 @@ class LocalBivariateMoranTest < ActiveSupport::TestCase
       assert_in_delta(v, p_vals[i], 0.0005)
     end
   end
+
+  def test_groups
+    second_values = [1, 1, 1, 1, 1, 1, 0, 0, 0]
+    @poly_scope.each_with_index do |poly, i|
+      poly.second_value = second_values[i]
+      poly.save
+    end
+
+    moran = SpatialStats::Local::BivariateMoran.new(@poly_scope, :value, :second_value, @weights)
+    groups = moran.groups
+    expected = %w[LH HH LH HH LH HH LL HL LL]
+    assert_equal(expected, groups)
+  end
 end

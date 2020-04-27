@@ -251,6 +251,22 @@ module SpatialStats
         end
       end
 
+      ##
+      # Summary of the statistic. Computes +stat+, +mc+, and +groups+ then returns the values
+      # in a hash array.
+      #
+      # @param [Integer] permutations to run. Last digit should be 9 to produce round numbers.
+      # @param [Integer] seed used in random number generator for shuffles.
+      #
+      # @return [Array]
+      def summary(permutations = 99, seed = nil)
+        p_vals = mc(permutations, seed)
+        data = weights.keys.zip(stat, p_vals, groups)
+        data.map do |row|
+          { key: row[0], stat: row[1], p: row[2], group: row[3] }
+        end
+      end
+
       private
 
       def stat_i

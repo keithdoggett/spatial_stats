@@ -89,6 +89,19 @@ module SpatialStats
       end
 
       ##
+      # Summary of the statistic. Computes +stat+ and +mc+ and returns the values
+      # in a hash.
+      #
+      # @param [Integer] permutations to run. Last digit should be 9 to produce round numbers.
+      # @param [Integer] seed used in random number generator for shuffles.
+      #
+      # @return [Hash]
+      def summary(permutations = 99, seed = nil)
+        p_val = mc(permutations, seed)
+        { stat: stat, p: p_val }
+      end
+
+      ##
       # Standardized variables queried from +x_field+.
       #
       # @return [Array]

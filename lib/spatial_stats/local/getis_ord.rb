@@ -25,6 +25,7 @@ module SpatialStats
         calc_weights
       end
       attr_accessor :star
+      attr_writer :x
 
       ##
       # Computes the G or G* statistic for every observation in x.
@@ -36,6 +37,25 @@ module SpatialStats
         end
       end
       alias g stat
+
+      ##
+      # Computes the groups each observation belongs to.
+      # Potential groups for G are:
+      # [H] High
+      # [L] Low
+      #
+      # Group is high when standardized z is positive, low otherwise.
+      #
+      # @return [Array] groups for each observation
+      def groups
+        z.standardize.map do |val|
+          if val.positive?
+            'H'
+          else
+            'L'
+          end
+        end
+      end
 
       ##
       # Values of the +field+ queried from the +scope+

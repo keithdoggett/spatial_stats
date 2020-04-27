@@ -90,4 +90,11 @@ class LocalGearyTest < ActiveSupport::TestCase
       assert_in_delta(v, p_vals[i], 0.0005)
     end
   end
+
+  def test_groups
+    geary = SpatialStats::Local::Geary.new(@poly_scope, :value, @weights)
+    groups = geary.groups
+    expected = %w[N N N N N N N N N]
+    assert_equal(expected, groups)
+  end
 end

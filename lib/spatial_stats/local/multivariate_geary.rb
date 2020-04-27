@@ -93,6 +93,10 @@ module SpatialStats
         end
       end
 
+      def groups
+        raise NotImplementedError, 'groups not implemented'
+      end
+
       private
 
       def mc_i(wi, perms, idx)

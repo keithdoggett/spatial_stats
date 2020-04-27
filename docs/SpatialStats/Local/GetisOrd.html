@@ -146,6 +146,35 @@
 </li>
 
     
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#x-instance_method" title="#x (instance method)">#<strong>x</strong>  &#x21d2; Array </a>
+    
+
+    
+      (also: #z)
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Values of the <code>field</code> queried from the <code>scope</code>.</p>
+</div></span>
+  
+</li>
+
+    
   </ul>
 
 
@@ -163,6 +192,30 @@
     </h2>
 
     <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#groups-instance_method" title="#groups (instance method)">#<strong>groups</strong>  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Computes the groups each observation belongs to.</p>
+</div></span>
+  
+</li>
+
       
         <li class="public ">
   <span class="summary_signature">
@@ -240,32 +293,6 @@
 </li>
 
       
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#x-instance_method" title="#x (instance method)">#<strong>x</strong>  &#x21d2; Array </a>
-    
-
-    
-      (also: #z)
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Values of the <code>field</code> queried from the <code>scope</code>.</p>
-</div></span>
-  
-</li>
-
-      
     </ul>
   
 
@@ -279,7 +306,7 @@
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Stat.html" title="SpatialStats::Local::Stat (class)">Stat</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Stat.html#crand-instance_method" title="SpatialStats::Local::Stat#crand (method)">#crand</a></span>, <span class='object_link'><a href="Stat.html#expectation-instance_method" title="SpatialStats::Local::Stat#expectation (method)">#expectation</a></span>, <span class='object_link'><a href="Stat.html#mc-instance_method" title="SpatialStats::Local::Stat#mc (method)">#mc</a></span>, <span class='object_link'><a href="Stat.html#mc_bv-instance_method" title="SpatialStats::Local::Stat#mc_bv (method)">#mc_bv</a></span>, <span class='object_link'><a href="Stat.html#quads-instance_method" title="SpatialStats::Local::Stat#quads (method)">#quads</a></span>, <span class='object_link'><a href="Stat.html#variance-instance_method" title="SpatialStats::Local::Stat#variance (method)">#variance</a></span>, <span class='object_link'><a href="Stat.html#z_score-instance_method" title="SpatialStats::Local::Stat#z_score (method)">#z_score</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="Stat.html#crand-instance_method" title="SpatialStats::Local::Stat#crand (method)">#crand</a></span>, <span class='object_link'><a href="Stat.html#expectation-instance_method" title="SpatialStats::Local::Stat#expectation (method)">#expectation</a></span>, <span class='object_link'><a href="Stat.html#mc-instance_method" title="SpatialStats::Local::Stat#mc (method)">#mc</a></span>, <span class='object_link'><a href="Stat.html#mc_bv-instance_method" title="SpatialStats::Local::Stat#mc_bv (method)">#mc_bv</a></span>, <span class='object_link'><a href="Stat.html#quads-instance_method" title="SpatialStats::Local::Stat#quads (method)">#quads</a></span>, <span class='object_link'><a href="Stat.html#summary-instance_method" title="SpatialStats::Local::Stat#summary (method)">#summary</a></span>, <span class='object_link'><a href="Stat.html#variance-instance_method" title="SpatialStats::Local::Stat#variance (method)">#variance</a></span>, <span class='object_link'><a href="Stat.html#z_score-instance_method" title="SpatialStats::Local::Stat#z_score (method)">#z_score</a></span></p>
 <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
@@ -445,6 +472,66 @@
 </table>
 </div>
     
+      
+      <span id="x=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="x-instance_method">
+  
+    #<strong>x</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='z-instance_method'>z</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Values of the <code>field</code> queried from the <code>scope</code></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+64
+65
+66</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 64</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_x'>x</span>
+  <span class='ivar'>@x</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Variables.html" title="SpatialStats::Queries::Variables (module)">Variables</a></span></span><span class='period'>.</span><span class='id identifier rubyid_query_field'><span class='object_link'><a href="../Queries/Variables.html#query_field-class_method" title="SpatialStats::Queries::Variables.query_field (method)">query_field</a></span></span><span class='lparen'>(</span><span class='ivar'>@scope</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 
@@ -453,7 +540,87 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="star?-instance_method">
+  <h3 class="signature first" id="groups-instance_method">
+  
+    #<strong>groups</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Computes the groups each observation belongs to. Potential groups for G are:</p>
+<dl class="rdoc-list label-list"><dt>H
+<dd>
+<p>High</p>
+</dd><dt>L
+<dd>
+<p>Low</p>
+</dd></dl>
+
+<p>Group is high when standardized z is positive, low otherwise.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>groups for each observation</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+50
+51
+52
+53
+54
+55
+56
+57
+58</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 50</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_groups'>groups</span>
+  <span class='id identifier rubyid_z'>z</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_val'>val</span><span class='op'>|</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_val'>val</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>H</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>else</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>L</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="star?-instance_method">
   
     #<strong>star?</strong>  &#x21d2; <tt>Boolean</tt> 
   
@@ -496,16 +663,16 @@
       <pre class="lines">
 
 
-55
-56
-57
-58
-59
-60
-61</pre>
+75
+76
+77
+78
+79
+80
+81</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 75</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_star?'>star?</span>
   <span class='kw'>if</span> <span class='ivar'>@star</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -567,14 +734,14 @@
       <pre class="lines">
 
 
-33
 34
 35
 36
-37</pre>
+37
+38</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 33</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_stat'>stat</span>
   <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid__x_val'>_x_val</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='op'>|</span>
@@ -586,70 +753,12 @@
 </table>
 </div>
     
-      <div class="method_details ">
-  <h3 class="signature " id="x-instance_method">
-  
-    #<strong>x</strong>  &#x21d2; <tt>Array</tt> 
-  
-
-  
-    <span class="aliases">Also known as:
-    <span class="names"><span id='z-instance_method'>z</span></span>
-    </span>
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Values of the <code>field</code> queried from the <code>scope</code></p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Array</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-44
-45
-46</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/local/getis_ord.rb', line 44</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_x'>x</span>
-  <span class='ivar'>@x</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Variables.html" title="SpatialStats::Queries::Variables (module)">Variables</a></span></span><span class='period'>.</span><span class='id identifier rubyid_query_field'><span class='object_link'><a href="../Queries/Variables.html#query_field-class_method" title="SpatialStats::Queries::Variables.query_field (method)">query_field</a></span></span><span class='lparen'>(</span><span class='ivar'>@scope</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 17 14:11:14 2020 by
+  Generated on Mon Apr 27 11:49:54 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

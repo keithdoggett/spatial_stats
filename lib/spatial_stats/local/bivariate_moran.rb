@@ -22,6 +22,7 @@ module SpatialStats
         @weights = weights.standardize
       end
       attr_accessor :scope, :x_field, :y_field, :weights
+      attr_writer :x, :y
 
       ##
       # Computes the local indicator of spatial correlation for
@@ -60,6 +61,61 @@ module SpatialStats
       # @return [Array] of p-values
       def mc(permutations = 99, seed = nil)
         mc_bv(permutations, seed)
+      end
+
+      ##
+      # Determines what quadrant an observation is in. Based on its value
+      # compared to its neighbors. This does not work for all stats, since
+      # it requires that values be negative.
+      #
+      # In a standardized array of z, high values are values greater than 0
+      # and it's neighbors are determined by the spatial lag and if that is
+      # positive then it's neighbors would be high, low otherwise.
+      #
+      # Quadrants are:
+      # [HH] a high value surrounded by other high values
+      # [LH] a low value surrounded by high values
+      # [LL] a low value surrounded by low values
+      # [HL] a high value surrounded by low values
+      #
+      # @return [Array] of labels
+      def quads
+        # https://github.com/pysal/esda/blob/master/esda/moran.py#L925
+        z_lag = SpatialStats::Utils::Lag.neighbor_average(weights, y)
+        zp = x.map(&:positive?)
+        lp = z_lag.map(&:positive?)
+
+        # hh = zp & lp
+        # lh = zp ^ true & lp
+        # ll = zp ^ true & lp ^ true
+        # hl = zp next to lp ^ true
+        hh = zp.each_with_index.map { |v, idx| v & lp[idx] }
+        lh = zp.each_with_index.map { |v, idx| (v ^ true) & lp[idx] }
+        ll = zp.each_with_index.map { |v, idx| (v ^ true) & (lp[idx] ^ true) }
+        hl = zp.each_with_index.map { |v, idx| v & (lp[idx] ^ true) }
+
+        # now zip lists and map them to proper terms
+        quad_terms = %w[HH LH LL HL]
+        hh.zip(lh, ll, hl).map do |feature|
+          quad_terms[feature.index(true)]
+        end
+      end
+      alias groups quads
+
+      ##
+      # Summary of the statistic. Computes +stat+, +mc+, and +groups+ then returns the values
+      # in a hash array.
+      #
+      # @param [Integer] permutations to run. Last digit should be 9 to produce round numbers.
+      # @param [Integer] seed used in random number generator for shuffles.
+      #
+      # @return [Array]
+      def summary(permutations = 99, seed = nil)
+        p_vals = mc(permutations, seed)
+        data = weights.keys.zip(stat, p_vals, groups)
+        data.map do |row|
+          { key: row[0], stat: row[1], p: row[2], group: row[3] }
+        end
       end
 
       def x

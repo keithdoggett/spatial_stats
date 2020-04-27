@@ -20,6 +20,7 @@ module SpatialStats
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
+      attr_writer :x
 
       ##
       # Computes the local indicator of spatial autocorrelation (lisa) for
@@ -65,6 +66,21 @@ module SpatialStats
           vars << (a_term - b_terms[idx] - (exp**2))
         end
         vars
+      end
+
+      ##
+      # Computes the groups each observation belongs to.
+      # Potential groups for Moran's I are:
+      # [HH] High-High
+      # [HL] High-Low
+      # [LH] Low-High
+      # [LL] Low-Low
+      #
+      # This is the same as the +#quads+ method in the +Stat+ class.
+      #
+      # @return [Array] groups for each observation
+      def groups
+        quads
       end
 
       ##
