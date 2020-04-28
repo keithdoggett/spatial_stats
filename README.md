@@ -88,7 +88,7 @@ wm.sparse
 
 ### Lagged Variables
 
-Spatially lagged variables can be computed with a 2-D n x n `Numo::NArray` and 1-D vector (`Array` or `Numo::NArray`).
+Spatially lagged variables can be computed with weights matrix and 1-D vector (`Array`).
 
 #### Compute a Lagged Variable
 
