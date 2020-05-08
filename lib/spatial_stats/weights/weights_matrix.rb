@@ -55,7 +55,7 @@ module SpatialStats
       #
       # @return [CSRMatrix]
       def sparse
-        @sparse ||= CSRMatrix.new(dense.to_a.flatten, n, n)
+        @sparse ||= CSRMatrix.new(weights, n)
       end
 
       ##

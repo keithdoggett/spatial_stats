@@ -28,60 +28,79 @@ VALUE csr_matrix_alloc(VALUE self)
     return TypedData_Wrap_Struct(self, &csr_matrix_type, csr);
 }
 
-void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE num_rows, VALUE num_cols)
+void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE keys, VALUE num_rows)
 {
+
     int nnz = 0;
-    int m = NUM2INT(num_rows);
-    int n = NUM2INT(num_cols);
+    int n = NUM2INT(num_rows);
+    int m;
+
+    VALUE key;
+    VALUE row;
+    VALUE entry;
+    VALUE key_lookup = rb_hash_new();
+    VALUE weight_sym = ID2SYM(rb_intern("weight"));
+    VALUE id_sym = ID2SYM(rb_intern("id"));
 
     double *values;
     int *col_index;
     int *row_index;
 
     int nz_idx;
-    double entry;
+    double weight;
 
     int i;
     int j;
-    int index;
 
     // first get number non zero count so we can alloc values and col_index
-    for (i = 0; i < m; i++)
+    for (i = 0; i < n; i++)
     {
-        for (j = 0; j < n; j++)
-        {
-            index = i * n + j;
-            if (NUM2DBL(rb_ary_entry(data, index)) != 0)
-            {
-                nnz++;
-            }
-        }
+        key = rb_ary_entry(keys, i);
+
+        // set lookup index for this key
+        rb_hash_aset(key_lookup, key, INT2NUM(i));
+
+        // check the value of this row is actually an array
+        // if it is, add array len to nnz
+        row = rb_hash_aref(data, key);
+        Check_Type(row, T_ARRAY);
+        nnz += rb_array_len(row);
     }
 
     values = malloc(sizeof(double) * nnz);
     col_index = malloc(sizeof(int) * nnz);
-    row_index = malloc(sizeof(int) * (m + 1));
+    row_index = malloc(sizeof(int) * (n + 1));
 
-    // for every non-zero, record value, column and then get values per row
+    // for every row, work through each hash
+    // in each hash, add the weight to values and get col_index
+    // by looking at the key_lookup of id.
+    // Row index will be computed by adding len of each row and updating array.
     nz_idx = 0;
-    for (i = 0; i < m; i++)
+    for (i = 0; i < n; i++)
     {
         row_index[i] = nz_idx;
-        for (j = 0; j < n; j++)
+
+        key = rb_ary_entry(keys, i);
+        row = rb_hash_aref(data, key);
+        m = rb_array_len(row);
+
+        for (j = 0; j < m; j++)
         {
-            index = i * n + j;
-            entry = NUM2DBL(rb_ary_entry(data, index));
-            if (entry != 0)
-            {
-                values[nz_idx] = entry;
-                col_index[nz_idx] = j;
-                nz_idx++;
-            }
+            entry = rb_ary_entry(row, j);
+            Check_Type(entry, T_HASH);
+
+            key = rb_hash_aref(entry, id_sym);
+            weight = NUM2DBL(rb_hash_aref(entry, weight_sym));
+
+            // assign the nnz the weight
+            // get index in the keys array of key from lookup table
+            values[nz_idx] = weight;
+            col_index[nz_idx] = NUM2INT(rb_hash_aref(key_lookup, key));
+            nz_idx++;
         }
     }
-    row_index[m] = nnz;
+    row_index[n] = nnz;
 
-    csr->m = m;
     csr->n = n;
     csr->nnz = nnz;
     csr->values = values;
@@ -112,27 +131,27 @@ void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE num_rows, VALUE num_cols)
  *  
  *  @return [CSRMatrix]
  */
-VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows, VALUE num_cols)
+VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows)
 {
-
+    VALUE keys;
     csr_matrix *csr;
     TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
     csr->init = 0;
 
-    Check_Type(data, T_ARRAY);
+    Check_Type(data, T_HASH);
     Check_Type(num_rows, T_FIXNUM);
-    Check_Type(num_cols, T_FIXNUM);
+
+    keys = rb_funcall(data, rb_intern("keys"), 0);
 
     // check dimensions are correct
-    if (NUM2INT(num_rows) * NUM2INT(num_cols) != rb_array_len(data))
+    if (NUM2INT(num_rows) != rb_array_len(keys))
     {
-        rb_raise(rb_eArgError, "n_rows * n_cols != data.size, check your dimensions");
+        rb_raise(rb_eArgError, "n_rows != keys.size, check your dimensions");
     }
 
-    mat_to_sparse(csr, data, num_rows, num_cols);
+    mat_to_sparse(csr, data, keys, num_rows);
 
-    rb_iv_set(self, "@m", num_rows);
-    rb_iv_set(self, "@n", num_cols);
+    rb_iv_set(self, "@n", num_rows);
     rb_iv_set(self, "@nnz", INT2NUM(csr->nnz));
 
     return self;
@@ -203,8 +222,8 @@ VALUE csr_matrix_row_index(VALUE self)
 
     TypedData_Get_Struct(self, csr_matrix, &csr_matrix_type, csr);
 
-    result = rb_ary_new_capa(csr->m + 1);
-    for (i = 0; i <= csr->m; i++)
+    result = rb_ary_new_capa(csr->n + 1);
+    for (i = 0; i <= csr->n; i++)
     {
         rb_ary_store(result, i, INT2NUM(csr->row_index[i]));
     }
@@ -239,11 +258,11 @@ VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
         rb_raise(rb_eArgError, "Dimension Mismatch CSRMatrix.n != vec.size");
     }
 
-    result = rb_ary_new_capa(csr->m);
+    result = rb_ary_new_capa(csr->n);
 
     // float *vals = (float *)DATA_PTR(result);
 
-    for (i = 0; i < csr->m; i++)
+    for (i = 0; i < csr->n; i++)
     {
         tmp = 0;
         for (jj = csr->row_index[i]; jj < csr->row_index[i + 1]; jj++)
@@ -285,7 +304,7 @@ VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row)
     }
 
     i = NUM2INT(row);
-    if (!(i >= 0 && i < csr->m))
+    if (!(i >= 0 && i < csr->n))
     {
         rb_raise(rb_eArgError, "Index Error row_idx >= m or idx < 0");
     }
