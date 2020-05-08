@@ -59,6 +59,19 @@ module SpatialStats
       end
 
       ##
+      # Compute the cardinalities of each neighbor into an array
+      #
+      # @return [Array]
+      def wc
+        @wc ||= begin
+          row_index = sparse.row_index
+          (0..n - 1).map do |idx|
+            row_index[idx + 1] - row_index[idx]
+          end
+        end
+      end
+
+      ##
       # Row standardized version of the weights matrix.
       # Will return a new version of the weights matrix with standardized
       # weights.

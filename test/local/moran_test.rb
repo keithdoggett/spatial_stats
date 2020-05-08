@@ -109,12 +109,10 @@ class LocalMoranTest < ActiveSupport::TestCase
   def test_crand
     # test value will be held in crand
     moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
-    rands = moran.crand(moran.x, 9, Random.new)
-    neighbor_counts = [2, 3, 2, 3, 4, 3, 2, 3, 2]
-    rands.to_a.each_with_index do |perms, idx|
-      expected = neighbor_counts[idx]
-      assert_equal(expected, perms.shape[1])
-    end
+    rands = moran.crand(9, Random.new)
+
+    assert_equal(9, rands.shape[0])
+    assert_equal(5, rands.shape[1])
   end
 
   def test_mc

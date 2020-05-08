@@ -42,12 +42,12 @@ module SpatialStats
 
       ##
       # Conditional randomization algorithm used in permutation testing.
-      # Outputs an array of length n of Numo::DFloat matrices of
-      # size m x num_neighbors. Where m is the number of permutations and
-      # num_neighbors is the number of neighbors for that observation.
+      # Returns a matrix with permuted index values that will be used for
+      # selecting values from the original data set.
       #
-      # The values are randomly permutated values from arr that will act
-      # as its neighbors for that permutation.
+      # The width of the matrix is the max number of neighbors + 1
+      # which is way less than it would be if the original vector
+      # was shuffled in full.
       #
       # This is super important because most weight matrices are very
       # sparse so the amount of shuffling/multiplication that is done
@@ -55,9 +55,9 @@ module SpatialStats
       #
       # @see https://github.com/pysal/esda/blob/master/esda/moran.py#L893
       #
-      # @return [Array] of Numo::Narray matrices
+      # @return [Numo::Int32] matrix of shape perms x wc_max + 1
       #
-      def crand(arr, permutations, rng)
+      def crand(permutations, rng)
         # basing this off the ESDA method
         # need to get k for max_neighbors
         # and wc for cardinalities of each item
@@ -68,32 +68,13 @@ module SpatialStats
         # entry not the entire list of permutations for each entry.
         n_1 = weights.n - 1
 
-        sparse = weights.sparse
-        row_index = sparse.row_index
-
         # weight counts
-        wc = Array.new(weights.n)
-        k = 0
-        (0..n_1).each do |idx|
-          wc[idx] = row_index[idx + 1] - row_index[idx]
-        end
-
+        wc = weights.wc
         k = wc.max + 1
         prange = (0..permutations - 1).to_a
 
-        arr = Numo::DFloat.cast(arr)
-
-        ids = (0..n_1).to_a
         ids_perm = (0..n_1 - 1).to_a
-        rids = Numo::Int32.cast(prange.map { ids_perm.sample(k, random: rng) })
-
-        (0..n_1).map do |idx|
-          idsi = ids.dup
-          idsi.delete_at(idx)
-          idsi.shuffle!(random: rng)
-          idsi = Numo::Int32.cast(idsi)
-          arr[idsi[rids[true, 0..wc[idx] - 1]]]
-        end
+        Numo::Int32.cast(prange.map { ids_perm.sample(k, random: rng) })
       end
 
       ##
@@ -114,48 +95,40 @@ module SpatialStats
         # its neighbors. Then we will only test for that item instead
         # of the entire set. This will be done for each item.
         rng = gen_rng(seed)
-        shuffles = crand(x, permutations, rng)
+        rids = crand(permutations, rng)
 
-        n = weights.n
-        # r is the number of equal to or more extreme samples
+        n_1 = weights.n - 1
+        sparse = weights.sparse
+        row_index = sparse.row_index
+        ws = sparse.values
+        wc = weights.wc
         stat_orig = stat
-        rs = [0] * n
 
-        row_index = weights.sparse.row_index
-        ws = weights.sparse.values
-
-        idx = 0
-        while idx < n
-          # need to truncate because floats from
-          # c in sparse matrix are inconsistent with
-          # dfloats
-          stat_i_orig = stat_orig[idx]
+        arr = Numo::DFloat.cast(x)
+        ids = (0..n_1).to_a
+        observations = Array.new(weights.n)
+        (0..n_1).each do |idx|
+          idsi = ids.dup
+          idsi.delete_at(idx)
+          idsi.shuffle!(random: rng)
+          idsi = Numo::Int32.cast(idsi)
+          sample = arr[idsi[rids[true, 0..wc[idx] - 1]]]
 
           # account for case where there are no neighbors
-          # the way Numo handles negative ranges, it returns the max
-          # so there will be a len 0 z array being multiplied by a
-          # max_neighbor width permutation matrix.
-          # Need to skip.
           row_range = row_index[idx]..(row_index[idx + 1] - 1)
           if row_range.size.zero?
-            rs[idx] = permutations
-            idx += 1
+            observations[idx] = permutations
             next
           end
-          wi = Numo::DFloat.cast(ws[row_range])
-          stat_i_new = mc_i(wi, shuffles[idx], idx)
 
-          rs[idx] = mc_observation_calc(stat_i_orig, stat_i_new,
-                                        permutations)
-          # rs[idx] = if stat_i_orig.positive?
-          #             (stat_i_new >= stat_i_orig).count
-          #           else
-          #             (stat_i_new <= stat_i_orig).count
-          #           end
-          idx += 1
+          wi = Numo::DFloat.cast(ws[row_range])
+          stat_i_new = mc_i(wi, sample, idx)
+          stat_i_orig = stat_orig[idx]
+          observations[idx] = mc_observation_calc(stat_i_orig, stat_i_new,
+                                                  permutations)
         end
 
-        rs.map do |ri|
+        observations.map do |ri|
           (ri + 1.0) / (permutations + 1.0)
         end
       end
@@ -174,41 +147,40 @@ module SpatialStats
       # @return [Array] of p-values
       def mc_bv(permutations, seed)
         rng = gen_rng(seed)
-        shuffles = crand(y, permutations, rng)
-        n = weights.n
+        rids = crand(permutations, rng)
 
+        n_1 = weights.n - 1
+        sparse = weights.sparse
+        row_index = sparse.row_index
+        ws = sparse.values
+        wc = weights.wc
         stat_orig = stat
-        rs = [0] * n
 
-        row_index = weights.sparse.row_index
-        ws = weights.sparse.values
+        arr = Numo::DFloat.cast(y)
+        ids = (0..n_1).to_a
+        observations = Array.new(weights.n)
+        (0..n_1).each do |idx|
+          idsi = ids.dup
+          idsi.delete_at(idx)
+          idsi.shuffle!(random: rng)
+          idsi = Numo::Int32.cast(idsi)
+          sample = arr[idsi[rids[true, 0..wc[idx] - 1]]]
 
-        idx = 0
-        while idx < n
-          stat_i_orig = stat_orig[idx]
-
+          # account for case where there are no neighbors
           row_range = row_index[idx]..(row_index[idx + 1] - 1)
           if row_range.size.zero?
-            rs[idx] = permutations
-            idx += 1
+            observations[idx] = permutations
             next
           end
+
           wi = Numo::DFloat.cast(ws[row_range])
-
-          stat_i_new = mc_i(wi, shuffles[idx], idx)
-
-          rs[idx] = mc_observation_calc(stat_i_orig, stat_i_new,
-                                        permutations)
-          # if stat_i_orig.positive?
-          #             (stat_i_new >= stat_i_orig).count
-          #           else
-          #             (stat_i_new <= stat_i_orig).count
-          #           end
-
-          idx += 1
+          stat_i_new = mc_i(wi, sample, idx)
+          stat_i_orig = stat_orig[idx]
+          observations[idx] = mc_observation_calc(stat_i_orig, stat_i_new,
+                                                  permutations)
         end
 
-        rs.map do |ri|
+        observations.map do |ri|
           (ri + 1.0) / (permutations + 1.0)
         end
       end
