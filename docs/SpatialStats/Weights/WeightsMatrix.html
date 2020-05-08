@@ -710,7 +710,7 @@
       <pre class="code"><span class="info file"># File 'lib/spatial_stats/weights/weights_matrix.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sparse'>sparse</span>
-  <span class='ivar'>@sparse</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="CSRMatrix.html" title="SpatialStats::Weights::CSRMatrix (class)">CSRMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="CSRMatrix.html#initialize-instance_method" title="SpatialStats::Weights::CSRMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_dense'>dense</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='comma'>,</span> <span class='id identifier rubyid_n'>n</span><span class='comma'>,</span> <span class='id identifier rubyid_n'>n</span><span class='rparen'>)</span>
+  <span class='ivar'>@sparse</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="CSRMatrix.html" title="SpatialStats::Weights::CSRMatrix (class)">CSRMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="CSRMatrix.html#initialize-instance_method" title="SpatialStats::Weights::CSRMatrix#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='comma'>,</span> <span class='id identifier rubyid_n'>n</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -934,7 +934,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri May  8 10:34:01 2020 by
+  Generated on Fri May  8 15:50:52 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

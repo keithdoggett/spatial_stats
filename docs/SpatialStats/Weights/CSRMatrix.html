@@ -297,7 +297,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(data, num_rows, num_cols)  &#x21d2; CSRMatrix </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(data, num_rows)  &#x21d2; CSRMatrix </a>
     
 
     
@@ -402,7 +402,7 @@
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(data, num_rows, num_cols)  &#x21d2; <tt><span class='object_link'><a href="" title="SpatialStats::Weights::CSRMatrix (class)">CSRMatrix</a></span></tt> 
+    #<strong>initialize</strong>(data, num_rows)  &#x21d2; <tt><span class='object_link'><a href="" title="SpatialStats::Weights::CSRMatrix (class)">CSRMatrix</a></span></tt> 
   
 
   
@@ -411,7 +411,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>A new instance of CSRMatrix. Uses a 1-D representation of a 2-D array as input.</p>
+<p>A new instance of CSRMatrix. Uses a Dictionary of Keys (DOK) as input to represent a square matrix.</p>
 
 
   </div>
@@ -422,17 +422,14 @@
     <p class="tag_title">Examples:</p>
     
       
-      <pre class="example code"><code>dummy_data = [
-                [0, 1, 2]
-                [3, 4, 5],
-                [6, 7, 8]
-             ]
-num_rows = 3
-num_cols = 3
-data = dummy_data.flatten
-# =&gt; [0, 1, 2, 3, 4, 5, 6, 7, 8]
+      <pre class="example code"><code><span class='id identifier rubyid_weights'>weights</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>a</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='lbrace'>{</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>c</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>weight:</span> <span class='int'>1</span> <span class='rbrace'>}</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>b</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='lbrace'>{</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>b</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>weight:</span> <span class='int'>1</span> <span class='rbrace'>}</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>c</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='lbrace'>{</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>a</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>weight:</span> <span class='int'>1</span> <span class='rbrace'>}</span><span class='rbracket'>]</span>
+<span class='rbrace'>}</span>
+<span class='id identifier rubyid_num_rows'>num_rows</span> <span class='op'>=</span> <span class='int'>3</span>
 
-csr = CSRMatrix.new(data, num_rows, num_cols)</code></pre>
+<span class='id identifier rubyid_csr'>csr</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="SpatialStats::Weights::CSRMatrix (class)">CSRMatrix</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_num_rows'>num_rows</span><span class='rparen'>)</span></code></pre>
     
   </div>
 <p class="tag_title">Parameters:</p>
@@ -470,22 +467,6 @@ csr = CSRMatrix.new(data, num_rows, num_cols)</code></pre>
       
     </li>
   
-    <li>
-      
-        <span class='name'>num_cols</span>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>in the 2-D representation</p>
-</div>
-      
-    </li>
-  
 </ul>
 
 
@@ -495,21 +476,6 @@ csr = CSRMatrix.new(data, num_rows, num_cols)</code></pre>
       <pre class="lines">
 
 
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
 130
 131
 132
@@ -519,32 +485,47 @@ csr = CSRMatrix.new(data, num_rows, num_cols)</code></pre>
 136
 137
 138
-139</pre>
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 115</span>
+      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 130</span>
 
-VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows, VALUE num_cols)
+VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows)
 {
-
+    VALUE keys;
     csr_matrix *csr;
     TypedData_Get_Struct(self, csr_matrix, &amp;csr_matrix_type, csr);
     csr-&gt;init = 0;
 
-    Check_Type(data, T_ARRAY);
+    Check_Type(data, T_HASH);
     Check_Type(num_rows, T_FIXNUM);
-    Check_Type(num_cols, T_FIXNUM);
+
+    keys = rb_funcall(data, rb_intern(&quot;keys&quot;), 0);
 
     // check dimensions are correct
-    if (NUM2INT(num_rows) * NUM2INT(num_cols) != rb_array_len(data))
+    if (NUM2INT(num_rows) != rb_array_len(keys))
     {
-        rb_raise(rb_eArgError, &quot;n_rows * n_cols != data.size, check your dimensions&quot;);
+        rb_raise(rb_eArgError, &quot;n_rows != keys.size, check your dimensions&quot;);
     }
 
-    mat_to_sparse(csr, data, num_rows, num_cols);
+    mat_to_sparse(csr, data, keys, num_rows);
 
-    rb_iv_set(self, &quot;@m&quot;, num_rows);
-    rb_iv_set(self, &quot;@n&quot;, num_cols);
+    rb_iv_set(self, &quot;@n&quot;, num_rows);
     rb_iv_set(self, &quot;@nnz&quot;, INT2NUM(csr-&gt;nnz));
 
     return self;
@@ -652,26 +633,26 @@ VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows, VALUE num_co
       <pre class="lines">
 
 
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
 184
-185</pre>
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 169</span>
+      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 184</span>
 
 VALUE csr_matrix_col_index(VALUE self)
 {
@@ -757,21 +738,6 @@ csr.coordinates
       <pre class="lines">
 
 
-325
-326
-327
-328
-329
-330
-331
-332
-333
-334
-335
-336
-337
-338
-339
 340
 341
 342
@@ -797,10 +763,25 @@ csr.coordinates
 362
 363
 364
-365</pre>
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 325</span>
+      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 340</span>
 
 VALUE csr_matrix_coordinates(VALUE self)
 {
@@ -928,21 +909,6 @@ VALUE csr_matrix_coordinates(VALUE self)
       <pre class="lines">
 
 
-268
-269
-270
-271
-272
-273
-274
-275
-276
-277
-278
-279
-280
-281
-282
 283
 284
 285
@@ -961,10 +927,25 @@ VALUE csr_matrix_coordinates(VALUE self)
 298
 299
 300
-301</pre>
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 268</span>
+      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 283</span>
 
 VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row)
 {
@@ -986,7 +967,7 @@ VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row)
     }
 
     i = NUM2INT(row);
-    if (!(i &gt;= 0 &amp;&amp; i &lt; csr-&gt;m))
+    if (!(i &gt;= 0 &amp;&amp; i &lt; csr-&gt;n))
     {
         rb_raise(rb_eArgError, &quot;Index Error row_idx &gt;= m or idx &lt; 0&quot;);
     }
@@ -1076,21 +1057,6 @@ VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row)
       <pre class="lines">
 
 
-224
-225
-226
-227
-228
-229
-230
-231
-232
-233
-234
-235
-236
-237
-238
 239
 240
 241
@@ -1109,10 +1075,25 @@ VALUE csr_matrix_dot_row(VALUE self, VALUE vec, VALUE row)
 254
 255
 256
-257</pre>
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 224</span>
+      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 239</span>
 
 VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
 {
@@ -1132,11 +1113,11 @@ VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
         rb_raise(rb_eArgError, &quot;Dimension Mismatch CSRMatrix.n != vec.size&quot;);
     }
 
-    result = rb_ary_new_capa(csr-&gt;m);
+    result = rb_ary_new_capa(csr-&gt;n);
 
     // float *vals = (float *)DATA_PTR(result);
 
-    for (i = 0; i &lt; csr-&gt;m; i++)
+    for (i = 0; i &lt; csr-&gt;n; i++)
     {
         tmp = 0;
         for (jj = csr-&gt;row_index[i]; jj &lt; csr-&gt;row_index[i + 1]; jj++)
@@ -1199,26 +1180,26 @@ VALUE csr_matrix_mulvec(VALUE self, VALUE vec)
       <pre class="lines">
 
 
-197
-198
-199
-200
-201
-202
-203
-204
-205
-206
-207
-208
-209
-210
-211
 212
-213</pre>
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 197</span>
+      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 212</span>
 
 VALUE csr_matrix_row_index(VALUE self)
 {
@@ -1229,8 +1210,8 @@ VALUE csr_matrix_row_index(VALUE self)
 
     TypedData_Get_Struct(self, csr_matrix, &amp;csr_matrix_type, csr);
 
-    result = rb_ary_new_capa(csr-&gt;m + 1);
-    for (i = 0; i &lt;= csr-&gt;m; i++)
+    result = rb_ary_new_capa(csr-&gt;n + 1);
+    for (i = 0; i &lt;= csr-&gt;n; i++)
     {
         rb_ary_store(result, i, INT2NUM(csr-&gt;row_index[i]));
     }
@@ -1286,26 +1267,26 @@ VALUE csr_matrix_row_index(VALUE self)
       <pre class="lines">
 
 
-146
-147
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
 161
-162</pre>
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 146</span>
+      <pre class="code"><span class="info file"># File 'ext/spatial_stats/csr_matrix.c', line 161</span>
 
 VALUE csr_matrix_values(VALUE self)
 {
@@ -1334,7 +1315,7 @@ VALUE csr_matrix_values(VALUE self)
 </div>
 
       <div id="footer">
-  Generated on Fri May  8 10:34:01 2020 by
+  Generated on Fri May  8 15:50:52 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

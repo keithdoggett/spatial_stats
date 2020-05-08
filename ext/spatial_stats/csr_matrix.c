@@ -111,23 +111,19 @@ void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE keys, VALUE num_rows)
 
 /**
  *  A new instance of CSRMatrix.
- *  Uses a 1-D representation of a 2-D array as input.
+ *  Uses a Dictionary of Keys (DOK) as input to represent a square matrix.
  *  @example
- *      dummy_data = [
- *                      [0, 1, 2]
- *                      [3, 4, 5],
- *                      [6, 7, 8]   
- *                   ]
+ *      weights = {
+ *          'a' => [{ id: 'c', weight: 1 }],
+ *          'b' => [{ id: 'b', weight: 1 }],
+ *          'c' => [{ id: 'a', weight: 1 }]
+ *      }
  *      num_rows = 3
- *      num_cols = 3
- *      data = dummy_data.flatten
- *      # => [0, 1, 2, 3, 4, 5, 6, 7, 8]
  *      
- *      csr = CSRMatrix.new(data, num_rows, num_cols)
+ *      csr = CSRMatrix.new(data, num_rows)
  * 
  *  @param [Array] data in 1-D format
  *  @param [Integer] num_rows in the 2-D representation
- *  @param [Integer] num_cols in the 2-D representation
  *  
  *  @return [CSRMatrix]
  */
