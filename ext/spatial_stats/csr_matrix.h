@@ -4,7 +4,6 @@
 typedef struct csr_matrix
 {
     char init;
-    int m;
     int n;
     int nnz;
     double *values;
@@ -23,9 +22,9 @@ static const rb_data_type_t csr_matrix_type = {
     0,
     RUBY_TYPED_FREE_IMMEDIATELY};
 
-void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE num_rows, VALUE num_cols);
+void mat_to_sparse(csr_matrix *csr, VALUE data, VALUE keys, VALUE num_rows);
 VALUE csr_matrix_alloc(VALUE self);
-VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows, VALUE num_cols);
+VALUE csr_matrix_initialize(VALUE self, VALUE data, VALUE num_rows);
 VALUE csr_matrix_values(VALUE self);
 VALUE csr_matrix_col_index(VALUE self);
 VALUE csr_matrix_row_index(VALUE self);

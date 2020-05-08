@@ -18,7 +18,7 @@ void Init_spatial_stats()
     VALUE csr_matrix_class = rb_define_class_under(weights_mod, "CSRMatrix", rb_cData);
 
     rb_define_alloc_func(csr_matrix_class, csr_matrix_alloc);
-    rb_define_method(csr_matrix_class, "initialize", csr_matrix_initialize, 3);
+    rb_define_method(csr_matrix_class, "initialize", csr_matrix_initialize, 2);
     rb_define_method(csr_matrix_class, "values", csr_matrix_values, 0);
     rb_define_method(csr_matrix_class, "col_index", csr_matrix_col_index, 0);
     rb_define_method(csr_matrix_class, "row_index", csr_matrix_row_index, 0);

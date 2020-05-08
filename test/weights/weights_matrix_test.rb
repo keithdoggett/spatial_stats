@@ -40,8 +40,7 @@ class WeightsMatrixTest < ActiveSupport::TestCase
   def test_sparse
     mat = SpatialStats::Weights::WeightsMatrix.new(@weights)
 
-    sparse_vals = [0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0]
-    expected = SpatialStats::Weights::CSRMatrix.new(sparse_vals, 4, 4)
+    expected = SpatialStats::Weights::CSRMatrix.new(@weights, 4)
 
     result = mat.sparse
     assert_equal(expected.values, result.values)
