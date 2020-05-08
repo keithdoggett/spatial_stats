@@ -117,8 +117,6 @@ weights = SpatialStats::Weights::Distant.idw_knn(scope, :geom, 5)
 
 <p>Weight matrices can be defined by a hash that describes each key’s neighbor and weight.</p>
 
-<p>Note: Currently, the keys must be numeric.</p>
-
 <p>Example: Define WeightsMatrix and get the matrix in row_standardized format.</p>
 
 <p>```ruby
@@ -129,30 +127,40 @@ weights = {
     4 =&gt; [{ id: 1, weight: 1 }, { id: 3, weight: 1 }]
 }
 keys = weights.keys
-wm = SpatialStats::Weights::WeightsMatrix.new(keys, weights)
+wm = SpatialStats::Weights::WeightsMatrix.new(weights)
 #  =&gt; #&lt;SpatialStats::Weights::WeightsMatrix:0x0000561e205677c0 @keys=[1, 2, 3, 4], @weights=:weight=&gt;1, :weight=&gt;1], 2=&gt;[:weight=&gt;1], 3=&gt;[:weight=&gt;1], 4=&gt;[:weight=&gt;1, :weight=&gt;1]}, @n=4&gt;</p>
 
-<p>wm.standardized
-#  =&gt; Numo::DFloat#shape=[4,4]
-#[[0, 0.5, 0, 0.5],
-# [1, 0, 0, 0],
-# [0, 0, 0, 1],
-# [0.5, 0, 0.5, 0]]
+<p>wm = wm.standardize
+#  =&gt; #&lt;SpatialStats::Weights::WeightsMatrix:0x0000561e205677c0 @keys=[1, 2, 3, 4], @weights=:weight=&gt;0.5, :weight=&gt;0.5], 2=&gt;[:weight=&gt;1], 3=&gt;[:weight=&gt;1], 4=&gt;[:weight=&gt;0.5, :weight=&gt;0.5]}, @n=4&gt;</p>
+
+<p>wm.dense
+# =&gt; Numo::DFloat[
+#    [0, 0.5, 0, 0.5],
+#    [1, 0, 0, 0],
+#    [0, 0, 0, 1],
+#    [0.5, 0, 0.5, 0]
+#   ]</p>
+
+<p>wm.sparse
+# =&gt; #&lt;SpatialStats::Weights::CSRMatrix @m=4, @n=4, @nnz=6&gt;
 ```</p>
 
 <h3 id="lagged-variables">Lagged Variables</h3>
 
-<p>Spatially lagged variables can be computed with a 2-D n x n <code>Numo::NArray</code> and 1-D vector (<code>Array</code> or <code>Numo::NArray</code>).</p>
+<p>Spatially lagged variables can be computed with weights matrix and 1-D vector (<code>Array</code>).</p>
 
 <h4 id="compute-a-lagged-variable">Compute a Lagged Variable</h4>
 
 <p><code>ruby
-w = Numo::DFloat[[0, 0.5, 0, 0.5],
-                 [1, 0, 0, 0],
-                 [0, 0, 0, 1],
-                 [0.5, 0, 0.5, 0]]
+weights = {
+    1 =&gt; [{ id: 2, weight: 1 }, { id: 4, weight: 1 }],
+    2 =&gt; [{ id: 1, weight: 1 }],
+    3 =&gt; [{ id: 4, weight: 1 }],
+    4 =&gt; [{ id: 1, weight: 1 }, { id: 3, weight: 1 }]
+}
+wm = SpatialStats::Weights::WeightsMatrix.new(weights).standardize
 vec = [1, 2, 3, 4]
-lagged_var = SpatialStats::Utils::Lag.neighbor_sum(w, vec)
+lagged_var = SpatialStats::Utils::Lag.neighbor_sum(wm, vec)
 # =&gt; [3.0, 1.0, 4.0, 2.0]
 </code></p>
 
@@ -425,7 +433,7 @@ rails c</p>
 </div></div>
 
       <div id="footer">
-  Generated on Mon Apr 27 11:49:54 2020 by
+  Generated on Fri May  8 10:34:00 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>
