@@ -60,35 +60,39 @@ module SpatialStats
         # of indices, which will return a list of new orders for the fields.
         # They will then be shuffled corresponding to the new indices.
         rng = gen_rng(seed)
-        n = w.shape[0]
-        indices = (0..(n - 1)).to_a
-        shuffles = crand(indices, permutations, rng)
+        rids = crand(permutations, rng)
 
+        n_1 = weights.n - 1
+        sparse = weights.sparse
+        row_index = sparse.row_index
+        ws = sparse.values
+        wc = weights.wc
         stat_orig = stat
-        rs = [0] * n
 
-        row_index = weights.sparse.row_index
-        ws = weights.sparse.values
+        ids = (0..n_1).to_a
+        observations = Array.new(weights.n)
+        (0..n_1).each do |idx|
+          idsi = ids.dup
+          idsi.delete_at(idx)
+          idsi.shuffle!(random: rng)
+          idsi = Numo::Int32.cast(idsi)
+          sample = rids[idsi[rids[true, 0..wc[idx] - 1]]]
 
-        idx = 0
-        while idx < n
-          stat_i_orig = stat_orig[idx]
-
+          # account for case where there are no neighbors
           row_range = row_index[idx]..(row_index[idx + 1] - 1)
           if row_range.size.zero?
-            rs[idx] = permutations
-            idx += 1
+            observations[idx] = permutations
             next
           end
-          wi = Numo::DFloat.cast(ws[row_range])
 
-          # for each field, compute the C value at that index.
-          stat_i_new = mc_i(wi, shuffles[idx], idx)
-          rs[idx] = mc_observation_calc(stat_i_orig, stat_i_new, permutations)
-          idx += 1
+          wi = Numo::DFloat.cast(ws[row_range])
+          stat_i_new = mc_i(wi, sample, idx)
+          stat_i_orig = stat_orig[idx]
+          observations[idx] = mc_observation_calc(stat_i_orig, stat_i_new,
+                                                  permutations)
         end
 
-        rs.map do |ri|
+        observations.map do |ri|
           (ri + 1.0) / (permutations + 1.0)
         end
       end
