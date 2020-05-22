@@ -32,6 +32,13 @@ class LocalBivariateMoranTest < ActiveSupport::TestCase
     assert_equal(expected, y)
   end
 
+  def test_y=
+    moran = SpatialStats::Local::BivariateMoran.new(@poly_scope, :value, :second_value, @weights)
+    moran.y = @second_values
+    expected = @second_values.standardize
+    assert_equal(expected, moran.y)
+  end
+
   def test_stat
     moran = SpatialStats::Local::BivariateMoran.new(@poly_scope, :value, :second_value, @weights)
     i = moran.stat

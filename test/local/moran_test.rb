@@ -23,6 +23,13 @@ class LocalMoranTest < ActiveSupport::TestCase
     assert_equal(expected, x)
   end
 
+  def test_x=
+    moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
+    moran.x = @values
+    expected = @values.standardize
+    assert_equal(expected, moran.x)
+  end
+
   def test_z
     moran = SpatialStats::Local::Moran.new(@poly_scope, :value, @weights)
     z = moran.z
@@ -41,6 +48,7 @@ class LocalMoranTest < ActiveSupport::TestCase
     expected_i = [-0.888888888888889, -0.8888888888888888, -0.888888888888889,
                   -0.8888888888888888, -0.888888888888889, -0.8888888888888888,
                   -0.888888888888889, -0.8888888888888888, -0.888888888888889]
+
     i.each_with_index do |v, idx|
       assert_in_delta(expected_i[idx], v, 1e-5)
     end

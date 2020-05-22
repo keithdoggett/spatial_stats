@@ -82,7 +82,7 @@ class Polygon < ApplicationRecord
   end
 
   def self.profile_mc
-    scope = all.limit(800)
+    scope = all
     weights = SpatialStats::Weights::Contiguous.queen(scope, :geom)
 
     1.times do

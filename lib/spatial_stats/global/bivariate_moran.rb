@@ -21,7 +21,6 @@ module SpatialStats
         @y_field = y_field
         @weights = weights.standardize
       end
-      attr_writer :x, :y
 
       ##
       # Computes the global spatial correlation of x against spatially lagged

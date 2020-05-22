@@ -39,6 +39,15 @@ module SpatialStats
         (stat - expectation) / Math.sqrt(variance)
       end
 
+      def x=(values)
+        @x = values.standardize
+      end
+      alias z= x=
+
+      def y=(values)
+        @y = values.standardize
+      end
+
       def mc(permutations, seed)
         rng = gen_rng(seed)
         shuffles = []

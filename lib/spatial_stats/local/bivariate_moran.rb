@@ -22,7 +22,6 @@ module SpatialStats
         @weights = weights.standardize
       end
       attr_accessor :scope, :x_field, :y_field, :weights
-      attr_writer :x, :y
 
       ##
       # Computes the local indicator of spatial correlation for

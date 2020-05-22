@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.com/keithdoggett/spatial_stats.svg?branch=master)](https://travis-ci.com/keithdoggett/spatial_stats)
 
+![Spatial Stats](/assets/ruby.svg)
+
 # SpatialStats
 
 SpatialStats is an ActiveRecord plugin that utilizes PostGIS and Ruby to compute weights/statistics of spatial data sets in Rails Apps.
@@ -138,8 +140,8 @@ field = nil
 moran = SpatialStats::Global::Moran.new(scope, field, weights)
 # => <SpatialStats::Global::Moran>
 
-# important to standardize the data!
-data = [1,2,3,4,5,6].standardize
+# data is automatically standardized on input
+data = [1,2,3,4,5,6]
 moran.x = data
 
 moran.stat
@@ -219,8 +221,8 @@ field = nil
 moran = SpatialStats::Local::Moran.new(scope, field, weights)
 # => <SpatialStats::Local::Moran>
 
-# important to standardize the data!
-data = [1,2,3,4,5,6].standardize
+# data is automatically standardized on input
+data = [1,2,3,4,5,6]
 moran.x = data
 
 moran.stat
@@ -310,50 +312,30 @@ RGeo::Geos.supported?
 # => true
 ```
 
-## TODO
+## Path Forward
 
-- ~~Memoize expensive functions within classes~~
-- ~~Make star a parameter to getis-ord class~~
-- ~~Add examples/usage to docs~~
-- ~~Create RDocs~~
-- ~~Refactor Global Moran and BVMoran~~
-- ~~Support non-numeric keys in WeightsMatrix/General refactor~~
-- ~~Write SparseMatrix C ext~~
-- ~~Change instances of `standardized` and `windowed` to `standardize` and `window`, respectively.~~
-- ~~Add `positive` and `negative` groups for `GetisOrd` and `Geary`, similar to how `#quads` is implemented.~~
-- ~~Add `#summary` method to statistics that will combine stat vals with p-vals, and quads or hot/cold spot info.~~
-- ~~Add ability to assign `x` or `z` on stat classes so users are not forced to query data to input it into models. Add example to README.~~
+Summaries of milestones for v1.x and v2.0. These lists are subject to change. If you have an additional feature you want to see for either milestone, open up an issue or PR.
 
-## Future Work
+### v1.x
 
-#### General
+1. Global Measurements
+   - `Geary`'s C
+   - `GetisOrd`
+2. Local Measurements
+   - `Join Count`
+3. Utilities
+   - Add support for .gal/.swm file imports
+   - Add support for Rate variables
+   - Add support for Bayes smoothing
+4. General
+   - Point Pattern Analysis Module
+   - Regression Module
 
-- ~~Refactor stats to inherit an abstract class.~~
-- ~~Change WeightsMatrix class and Stat classes to utilize sparse matrix methods.~~
-- Split into two separate gems spatial_stats and spatial_stats-activerecord
+### v2.0
 
-#### Weights
-
-- Add Kernel based weighting
-
-#### Utils
-
-- Rate smoothing
-- Bayes smoothing
-
-#### Global
-
-- Geary class
-- GetisOrd class
-
-#### Local
-
-- Join Count Statistic
-
-#### PPA
-
-- Add descriptive stat methods for point clusters.
+- Break gem into core `spatial_stats` that will not include queries module and `spatial_stats-activerecord`. This will remove the dependency on rails for the core gem.
+- Create `spatial_stats-import/geojson/shp` gem that will allow importing files and generating a `WeightsMatrix`. Will likely rely on `RGeo` or another spatial lib.
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause).

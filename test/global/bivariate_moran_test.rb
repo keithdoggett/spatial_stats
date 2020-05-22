@@ -34,6 +34,22 @@ class GlobalBivariateMoranTest < ActiveSupport::TestCase
     assert_equal(expected, y)
   end
 
+  def test_x=
+    moran = SpatialStats::Global::BivariateMoran
+            .new(@poly_scope, :value, :second_value, @weights)
+    moran.x = @values
+    expected = @values.standardize
+    assert_equal(expected, moran.x)
+  end
+
+  def test_y=
+    moran = SpatialStats::Global::BivariateMoran
+            .new(@poly_scope, :value, :second_value, @weights)
+    moran.y = @second_values
+    expected = @second_values.standardize
+    assert_equal(expected, moran.y)
+  end
+
   def test_stat
     moran = SpatialStats::Global::BivariateMoran
             .new(@poly_scope, :value, :second_value, @weights)

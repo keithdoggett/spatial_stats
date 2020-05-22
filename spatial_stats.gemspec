@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.name        = 'spatial_stats'
   spec.version     = SpatialStats::VERSION
   spec.authors     = ['Keith Doggett']
-  spec.email       = ['keith.doggett887@gmail.com']
+  spec.email       = ['kfdoggett@gmail.com']
   spec.homepage    = 'https://www.github.com/keithdoggett/spatial_stats'
   spec.summary     = 'An ActiveRecord/PostGIS extension that provides statistical methods to spatial postgresql databases.'
   spec.description = 'An ActiveRecord/PostGIS extension that provides '\
@@ -19,12 +19,14 @@ Gem::Specification.new do |spec|
                      ' in PostGIS and performs statistical computations '\
                      'inside your rails app. Supports contiguious and distance-based'\
                      ' calculations.'
-  spec.license     = 'MIT'
+  spec.license     = 'BSD-3-Clause'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
   spec.metadata['documentation_uri'] = 'https://keithdoggett.github.io/spatial_stats/'
+  spec.metadata['changelog_uri'] = 'https://www.github.com/keithdoggett/spatial_stats/CHANGELOG.md'
+
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   # if spec.respond_to?(:metadata)

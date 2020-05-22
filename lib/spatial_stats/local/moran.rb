@@ -20,7 +20,6 @@ module SpatialStats
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
-      attr_writer :x
 
       ##
       # Computes the local indicator of spatial autocorrelation (lisa) for

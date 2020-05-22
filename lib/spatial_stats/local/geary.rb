@@ -18,7 +18,6 @@ module SpatialStats
       def initialize(scope, field, weights)
         super(scope, field, weights)
       end
-      attr_writer :x
 
       ##
       # Computes Geary's C for every observation in the +scoe+.

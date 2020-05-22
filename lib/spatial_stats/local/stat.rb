@@ -28,6 +28,15 @@ module SpatialStats
         raise NotImplementedError, 'method variance not implemented'
       end
 
+      def x=(values)
+        @x = values.standardize
+      end
+      alias z= x=
+
+      def y=(values)
+        @y = values.standardize
+      end
+
       ##
       # Z-score for each observation of the statistic.
       #
