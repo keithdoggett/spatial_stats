@@ -6,7 +6,7 @@
 
 # SpatialStats
 
-SpatialStats is an ActiveRecord plugin that utilizes PostGIS and Ruby to compute weights/statistics of spatial data sets in Rails Apps.
+SpatialStats is an ActiveRecord/Rails plugin that utilizes PostGIS to compute weights/statistics of spatial data sets in Rails Apps.
 
 ## Installation
 
