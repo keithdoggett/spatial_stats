@@ -1,6 +1,8 @@
+![Spatial Stats](/assets/ruby.svg)
+
 [![Build Status](https://travis-ci.com/keithdoggett/spatial_stats.svg?branch=master)](https://travis-ci.com/keithdoggett/spatial_stats)
 
-![Spatial Stats](/assets/ruby.svg)
+[Docs](https://keithdoggett.github.io/spatial_stats)
 
 # SpatialStats
 

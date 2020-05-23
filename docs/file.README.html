@@ -59,6 +59,8 @@
 
       <div id="content"><div id='filecontents'><p><a href="https://travis-ci.com/keithdoggett/spatial_stats"><img src="https://travis-ci.com/keithdoggett/spatial_stats.svg?branch=master" alt="Build Status" /></a></p>
 
+<p><img src="/assets/ruby.svg" alt="Spatial Stats" /></p>
+
 <h1 id="spatialstats">SpatialStats</h1>
 
 <p>SpatialStats is an ActiveRecord plugin that utilizes PostGIS and Ruby to compute weights/statistics of spatial data sets in Rails Apps.</p>
@@ -197,8 +199,8 @@ weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)</p>
 moran = SpatialStats::Global::Moran.new(scope, field, weights)
 # =&gt; &lt;SpatialStats::Global::Moran&gt;</p>
 
-<h1 id="important-to-standardize-the-data">important to standardize the data!</h1>
-<p>data = [1,2,3,4,5,6].standardize
+<h1 id="data-is-automatically-standardized-on-input">data is automatically standardized on input</h1>
+<p>data = [1,2,3,4,5,6]
 moran.x = data</p>
 
 <p>moran.stat
@@ -278,8 +280,8 @@ weights = SpatialStats::Weights::Contiguous.rook(scope, :geom)</p>
 moran = SpatialStats::Local::Moran.new(scope, field, weights)
 # =&gt; &lt;SpatialStats::Local::Moran&gt;</p>
 
-<h1 id="important-to-standardize-the-data-1">important to standardize the data!</h1>
-<p>data = [1,2,3,4,5,6].standardize
+<h1 id="data-is-automatically-standardized-on-input-1">data is automatically standardized on input</h1>
+<p>data = [1,2,3,4,5,6]
 moran.x = data</p>
 
 <p>moran.stat
@@ -369,71 +371,53 @@ rails c</p>
 # =&gt; true
 ```</p>
 
-<h2 id="todo">TODO</h2>
+<h2 id="path-forward">Path Forward</h2>
+
+<p>Summaries of milestones for v1.x and v2.0. These lists are subject to change. If you have an additional feature you want to see for either milestone, open up an issue or PR.</p>
+
+<h3 id="v1x">v1.x</h3>
+
+<ol>
+  <li>Global Measurements
+    <ul>
+      <li><code>Geary</code>’s C</li>
+      <li><code>GetisOrd</code></li>
+    </ul>
+  </li>
+  <li>Local Measurements
+    <ul>
+      <li><code>Join Count</code></li>
+    </ul>
+  </li>
+  <li>Utilities
+    <ul>
+      <li>Add support for .gal/.swm file imports</li>
+      <li>Add support for Rate variables</li>
+      <li>Add support for Bayes smoothing</li>
+    </ul>
+  </li>
+  <li>General
+    <ul>
+      <li>Point Pattern Analysis Module</li>
+      <li>Regression Module</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="v20">v2.0</h3>
 
 <ul>
-  <li>~~Memoize expensive functions within classes~~</li>
-  <li>~~Make star a parameter to getis-ord class~~</li>
-  <li>~~Add examples/usage to docs~~</li>
-  <li>~~Create RDocs~~</li>
-  <li>~~Refactor Global Moran and BVMoran~~</li>
-  <li>~~Support non-numeric keys in WeightsMatrix/General refactor~~</li>
-  <li>~~Write SparseMatrix C ext~~</li>
-  <li>~~Change instances of <code>standardized</code> and <code>windowed</code> to <code>standardize</code> and <code>window</code>, respectively.~~</li>
-  <li>~~Add <code>positive</code> and <code>negative</code> groups for <code>GetisOrd</code> and <code>Geary</code>, similar to how <code>#quads</code> is implemented.~~</li>
-  <li>~~Add <code>#summary</code> method to statistics that will combine stat vals with p-vals, and quads or hot/cold spot info.~~</li>
-  <li>~~Add ability to assign <code>x</code> or <code>z</code> on stat classes so users are not forced to query data to input it into models. Add example to README.~~</li>
-</ul>
-
-<h2 id="future-work">Future Work</h2>
-
-<h4 id="general">General</h4>
-
-<ul>
-  <li>~~Refactor stats to inherit an abstract class.~~</li>
-  <li>~~Change WeightsMatrix class and Stat classes to utilize sparse matrix methods.~~</li>
-  <li>Split into two separate gems spatial_stats and spatial_stats-activerecord</li>
-</ul>
-
-<h4 id="weights-1">Weights</h4>
-
-<ul>
-  <li>Add Kernel based weighting</li>
-</ul>
-
-<h4 id="utils">Utils</h4>
-
-<ul>
-  <li>Rate smoothing</li>
-  <li>Bayes smoothing</li>
-</ul>
-
-<h4 id="global">Global</h4>
-
-<ul>
-  <li>Geary class</li>
-  <li>GetisOrd class</li>
-</ul>
-
-<h4 id="local">Local</h4>
-
-<ul>
-  <li>Join Count Statistic</li>
-</ul>
-
-<h4 id="ppa">PPA</h4>
-
-<ul>
-  <li>Add descriptive stat methods for point clusters.</li>
+  <li>Break gem into core <code>spatial_stats</code> that will not include queries module and <code>spatial_stats-activerecord</code>. This will remove the dependency on rails for the core gem.</li>
+  <li>Create <code>spatial_stats-import/geojson/shp</code> gem that will allow importing files and generating a <code>WeightsMatrix</code>. Will likely rely on <code>RGeo</code> or another spatial lib.</li>
 </ul>
 
 <h2 id="license">License</h2>
 
-<p>The gem is available as open source under the terms of the <a href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+<p>The gem is available as open source under the terms of the <a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Fri May  8 15:50:51 2020 by
+  Generated on Sat May 23 09:26:29 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

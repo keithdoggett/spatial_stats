@@ -116,43 +116,9 @@
 
 
 
-  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
-  <ul class="summary">
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#x-instance_method" title="#x (instance method)">#<strong>x</strong>  &#x21d2; Array </a>
-    
-
-    
-      (also: #z)
-    
-  </span>
-  
-  
-  
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Values of the <code>field</code> queried from the <code>scope</code>.</p>
-</div></span>
-  
-</li>
-
-    
-  </ul>
 
 
-
-  
+  <h2>Instance Attribute Summary</h2>
   
   <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="Stat.html" title="SpatialStats::Global::Stat (class)">Stat</a></span></h3>
   <p class="inherited"><span class='object_link'><a href="Stat.html#field-instance_method" title="SpatialStats::Global::Stat#field (method)">#field</a></span>, <span class='object_link'><a href="Stat.html#scope-instance_method" title="SpatialStats::Global::Stat#scope (method)">#scope</a></span>, <span class='object_link'><a href="Stat.html#weights-instance_method" title="SpatialStats::Global::Stat#weights (method)">#weights</a></span></p>
@@ -314,6 +280,32 @@
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#x-instance_method" title="#x (instance method)">#<strong>x</strong>  &#x21d2; Array </a>
+    
+
+    
+      (also: #z)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Values of the <code>field</code> queried from the <code>scope</code>.</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -327,7 +319,7 @@
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Stat.html" title="SpatialStats::Global::Stat (class)">Stat</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Stat.html#mc_bv-instance_method" title="SpatialStats::Global::Stat#mc_bv (method)">#mc_bv</a></span>, <span class='object_link'><a href="Stat.html#z_score-instance_method" title="SpatialStats::Global::Stat#z_score (method)">#z_score</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="Stat.html#mc_bv-instance_method" title="SpatialStats::Global::Stat#mc_bv (method)">#mc_bv</a></span>, <span class='object_link'><a href="Stat.html#x=-instance_method" title="SpatialStats::Global::Stat#x= (method)">#x=</a></span>, <span class='object_link'><a href="Stat.html#y=-instance_method" title="SpatialStats::Global::Stat#y= (method)">#y=</a></span>, <span class='object_link'><a href="Stat.html#z_score-instance_method" title="SpatialStats::Global::Stat#z_score (method)">#z_score</a></span></p>
 <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
@@ -421,73 +413,6 @@
   
 </div>
 
-  <div id="instance_attr_details" class="attr_details">
-    <h2>Instance Attribute Details</h2>
-    
-      
-      <span id="x=-instance_method"></span>
-      <div class="method_details first">
-  <h3 class="signature first" id="x-instance_method">
-  
-    #<strong>x</strong>  &#x21d2; <tt>Array</tt> 
-  
-
-  
-    <span class="aliases">Also known as:
-    <span class="names"><span id='z-instance_method'>z</span></span>
-    </span>
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Values of the <code>field</code> queried from the <code>scope</code></p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Array</tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-111
-112
-113
-114</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 111</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_x'>x</span>
-  <span class='ivar'>@x</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Variables.html" title="SpatialStats::Queries::Variables (module)">Variables</a></span></span><span class='period'>.</span><span class='id identifier rubyid_query_field'><span class='object_link'><a href="../Queries/Variables.html#query_field-class_method" title="SpatialStats::Queries::Variables.query_field (method)">query_field</a></span></span><span class='lparen'>(</span><span class='ivar'>@scope</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='rparen'>)</span>
-                                         <span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-  </div>
-
 
   <div id="instance_method_details" class="method_details_list">
     <h2>Instance Method Details</h2>
@@ -539,13 +464,13 @@
       <pre class="lines">
 
 
+48
 49
 50
-51
-52</pre>
+51</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 48</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_expectation'>expectation</span>
   <span class='comment'># -1/(n-1)
@@ -642,12 +567,12 @@
       <pre class="lines">
 
 
+89
 90
-91
-92</pre>
+91</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 90</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 89</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_mc'>mc</span><span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span> <span class='op'>=</span> <span class='int'>99</span><span class='comma'>,</span> <span class='id identifier rubyid_seed'>seed</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span><span class='comma'>,</span> <span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
@@ -700,6 +625,7 @@
       <pre class="lines">
 
 
+27
 28
 29
 30
@@ -712,11 +638,10 @@
 37
 38
 39
-40
-41</pre>
+40</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 28</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_stat'>stat</span>
   <span class='comment'># compute&#39;s Moran&#39;s I. numerator is sum of zi * spatial lag of zi
@@ -816,13 +741,13 @@
       <pre class="lines">
 
 
+101
 102
 103
-104
-105</pre>
+104</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 102</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 101</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_summary'>summary</span><span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span> <span class='op'>=</span> <span class='int'>99</span><span class='comma'>,</span> <span class='id identifier rubyid_seed'>seed</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_p_val'>p_val</span> <span class='op'>=</span> <span class='id identifier rubyid_mc'>mc</span><span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span><span class='comma'>,</span> <span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
@@ -879,6 +804,7 @@
       <pre class="lines">
 
 
+58
 59
 60
 61
@@ -895,11 +821,10 @@
 72
 73
 74
-75
-76</pre>
+75</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 59</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_variance'>variance</span>
   <span class='id identifier rubyid_n'>n</span> <span class='op'>=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_n'>n</span>
@@ -924,12 +849,72 @@
 </table>
 </div>
     
+      <div class="method_details ">
+  <h3 class="signature " id="x-instance_method">
+  
+    #<strong>x</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='z-instance_method'>z</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Values of the <code>field</code> queried from the <code>scope</code></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+110
+111
+112
+113</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/moran.rb', line 110</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_x'>x</span>
+  <span class='ivar'>@x</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries.html" title="SpatialStats::Queries (module)">Queries</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Queries/Variables.html" title="SpatialStats::Queries::Variables (module)">Variables</a></span></span><span class='period'>.</span><span class='id identifier rubyid_query_field'><span class='object_link'><a href="../Queries/Variables.html#query_field-class_method" title="SpatialStats::Queries::Variables.query_field (method)">query_field</a></span></span><span class='lparen'>(</span><span class='ivar'>@scope</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='rparen'>)</span>
+                                         <span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Fri May  8 15:50:52 2020 by
+  Generated on Sat May 23 09:26:30 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>
