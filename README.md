@@ -330,6 +330,7 @@ Summaries of milestones for v1.x and v2.0. These lists are subject to change. If
    - Add support for Rate variables
    - Add support for Bayes smoothing
 4. General
+   - Add new stat constructors that only rely on a weights matrix and data vector
    - Point Pattern Analysis Module
    - Regression Module
 
