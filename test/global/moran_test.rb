@@ -17,6 +17,19 @@ class GlobalMoranTest < ActiveSupport::TestCase
     @weights = SpatialStats::Weights::Contiguous.rook(@poly_scope, :geom)
   end
 
+  def test_from_observations
+    moran = SpatialStats::Global::Moran.from_observations(@values, @weights)
+
+    assert_equal(moran.x, @values.standardize)
+    assert_equal(moran.weights, @weights.standardize)
+  end
+
+  def test_from_observations_error
+    assert_raises(ArgumentError) do
+      SpatialStats::Global::Moran.from_observations([], @weights)
+    end
+  end
+
   def test_x
     moran = SpatialStats::Global::Moran.new(@poly_scope, :value, @weights)
     x = moran.x

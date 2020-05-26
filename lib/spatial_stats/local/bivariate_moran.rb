@@ -24,6 +24,24 @@ module SpatialStats
       attr_accessor :scope, :x_field, :y_field, :weights
 
       ##
+      # A new instance of BivariateMoran, from vector and weights.
+      #
+      # @param [Array] x observations of dataset
+      # @param [Array] y observations of dataset
+      # @param [WeightsMatrix] weights to define relationships between observations
+      #
+      # @return [BivariateMoran]
+      def self.from_observations(x, y, weights)
+        n = weights.n
+        raise ArgumentError, 'Data size != weights.n' if x.size != n || y.size != n
+
+        instance = new(nil, nil, nil, weights.standardize)
+        instance.x = x
+        instance.y = y
+        instance
+      end
+
+      ##
       # Computes the local indicator of spatial correlation for
       # x against lagged y.
       #
