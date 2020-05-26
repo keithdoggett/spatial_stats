@@ -21,6 +21,24 @@ class WeightsMatrixTest < ActiveSupport::TestCase
     assert_equal(@weights, mat.weights)
   end
 
+  def test_equality_operator_true
+    mat1 = SpatialStats::Weights::WeightsMatrix.new(@weights)
+    mat2 = SpatialStats::Weights::WeightsMatrix.new(@weights)
+    assert_equal(mat1, mat2)
+  end
+
+  def test_equality_operator_false
+    weights2 = {
+      1 => [{ id: 2, weight: 1 }],
+      2 => [{ id: 1, weight: 1 }],
+      3 => [{ id: 4, weight: 1 }],
+      4 => [{ id: 3, weight: 1 }]
+    }
+    mat1 = SpatialStats::Weights::WeightsMatrix.new(@weights)
+    mat2 = SpatialStats::Weights::WeightsMatrix.new(weights2)
+    assert_not_equal(mat1, mat2)
+  end
+
   def test_dense
     mat = SpatialStats::Weights::WeightsMatrix.new(@weights)
 

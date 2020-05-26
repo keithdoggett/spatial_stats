@@ -23,6 +23,23 @@ module SpatialStats
       end
 
       ##
+      # A new instance of BivariateMoran, from vector and weights.
+      #
+      # @param [Array] x observations of dataset
+      # @param [WeightsMatrix] weights to define relationships between observations
+      #
+      # @return [BivariateMoran]
+      def self.from_observations(x, y, weights)
+        n = weights.n
+        raise ArgumentError, 'Data size != weights.n' if x.size != n || y.size != n
+
+        instance = new(nil, nil, nil, weights.standardize)
+        instance.x = x
+        instance.y = y
+        instance
+      end
+
+      ##
       # Computes the global spatial correlation of x against spatially lagged
       # y.
       #

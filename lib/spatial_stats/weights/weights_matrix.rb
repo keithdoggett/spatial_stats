@@ -22,6 +22,16 @@ module SpatialStats
       attr_accessor :keys, :weights, :n
 
       ##
+      # Equality operator
+      #
+      # @param [WeightsMatrix] other WeightsMatrix
+      #
+      # @return [TrueClass, FalseClass] equality result
+      def ==(other)
+        weights == other.weights
+      end
+
+      ##
       # Compute the n x n Numo::Narray of the weights hash.
       #
       # @example

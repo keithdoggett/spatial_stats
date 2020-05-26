@@ -18,6 +18,20 @@ class LocalBivariateMoranTest < ActiveSupport::TestCase
     @weights = SpatialStats::Weights::Contiguous.rook(@poly_scope, :geom)
   end
 
+  def test_from_observations
+    moran = SpatialStats::Local::BivariateMoran.from_observations(@values, @second_values, @weights)
+
+    assert_equal(moran.x, @values.standardize)
+    assert_equal(moran.y, @second_values.standardize)
+    assert_equal(moran.weights, @weights.standardize)
+  end
+
+  def test_from_observations_error
+    assert_raises(ArgumentError) do
+      SpatialStats::Local::BivariateMoran.from_observations([], [], @weights)
+    end
+  end
+
   def test_x
     moran = SpatialStats::Local::BivariateMoran.new(@poly_scope, :value, :second_value, @weights)
     x = moran.x

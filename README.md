@@ -339,6 +339,10 @@ Summaries of milestones for v1.x and v2.0. These lists are subject to change. If
 - Break gem into core `spatial_stats` that will not include queries module and `spatial_stats-activerecord`. This will remove the dependency on rails for the core gem.
 - Create `spatial_stats-import/geojson/shp` gem that will allow importing files and generating a `WeightsMatrix`. Will likely rely on `RGeo` or another spatial lib.
 
+### Other TODOs
+
+- Refactor `MultivariateGeary` so that it can be used without `activerecord` by adding `from_observations` and supporting methods.
+
 ## License
 
 The gem is available as open source under the terms of the [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause).

@@ -16,6 +16,21 @@ module SpatialStats
       end
       attr_accessor :scope, :field, :weights
 
+      ##
+      # A new instance of Stat, from vector and weights.
+      #
+      # @param [Array] x observations of dataset
+      # @param [WeightsMatrix] weights to define relationships between observations
+      #
+      # @return [Stat]
+      def self.from_observations(x, weights)
+        raise ArgumentError, 'Data size != weights.n' if x.size != weights.n
+
+        instance = new(nil, nil, weights.standardize)
+        instance.x = x
+        instance
+      end
+
       def stat
         raise NotImplementedError, 'method stat not defined'
       end
