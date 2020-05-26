@@ -341,6 +341,7 @@ Summaries of milestones for v1.x and v2.0. These lists are subject to change. If
 
 ### Other TODOs
 
+- Update Docs to show `from_observation` when version is bumped
 - Refactor `MultivariateGeary` so that it can be used without `activerecord` by adding `from_observations` and supporting methods.
 
 ## License
