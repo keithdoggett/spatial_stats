@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `from_observations` class methods to local and global stat classes
 - `==` operator for `WeightsMatrix`
+- `fdr` function in `Utils` module
 
 ## [1.0.3] - 2020-05-22
 
