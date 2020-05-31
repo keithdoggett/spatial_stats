@@ -5,6 +5,7 @@ require 'spatial_stats/enumerable_ext'
 require 'spatial_stats/global'
 require 'spatial_stats/local'
 require 'spatial_stats/narray_ext'
+require 'spatial_stats/ppa'
 require 'spatial_stats/queries'
 require 'spatial_stats/spatial_stats' # c extensions
 require 'spatial_stats/utils'
