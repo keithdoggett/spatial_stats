@@ -5,7 +5,9 @@ require 'test_helper'
 class CentrographyTest < ActiveSupport::TestCase
   def setup
     @points = [[0, 0], [0, 0], [1, 2], [2, 3], [3, 4], [-1.5, -1.5]]
+    @points2 = [[0, 0], [0, 0], [1, 2], [2, 3], [3, 4], [-1.5, -1.5], [2, 2]]
     @pp = SpatialStats::PPA::PointPattern.new(@points)
+    @pp2 = SpatialStats::PPA::PointPattern.new(@points2)
   end
 
   def test_mean_center
@@ -26,6 +28,12 @@ class CentrographyTest < ActiveSupport::TestCase
     assert_raises(ArgumentError) { @pp.weighted_mean_center(short_weights) }
   end
 
+  def test_standard_distance
+    std = @pp.standard_distance
+    expected = 2.4065881
+    assert_in_delta(expected, std, 1e-5)
+  end
+
   def test_median_even
     med = @pp.median
     expected = [0.5, 1.0]
@@ -33,10 +41,24 @@ class CentrographyTest < ActiveSupport::TestCase
   end
 
   def test_median_odd
-    points = [[0, 0], [0, 0], [1, 2], [2, 3], [3, 4], [-1.5, -1.5], [2, 2]]
-    pp = SpatialStats::PPA::PointPattern.new(points)
-    med = pp.median
+    med = @pp2.median
     expected = [1.0, 2.0]
     assert_equal(expected, med)
+  end
+
+  def test_center_median
+    center = @pp2.center_median
+    expected = [1.114538, 1.851077]
+    center.each_with_index do |v, i|
+      assert_in_delta(expected[i], v, 1e-2)
+    end
+  end
+
+  def test_sd_ellipse
+    sde = @pp.sd_ellipse
+    expected = [0.27544, 1.11875, 0.65322]
+    sde.each_with_index do |v, i|
+      assert_in_delta(expected[i], v, 1e-5)
+    end
   end
 end

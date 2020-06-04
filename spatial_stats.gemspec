@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.version     = SpatialStats::VERSION
   spec.authors     = ['Keith Doggett']
   spec.email       = ['kfdoggett@gmail.com']
-  spec.homepage    = 'https://www.github.com/keithdoggett/spatial_stats'
+  spec.homepage    = 'https://github.com/keithdoggett/spatial_stats'
   spec.summary     = 'An ActiveRecord/PostGIS extension that provides statistical methods to spatial postgresql databases.'
   spec.description = 'An ActiveRecord/PostGIS extension that provides '\
                      'statistical methods to spatial postgresql databases. '\
@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   #     "public gem pushes."
   # end
 
-  spec.files = Dir['{app,config,db,lib,ext}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
+  spec.files = Dir['{app,config,db,lib,ext}/**/*', 'LICENSE', 'Rakefile', 'README.md']
   spec.extensions = ['ext/spatial_stats/extconf.rb']
 
   spec.add_dependency 'numo-narray', '~>0.9.1'
