@@ -153,6 +153,64 @@ module SpatialStats
         [sx, sy, theta]
       end
 
+      ##
+      # Compute the bounding box of the PointPattern
+      #
+      # This is the same is minimum bounding rectangle
+      # Returns an array of 2 points: the lower left and upper right
+      # corners.
+      #
+      # @return [Array] [lower_left, upper_right]
+      def bbox
+        minx = Float::INFINITY
+        miny = Float::INFINITY
+        maxx = -Float::INFINITY
+        maxy = -Float::INFINITY
+
+        points.each do |point|
+          # x analysis
+          x = point[0]
+          minx = x if x < minx
+          maxx = x if x > maxx
+
+          # y analysis
+          y = point[1]
+          miny = y if y < miny
+          maxy = y if y > maxy
+        end
+        [[minx, miny], [maxx, maxy]]
+      end
+      alias mbr bbox
+
+      ##
+      # Compute the convex hull of a PointPattern
+      #
+      # Uses the Graham Scan method to compute the hull.
+      #
+      #
+      # @return [Array] of points representing the geometry
+      def convex_hull
+        # first find lowest point
+        left_i = leftmost_point_i
+        leftmost_point = points[left_i]
+
+        # second, sort by angle to lowest point
+        sorted_points = points.dup
+        sorted_points.delete_at(left_i)
+        sorted_points.sort_by! { |v| slope(leftmost_point, v) }
+        sorted_points.unshift(leftmost_point)
+
+        # third, iterate through points and create hull
+        # stack to store successive points
+        hull = []
+        hull.push(leftmost_point)
+        sorted_points.each do |point|
+          hull.pop while hull.size > 1 && orientation(hull[hull.size - 2], hull[hull.size - 1], point) >= 0
+          hull.push(point)
+        end
+        hull
+      end
+
       private
 
       def sd_ellipse_theta
@@ -175,6 +233,74 @@ module SpatialStats
         )
         denominator = 2 * diff_product
         Math.atan((lhs_numerator + rhs_numerator) / denominator)
+      end
+
+      ##
+      # Find the index of the leftmost, lowest point
+      #
+      # @return [Integer]
+      def leftmost_point_i
+        left_idx = -1
+        leftmost_point = nil
+
+        points.each_with_index do |point, i|
+          if leftmost_point.nil?
+            leftmost_point = point
+            next
+          end
+
+          if point[0] < leftmost_point[0]
+            leftmost_point = point
+            left_idx = i
+          elsif point[0] == leftmost_point[0] && point[1] < leftmost_point[1]
+            leftmost_point = point
+            left_idx = i
+          end
+        end
+
+        left_idx
+      end
+
+      ##
+      # Slope from p2 to p1
+      #
+      # @return [Float]
+      def slope(p1, p2)
+        y = p1[1] - p2[1]
+        x = p1[0] - p2[0]
+
+        if x.zero?
+          Float::INFINITY
+        else
+          y / x
+        end
+      end
+
+      ##
+      # Find the orientation between the three points
+      # Cross product of the lines p1p2 and p1p3.
+      #
+      # @return [Integer] 0 if colinear, 1 if clockwise, -1 if counterclockwise
+      def orientation(p1, p2, p3)
+        val = cross_product(p1, p2, p3)
+        unless val.zero?
+          val = if val.positive?
+                  1
+                else
+                  -1
+                end
+        end
+        val
+      end
+
+      ##
+      # Compute cross product of p1p2 and p1p3
+      #
+      # @return [Float]
+      def cross_product(p1, p2, p3)
+        lhs = (p2[1] - p1[1]) * (p3[0] - p1[0])
+        rhs = (p2[0] - p1[0]) * (p3[1] - p1[1])
+        lhs - rhs
       end
     end
   end

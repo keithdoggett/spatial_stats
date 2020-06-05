@@ -61,4 +61,16 @@ class CentrographyTest < ActiveSupport::TestCase
       assert_in_delta(expected[i], v, 1e-5)
     end
   end
+
+  def test_bbox
+    bbox = @pp.bbox
+    expected = [[-1.5, -1.5], [3.0, 4.0]]
+    assert_equal(expected, bbox)
+  end
+
+  def test_convex_hull
+    chull = @pp.convex_hull
+    expected = [[-1.5, -1.5], [0, 0], [3, 4], [1, 2]]
+    assert_equal(expected, chull)
+  end
 end
