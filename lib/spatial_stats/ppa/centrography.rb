@@ -187,23 +187,23 @@ module SpatialStats
       #
       # Uses the Graham Scan method to compute the hull.
       #
+      # @see https://en.wikipedia.org/wiki/Graham_scan
       #
       # @return [Array] of points representing the geometry
       def convex_hull
         # first find lowest point
-        left_i = leftmost_point_i
-        leftmost_point = points[left_i]
+        low_i = lowest_point_i
+        lowest_point = points[low_i]
 
         # second, sort by angle to lowest point
         sorted_points = points.dup
-        sorted_points.delete_at(left_i)
-        sorted_points.sort_by! { |v| slope(leftmost_point, v) }
-        sorted_points.unshift(leftmost_point)
+        sorted_points.delete_at(low_i)
+        sorted_points.sort! { |v1, v2| orientation(lowest_point, v1, v2) }
 
         # third, iterate through points and create hull
         # stack to store successive points
         hull = []
-        hull.push(leftmost_point)
+        hull.push(lowest_point)
         sorted_points.each do |point|
           hull.pop while hull.size > 1 && orientation(hull[hull.size - 2], hull[hull.size - 1], point) >= 0
           hull.push(point)
@@ -236,44 +236,29 @@ module SpatialStats
       end
 
       ##
-      # Find the index of the leftmost, lowest point
+      # Find the index of the lowest, leftmost point
       #
       # @return [Integer]
-      def leftmost_point_i
-        left_idx = -1
-        leftmost_point = nil
+      def lowest_point_i
+        low_idx = -1
+        lowest_point = nil
 
         points.each_with_index do |point, i|
-          if leftmost_point.nil?
-            leftmost_point = point
+          if lowest_point.nil?
+            lowest_point = point
             next
           end
 
-          if point[0] < leftmost_point[0]
-            leftmost_point = point
-            left_idx = i
-          elsif point[0] == leftmost_point[0] && point[1] < leftmost_point[1]
-            leftmost_point = point
-            left_idx = i
+          if point[1] < lowest_point[1]
+            lowest_point = point
+            low_idx = i
+          elsif point[1] == lowest_point[1] && point[0] < lowest_point[0]
+            lowest_point = point
+            low_idx = i
           end
         end
 
-        left_idx
-      end
-
-      ##
-      # Slope from p2 to p1
-      #
-      # @return [Float]
-      def slope(p1, p2)
-        y = p1[1] - p2[1]
-        x = p1[0] - p2[0]
-
-        if x.zero?
-          Float::INFINITY
-        else
-          y / x
-        end
+        low_idx
       end
 
       ##
