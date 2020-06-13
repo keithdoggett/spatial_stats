@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Module: SpatialStats::Global
+  Module: SpatialStats::PPA
   
     &mdash; Documentation by YARD 0.9.24
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" />
 
 <script type="text/javascript">
-  pathId = "SpatialStats::Global";
+  pathId = "SpatialStats::PPA";
   relpath = '../';
 </script>
 
@@ -36,10 +36,10 @@
       <div id="header">
         <div id="menu">
   
-    <a href="../_index.html">Index (G)</a> &raquo;
+    <a href="../_index.html">Index (P)</a> &raquo;
     <span class='title'><span class='object_link'><a href="../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span>
      &raquo; 
-    <span class="title">Global</span>
+    <span class="title">PPA</span>
   
 </div>
 
@@ -59,7 +59,7 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Module: SpatialStats::Global
+      <div id="content"><h1>Module: SpatialStats::PPA
   
   
   
@@ -78,8 +78,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/spatial_stats/global.rb<span class="defines">,<br />
-  lib/spatial_stats/global/stat.rb,<br /> lib/spatial_stats/global/moran.rb,<br /> lib/spatial_stats/global/bivariate_moran.rb</span>
+    <dd>lib/spatial_stats/ppa.rb<span class="defines">,<br />
+  lib/spatial_stats/ppa/distance.rb,<br /> lib/spatial_stats/ppa/centrography.rb</span>
 </dd>
   </dl>
   
@@ -88,9 +88,9 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>The Global module provides functionality for global spatial statistics. Global spatial statistics describe the entire dataset with one value, like how clustered the observations are across the entire dataset.</p>
+<p>The PPA module provides functionality for point pattern analysis. It includes support for descriptive statistics and distance analysis.</p>
 
-<p>All global classes define a <code>stat</code> method that returns the described statistic and an <code>mc</code> method that runs a permutation test determine a pseudo p-value for the statistic. Some also define <code>variance</code> and <code>z_score</code>  methods that can be used to calculate p-values if the distribution is known.</p>
+<p>Also has support for database connections for tables that have x,y columns or are a Point from PostGIS.</p>
 
 
   </div>
@@ -104,7 +104,7 @@
     
   
     
-      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Global/BivariateMoran.html" title="SpatialStats::Global::BivariateMoran (class)">BivariateMoran</a></span>, <span class='object_link'><a href="Global/Moran.html" title="SpatialStats::Global::Moran (class)">Moran</a></span>, <span class='object_link'><a href="Global/Stat.html" title="SpatialStats::Global::Stat (class)">Stat</a></span>
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="PPA/PointPattern.html" title="SpatialStats::PPA::PointPattern (class)">PointPattern</a></span>
     
   
 </p>

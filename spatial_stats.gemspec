@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
   spec.metadata['documentation_uri'] = 'https://keithdoggett.github.io/spatial_stats/'
-  spec.metadata['changelog_uri'] = 'https://www.github.com/keithdoggett/spatial_stats/CHANGELOG.md'
+  spec.metadata['changelog_uri'] = 'https://github.com/keithdoggett/spatial_stats/blob/master/CHANGELOG.md'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.

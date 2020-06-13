@@ -113,12 +113,154 @@
 
 
 
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
 
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fdr-class_method" title="fdr (class method)">.<strong>fdr</strong>(pvals, alpha)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the false discovery rate (FDR) of a set of p-values given an alpha value.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="fdr-class_method">
+  
+    .<strong>fdr</strong>(pvals, alpha)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the false discovery rate (FDR) of a set of p-values given an alpha value.</p>
+
+<p>If there is no FDR available in the dataset, the Bonferroni Bound is returned instead.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>pvals</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>from an mc test</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>alpha</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>value for the fdr</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/utils.rb', line 20</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_fdr'>fdr</span><span class='lparen'>(</span><span class='id identifier rubyid_pvals'>pvals</span><span class='comma'>,</span> <span class='id identifier rubyid_alpha'>alpha</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_n'>n</span> <span class='op'>=</span> <span class='id identifier rubyid_pvals'>pvals</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+  <span class='id identifier rubyid_b_bound'>b_bound</span> <span class='op'>=</span> <span class='id identifier rubyid_alpha'>alpha</span> <span class='op'>/</span> <span class='id identifier rubyid_n'>n</span>
+  <span class='id identifier rubyid_pvals'>pvals</span><span class='period'>.</span><span class='id identifier rubyid_sort!'>sort!</span>
+
+  <span class='id identifier rubyid_p_val'>p_val</span> <span class='op'>=</span> <span class='id identifier rubyid_b_bound'>b_bound</span>
+  <span class='lparen'>(</span><span class='int'>0</span><span class='op'>..</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+    <span class='id identifier rubyid_p_fdr'>p_fdr</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span> <span class='op'>+</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_b_bound'>b_bound</span>
+    <span class='kw'>break</span> <span class='kw'>unless</span> <span class='id identifier rubyid_pvals'>pvals</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span> <span class='op'>&lt;=</span> <span class='id identifier rubyid_p_fdr'>p_fdr</span>
+
+    <span class='id identifier rubyid_p_val'>p_val</span> <span class='op'>=</span> <span class='id identifier rubyid_p_fdr'>p_fdr</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_p_val'>p_val</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
 
 </div>
 
       <div id="footer">
-  Generated on Sat May 23 09:26:29 2020 by
+  Generated on Tue Jun  9 17:07:55 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

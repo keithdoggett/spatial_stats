@@ -57,13 +57,15 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'><p><a href="https://travis-ci.com/keithdoggett/spatial_stats"><img src="https://travis-ci.com/keithdoggett/spatial_stats.svg?branch=master" alt="Build Status" /></a></p>
+      <div id="content"><div id='filecontents'><p><img src="/assets/ruby.svg" alt="Spatial Stats" /></p>
 
-<p><img src="/assets/ruby.svg" alt="Spatial Stats" /></p>
+<p><a href="https://travis-ci.com/keithdoggett/spatial_stats"><img src="https://travis-ci.com/keithdoggett/spatial_stats.svg?branch=master" alt="Build Status" /></a></p>
+
+<p><a href="https://keithdoggett.github.io/spatial_stats">Docs</a></p>
 
 <h1 id="spatialstats">SpatialStats</h1>
 
-<p>SpatialStats is an ActiveRecord plugin that utilizes PostGIS and Ruby to compute weights/statistics of spatial data sets in Rails Apps.</p>
+<p>SpatialStats is an ActiveRecord/Rails plugin that utilizes PostGIS to compute weights/statistics of spatial data sets in Rails Apps.</p>
 
 <h2 id="installation">Installation</h2>
 
@@ -394,10 +396,12 @@ rails c</p>
       <li>Add support for .gal/.swm file imports</li>
       <li>Add support for Rate variables</li>
       <li>Add support for Bayes smoothing</li>
+      <li>~Add support for Bonferroni Bounds and FDR~</li>
     </ul>
   </li>
   <li>General
     <ul>
+      <li>~Add new stat constructors that only rely on a weights matrix and data vector~</li>
       <li>Point Pattern Analysis Module</li>
       <li>Regression Module</li>
     </ul>
@@ -411,13 +415,20 @@ rails c</p>
   <li>Create <code>spatial_stats-import/geojson/shp</code> gem that will allow importing files and generating a <code>WeightsMatrix</code>. Will likely rely on <code>RGeo</code> or another spatial lib.</li>
 </ul>
 
+<h3 id="other-todos">Other TODOs</h3>
+
+<ul>
+  <li>Update Docs to show <code>from_observation</code> when version is bumped</li>
+  <li>Refactor <code>MultivariateGeary</code> so that it can be used without <code>activerecord</code> by adding <code>from_observations</code> and supporting methods.</li>
+</ul>
+
 <h2 id="license">License</h2>
 
 <p>The gem is available as open source under the terms of the <a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a>.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Sat May 23 09:26:29 2020 by
+  Generated on Tue Jun  9 17:07:55 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

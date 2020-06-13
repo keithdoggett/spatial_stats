@@ -209,6 +209,39 @@
 
   
     <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#from_observations-class_method" title="from_observations (class method)">.<strong>from_observations</strong>(x, weights)  &#x21d2; Stat </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Stat, from vector and weights.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
       Instance Method Summary
       <small><a href="#" class="summary_toggle">collapse</a></small>
     </h2>
@@ -611,6 +644,123 @@
   </div>
 
 
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="from_observations-class_method">
+  
+    .<strong>from_observations</strong>(x, weights)  &#x21d2; <tt><span class='object_link'><a href="" title="SpatialStats::Global::Stat (class)">Stat</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>A new instance of Stat, from vector and weights.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>x</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>observations of dataset</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>weights</span>
+      
+      
+        <span class='type'>(<tt>WeightsMatrix</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>to define relationships between observations</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="SpatialStats::Global::Stat (class)">Stat</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26
+27
+28
+29
+30
+31</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 25</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_from_observations'>from_observations</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Data size != weights.n</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>!=</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_n'>n</span>
+
+  <span class='id identifier rubyid_instance'>instance</span> <span class='op'>=</span> <span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span>
+  <span class='id identifier rubyid_instance'>instance</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
   <div id="instance_method_details" class="method_details_list">
     <h2>Instance Method Details</h2>
 
@@ -667,12 +817,12 @@
       <pre class="lines">
 
 
-26
-27
-28</pre>
+41
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 26</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_expectation'>expectation</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>method expectation not implemented</span><span class='tstring_end'>&#39;</span></span>
@@ -697,21 +847,6 @@
       <pre class="lines">
 
 
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
 66
 67
 68
@@ -720,10 +855,25 @@
 71
 72
 73
-74</pre>
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 51</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_mc'>mc</span><span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span><span class='comma'>,</span> <span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_rng'>rng</span> <span class='op'>=</span> <span class='id identifier rubyid_gen_rng'>gen_rng</span><span class='lparen'>(</span><span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
@@ -769,30 +919,30 @@
       <pre class="lines">
 
 
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
 91
 92
 93
 94
 95
-96</pre>
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 76</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 91</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_mc_bv'>mc_bv</span><span class='lparen'>(</span><span class='id identifier rubyid_permutations'>permutations</span><span class='comma'>,</span> <span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
   <span class='comment'># in multivariate, hold x and shuffle y
@@ -857,12 +1007,12 @@
       <pre class="lines">
 
 
-18
-19
-20</pre>
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_stat'>stat</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>method stat not defined</span><span class='tstring_end'>&#39;</span></span>
@@ -909,12 +1059,12 @@
       <pre class="lines">
 
 
-30
-31
-32</pre>
+45
+46
+47</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 30</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_variance'>variance</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>method variance not implemented</span><span class='tstring_end'>&#39;</span></span>
@@ -943,12 +1093,12 @@
       <pre class="lines">
 
 
-42
-43
-44</pre>
+57
+58
+59</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 42</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_x='>x=</span><span class='lparen'>(</span><span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
   <span class='ivar'>@x</span> <span class='op'>=</span> <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
@@ -973,12 +1123,12 @@
       <pre class="lines">
 
 
-47
-48
-49</pre>
+62
+63
+64</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 62</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_y='>y=</span><span class='lparen'>(</span><span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
   <span class='ivar'>@y</span> <span class='op'>=</span> <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_standardize'>standardize</span>
@@ -1032,12 +1182,12 @@
       <pre class="lines">
 
 
-38
-39
-40</pre>
+53
+54
+55</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/global/stat.rb', line 53</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_z_score'>z_score</span>
   <span class='lparen'>(</span><span class='id identifier rubyid_stat'>stat</span> <span class='op'>-</span> <span class='id identifier rubyid_expectation'>expectation</span><span class='rparen'>)</span> <span class='op'>/</span> <span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_sqrt'>sqrt</span><span class='lparen'>(</span><span class='id identifier rubyid_variance'>variance</span><span class='rparen'>)</span>
@@ -1052,7 +1202,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sat May 23 09:26:30 2020 by
+  Generated on Tue Jun  9 17:07:55 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.24 (ruby-2.6.3).
 </div>

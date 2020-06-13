@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: SpatialStats::PPA::PointPattern
+  
+    &mdash; Documentation by YARD 0.9.24
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "SpatialStats::PPA::PointPattern";
+  relpath = '../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../_index.html">Index (P)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../PPA.html" title="SpatialStats::PPA (module)">PPA</a></span></span>
+     &raquo; 
+    <span class="title">PointPattern</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: SpatialStats::PPA::PointPattern
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">SpatialStats::PPA::PointPattern</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/spatial_stats/ppa.rb<span class="defines">,<br />
+  lib/spatial_stats/ppa/distance.rb,<br /> lib/spatial_stats/ppa/centrography.rb</span>
+</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>PointPattern class holds an array of points and performs various analysis on them.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#n-instance_method" title="#n (instance method)">#<strong>n</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute n.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#points-instance_method" title="#points (instance method)">#<strong>points</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute points.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bbox-instance_method" title="#bbox (instance method)">#<strong>bbox</strong>  &#x21d2; Array </a>
+    
+
+    
+      (also: #mbr)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the bounding box of the PointPattern.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#center_median-instance_method" title="#center_median (instance method)">#<strong>center_median</strong>(tol = 1e-4)  &#x21d2; Array </a>
+    
+
+    
+      (also: #center_of_minimum_dist)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the median center or center of minimum distance of a PointPattern.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#convex_hull-instance_method" title="#convex_hull (instance method)">#<strong>convex_hull</strong>  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the convex hull of a PointPattern.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(points)  &#x21d2; PointPattern </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of PointPattern.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#knn-instance_method" title="#knn (instance method)">#<strong>knn</strong>(k = 1)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#mean_center-instance_method" title="#mean_center (instance method)">#<strong>mean_center</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the mean center of a PointPattern.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#median-instance_method" title="#median (instance method)">#<strong>median</strong>  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the median of a PointPattern.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sd_ellipse-instance_method" title="#sd_ellipse (instance method)">#<strong>sd_ellipse</strong>  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the Standard Deviational Ellipse of the PointPattern.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#standard_distance-instance_method" title="#standard_distance (instance method)">#<strong>standard_distance</strong>  &#x21d2; Float </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the standard distance of a PointPattern.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#weighted_mean_center-instance_method" title="#weighted_mean_center (instance method)">#<strong>weighted_mean_center</strong>(weights)  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the weighted mean center of a PointPattern.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(points)  &#x21d2; <tt><span class='object_link'><a href="" title="SpatialStats::PPA::PointPattern (class)">PointPattern</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>A new instance of PointPattern.</p>
+
+<p>Points are an array of arrays of floats, ex.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='ivar'>@example</span>
+ <span class='id identifier rubyid_pts'>pts</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='float'>1.25</span><span class='comma'>,</span> <span class='float'>3.25</span><span class='rbracket'>]</span><span class='rbracket'>]</span>
+ <span class='const'><span class='object_link'><a href="../../SpatialStats.html" title="SpatialStats (module)">SpatialStats</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../PPA.html" title="SpatialStats::PPA (module)">PPA</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="SpatialStats::PPA::PointPattern (class)">PointPattern</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_pts'>pts</span><span class='rparen'>)</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>array</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>of x,y tuples</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+30
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa.rb', line 30</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_points'>points</span><span class='rparen'>)</span>
+  <span class='ivar'>@points</span> <span class='op'>=</span> <span class='id identifier rubyid_points'>points</span>
+  <span class='ivar'>@n</span> <span class='op'>=</span> <span class='id identifier rubyid_points'>points</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="n=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="n-instance_method">
+  
+    #<strong>n</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute n.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+34
+35
+36</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa.rb', line 34</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_n'>n</span>
+  <span class='ivar'>@n</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="points=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="points-instance_method">
+  
+    #<strong>points</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute points.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+34
+35
+36</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa.rb', line 34</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_points'>points</span>
+  <span class='ivar'>@points</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="bbox-instance_method">
+  
+    #<strong>bbox</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='mbr-instance_method'>mbr</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the bounding box of the PointPattern</p>
+
+<p>This is the same is minimum bounding rectangle Returns an array of 2 points: the lower left and upper right corners.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><dl class="rdoc-list label-list"><dt>lower_left, upper_right
+<dd></dd></dl>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa/centrography.rb', line 164</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bbox'>bbox</span>
+  <span class='id identifier rubyid_minx'>minx</span> <span class='op'>=</span> <span class='const'>Float</span><span class='op'>::</span><span class='const'>INFINITY</span>
+  <span class='id identifier rubyid_miny'>miny</span> <span class='op'>=</span> <span class='const'>Float</span><span class='op'>::</span><span class='const'>INFINITY</span>
+  <span class='id identifier rubyid_maxx'>maxx</span> <span class='op'>=</span> <span class='op'>-</span><span class='const'>Float</span><span class='op'>::</span><span class='const'>INFINITY</span>
+  <span class='id identifier rubyid_maxy'>maxy</span> <span class='op'>=</span> <span class='op'>-</span><span class='const'>Float</span><span class='op'>::</span><span class='const'>INFINITY</span>
+
+  <span class='id identifier rubyid_points'>points</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_point'>point</span><span class='op'>|</span>
+    <span class='comment'># x analysis
+</span>    <span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_minx'>minx</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span> <span class='kw'>if</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_minx'>minx</span>
+    <span class='id identifier rubyid_maxx'>maxx</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span> <span class='kw'>if</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_maxx'>maxx</span>
+
+    <span class='comment'># y analysis
+</span>    <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_miny'>miny</span> <span class='op'>=</span> <span class='id identifier rubyid_y'>y</span> <span class='kw'>if</span> <span class='id identifier rubyid_y'>y</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_miny'>miny</span>
+    <span class='id identifier rubyid_maxy'>maxy</span> <span class='op'>=</span> <span class='id identifier rubyid_y'>y</span> <span class='kw'>if</span> <span class='id identifier rubyid_y'>y</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_maxy'>maxy</span>
+  <span class='kw'>end</span>
+  <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='id identifier rubyid_minx'>minx</span><span class='comma'>,</span> <span class='id identifier rubyid_miny'>miny</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='id identifier rubyid_maxx'>maxx</span><span class='comma'>,</span> <span class='id identifier rubyid_maxy'>maxy</span><span class='rbracket'>]</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="center_median-instance_method">
+  
+    #<strong>center_median</strong>(tol = 1e-4)  &#x21d2; <tt>Array</tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='center_of_minimum_dist-instance_method'>center_of_minimum_dist</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the median center or center of minimum distance of a PointPattern.</p>
+
+<p>This is the point that minimizes the sum of euclidean distances to all points in the data set.</p>
+
+<p>This is an iterative algorithm and a tolerance has to be passed to tell the method when to stop iterating.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>tol</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>1e-4</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>to cutoff algorithm</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>x_center, y_center</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa/centrography.rb', line 97</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_center_median'>center_median</span><span class='lparen'>(</span><span class='id identifier rubyid_tol'>tol</span> <span class='op'>=</span> <span class='float'>1e-4</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_pts'>pts</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Numo.html" title="Numo (module)">Numo</a></span></span><span class='op'>::</span><span class='const'>DFloat</span><span class='period'>.</span><span class='id identifier rubyid_cast'>cast</span><span class='lparen'>(</span><span class='id identifier rubyid_points'>points</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_center'>center</span> <span class='op'>=</span> <span class='id identifier rubyid_mean_center'>mean_center</span>
+  <span class='id identifier rubyid_x0'>x0</span> <span class='op'>=</span> <span class='id identifier rubyid_center'>center</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_y0'>y0</span> <span class='op'>=</span> <span class='id identifier rubyid_center'>center</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_dx'>dx</span> <span class='op'>=</span> <span class='const'>Float</span><span class='op'>::</span><span class='const'>INFINITY</span>
+  <span class='id identifier rubyid_dy'>dy</span> <span class='op'>=</span> <span class='const'>Float</span><span class='op'>::</span><span class='const'>INFINITY</span>
+  <span class='kw'>while</span> <span class='id identifier rubyid_dx'>dx</span><span class='period'>.</span><span class='id identifier rubyid_abs'>abs</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_tol'>tol</span> <span class='op'>||</span> <span class='id identifier rubyid_dy'>dy</span><span class='period'>.</span><span class='id identifier rubyid_abs'>abs</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_tol'>tol</span>
+    <span class='id identifier rubyid_dist'>dist</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_pts'>pts</span><span class='lbracket'>[</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='id identifier rubyid_x0'>x0</span><span class='rparen'>)</span><span class='op'>**</span><span class='int'>2</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='id identifier rubyid_pts'>pts</span><span class='lbracket'>[</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='id identifier rubyid_y0'>y0</span><span class='rparen'>)</span><span class='op'>**</span><span class='int'>2</span><span class='rparen'>)</span><span class='op'>**</span><span class='float'>0.5</span>
+    <span class='id identifier rubyid_inv_d'>inv_d</span> <span class='op'>=</span> <span class='int'>1</span> <span class='op'>/</span> <span class='id identifier rubyid_dist'>dist</span>
+    <span class='id identifier rubyid_inv_d'>inv_d</span> <span class='op'>/=</span> <span class='id identifier rubyid_inv_d'>inv_d</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
+
+    <span class='id identifier rubyid_dot_prod'>dot_prod</span> <span class='op'>=</span> <span class='id identifier rubyid_inv_d'>inv_d</span><span class='period'>.</span><span class='id identifier rubyid_dot'>dot</span><span class='lparen'>(</span><span class='id identifier rubyid_pts'>pts</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_x1'>x1</span> <span class='op'>=</span> <span class='id identifier rubyid_dot_prod'>dot_prod</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_y1'>y1</span> <span class='op'>=</span> <span class='id identifier rubyid_dot_prod'>dot_prod</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+
+    <span class='id identifier rubyid_dx'>dx</span> <span class='op'>=</span> <span class='id identifier rubyid_x1'>x1</span> <span class='op'>-</span> <span class='id identifier rubyid_x0'>x0</span>
+    <span class='id identifier rubyid_dy'>dy</span> <span class='op'>=</span> <span class='id identifier rubyid_y1'>y1</span> <span class='op'>-</span> <span class='id identifier rubyid_y0'>y0</span>
+
+    <span class='id identifier rubyid_x0'>x0</span> <span class='op'>=</span> <span class='id identifier rubyid_x1'>x1</span>
+    <span class='id identifier rubyid_y0'>y0</span> <span class='op'>=</span> <span class='id identifier rubyid_y1'>y1</span>
+  <span class='kw'>end</span>
+  <span class='lbracket'>[</span><span class='id identifier rubyid_x1'>x1</span><span class='comma'>,</span> <span class='id identifier rubyid_y1'>y1</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="convex_hull-instance_method">
+  
+    #<strong>convex_hull</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the convex hull of a PointPattern</p>
+
+<p>Uses the Graham Scan method to compute the hull.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>of points representing the geometry</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="https://en.wikipedia.org/wiki/Graham_scan" target="_parent" title="https://en.wikipedia.org/wiki/Graham_scan">https://en.wikipedia.org/wiki/Graham_scan</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa/centrography.rb', line 193</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_convex_hull'>convex_hull</span>
+  <span class='comment'># first find lowest point
+</span>  <span class='id identifier rubyid_low_i'>low_i</span> <span class='op'>=</span> <span class='id identifier rubyid_lowest_point_i'>lowest_point_i</span>
+  <span class='id identifier rubyid_lowest_point'>lowest_point</span> <span class='op'>=</span> <span class='id identifier rubyid_points'>points</span><span class='lbracket'>[</span><span class='id identifier rubyid_low_i'>low_i</span><span class='rbracket'>]</span>
+
+  <span class='comment'># second, sort by angle to lowest point
+</span>  <span class='id identifier rubyid_sorted_points'>sorted_points</span> <span class='op'>=</span> <span class='id identifier rubyid_points'>points</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span>
+  <span class='id identifier rubyid_sorted_points'>sorted_points</span><span class='period'>.</span><span class='id identifier rubyid_delete_at'>delete_at</span><span class='lparen'>(</span><span class='id identifier rubyid_low_i'>low_i</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_sorted_points'>sorted_points</span><span class='period'>.</span><span class='id identifier rubyid_sort!'>sort!</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_v1'>v1</span><span class='comma'>,</span> <span class='id identifier rubyid_v2'>v2</span><span class='op'>|</span> <span class='id identifier rubyid_orientation'>orientation</span><span class='lparen'>(</span><span class='id identifier rubyid_lowest_point'>lowest_point</span><span class='comma'>,</span> <span class='id identifier rubyid_v1'>v1</span><span class='comma'>,</span> <span class='id identifier rubyid_v2'>v2</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+
+  <span class='comment'># third, iterate through points and create hull
+</span>  <span class='comment'># stack to store successive points
+</span>  <span class='id identifier rubyid_hull'>hull</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_hull'>hull</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_lowest_point'>lowest_point</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_sorted_points'>sorted_points</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_point'>point</span><span class='op'>|</span>
+    <span class='id identifier rubyid_hull'>hull</span><span class='period'>.</span><span class='id identifier rubyid_pop'>pop</span> <span class='kw'>while</span> <span class='id identifier rubyid_hull'>hull</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>&gt;</span> <span class='int'>1</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_orientation'>orientation</span><span class='lparen'>(</span><span class='id identifier rubyid_hull'>hull</span><span class='lbracket'>[</span><span class='id identifier rubyid_hull'>hull</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>-</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_hull'>hull</span><span class='lbracket'>[</span><span class='id identifier rubyid_hull'>hull</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>-</span> <span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_point'>point</span><span class='rparen'>)</span> <span class='op'>&gt;=</span> <span class='int'>0</span>
+    <span class='id identifier rubyid_hull'>hull</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='id identifier rubyid_point'>point</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_hull'>hull</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="knn-instance_method">
+  
+    #<strong>knn</strong>(k = 1)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa/distance.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_knn'>knn</span><span class='lparen'>(</span><span class='id identifier rubyid_k'>k</span> <span class='op'>=</span> <span class='int'>1</span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="mean_center-instance_method">
+  
+    #<strong>mean_center</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the mean center of a PointPattern</p>
+
+<p>Computes the arithmetic mean of the x and y values and returns x_mean and y_mean in an array.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa/centrography.rb', line 13</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_mean_center'>mean_center</span>
+  <span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='float'>0.0</span>
+  <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='float'>0.0</span>
+  <span class='id identifier rubyid_points'>points</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_point'>point</span><span class='op'>|</span>
+    <span class='id identifier rubyid_x'>x</span> <span class='op'>+=</span> <span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_y'>y</span> <span class='op'>+=</span> <span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+
+  <span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span> <span class='op'>/</span> <span class='id identifier rubyid_n'>n</span><span class='comma'>,</span> <span class='id identifier rubyid_y'>y</span> <span class='op'>/</span> <span class='id identifier rubyid_n'>n</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="median-instance_method">
+  
+    #<strong>median</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the median of a PointPattern</p>
+
+<p>Not the center of minimum distance, but the middle x and middle y values. If the number of points is even, returns the average of medians in each dimension</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>x_median, y_median</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa/centrography.rb', line 72</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_median'>median</span>
+  <span class='id identifier rubyid_x_sorted'>x_sorted</span> <span class='op'>=</span> <span class='id identifier rubyid_points'>points</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
+  <span class='id identifier rubyid_y_sorted'>y_sorted</span> <span class='op'>=</span> <span class='id identifier rubyid_points'>points</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_n'>n</span><span class='period'>.</span><span class='id identifier rubyid_even?'>even?</span>
+    <span class='id identifier rubyid_x_val'>x_val</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_x_sorted'>x_sorted</span><span class='lbracket'>[</span><span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='op'>/</span> <span class='int'>2</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_x_sorted'>x_sorted</span><span class='lbracket'>[</span><span class='id identifier rubyid_n'>n</span> <span class='op'>/</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='op'>/</span> <span class='float'>2.0</span>
+    <span class='id identifier rubyid_y_val'>y_val</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_y_sorted'>y_sorted</span><span class='lbracket'>[</span><span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='op'>/</span> <span class='int'>2</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_y_sorted'>y_sorted</span><span class='lbracket'>[</span><span class='id identifier rubyid_n'>n</span> <span class='op'>/</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='op'>/</span> <span class='float'>2.0</span>
+    <span class='lbracket'>[</span><span class='id identifier rubyid_x_val'>x_val</span><span class='comma'>,</span> <span class='id identifier rubyid_y_val'>y_val</span><span class='rbracket'>]</span>
+  <span class='kw'>else</span>
+    <span class='lbracket'>[</span><span class='id identifier rubyid_x_sorted'>x_sorted</span><span class='lbracket'>[</span><span class='id identifier rubyid_n'>n</span> <span class='op'>/</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_y_sorted'>y_sorted</span><span class='lbracket'>[</span><span class='id identifier rubyid_n'>n</span> <span class='op'>/</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sd_ellipse-instance_method">
+  
+    #<strong>sd_ellipse</strong>  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the Standard Deviational Ellipse of the PointPattern</p>
+
+<p>Returns the semi-major axis, semi-minor axis, and rotation in rads</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>sx, sy, theta</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa/centrography.rb', line 130</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sd_ellipse'>sd_ellipse</span>
+  <span class='comment'># first theta needs to be computed
+</span>  <span class='id identifier rubyid_theta'>theta</span> <span class='op'>=</span> <span class='id identifier rubyid_sd_ellipse_theta'>sd_ellipse_theta</span>
+  <span class='id identifier rubyid_center'>center</span> <span class='op'>=</span> <span class='id identifier rubyid_mean_center'>mean_center</span>
+  <span class='id identifier rubyid_cos'>cos</span> <span class='op'>=</span> <span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_cos'>cos</span><span class='lparen'>(</span><span class='id identifier rubyid_theta'>theta</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_sin'>sin</span> <span class='op'>=</span> <span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_sin'>sin</span><span class='lparen'>(</span><span class='id identifier rubyid_theta'>theta</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_sx'>sx</span> <span class='op'>=</span> <span class='float'>0.0</span>
+  <span class='id identifier rubyid_sy'>sy</span> <span class='op'>=</span> <span class='float'>0.0</span>
+
+  <span class='id identifier rubyid_points'>points</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_point'>point</span><span class='op'>|</span>
+    <span class='id identifier rubyid_xdiff'>xdiff</span> <span class='op'>=</span> <span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='id identifier rubyid_center'>center</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_ydiff'>ydiff</span> <span class='op'>=</span> <span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='id identifier rubyid_center'>center</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_sx'>sx</span> <span class='op'>+=</span> <span class='lparen'>(</span><span class='id identifier rubyid_xdiff'>xdiff</span> <span class='op'>*</span> <span class='id identifier rubyid_cos'>cos</span> <span class='op'>-</span> <span class='id identifier rubyid_ydiff'>ydiff</span> <span class='op'>*</span> <span class='id identifier rubyid_sin'>sin</span><span class='rparen'>)</span><span class='op'>**</span><span class='int'>2</span>
+    <span class='id identifier rubyid_sy'>sy</span> <span class='op'>+=</span> <span class='lparen'>(</span><span class='id identifier rubyid_xdiff'>xdiff</span> <span class='op'>*</span> <span class='id identifier rubyid_sin'>sin</span> <span class='op'>-</span> <span class='id identifier rubyid_ydiff'>ydiff</span> <span class='op'>*</span> <span class='id identifier rubyid_cos'>cos</span><span class='rparen'>)</span><span class='op'>**</span><span class='int'>2</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_sx'>sx</span> <span class='op'>=</span> <span class='int'>2</span> <span class='op'>*</span> <span class='id identifier rubyid_sx'>sx</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>2</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_sy'>sy</span> <span class='op'>=</span> <span class='int'>2</span> <span class='op'>*</span> <span class='id identifier rubyid_sy'>sy</span> <span class='op'>/</span> <span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span> <span class='op'>-</span> <span class='int'>2</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_sx'>sx</span> <span class='op'>=</span> <span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_sqrt'>sqrt</span><span class='lparen'>(</span><span class='id identifier rubyid_sx'>sx</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_sy'>sy</span> <span class='op'>=</span> <span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_sqrt'>sqrt</span><span class='lparen'>(</span><span class='id identifier rubyid_sy'>sy</span><span class='rparen'>)</span>
+
+  <span class='lbracket'>[</span><span class='id identifier rubyid_sx'>sx</span><span class='comma'>,</span> <span class='id identifier rubyid_sy'>sy</span><span class='comma'>,</span> <span class='id identifier rubyid_theta'>theta</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="standard_distance-instance_method">
+  
+    #<strong>standard_distance</strong>  &#x21d2; <tt>Float</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the standard distance of a PointPattern</p>
+
+<p>Computes the standard deviation of each point from the mean_center</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+54
+55
+56
+57
+58
+59
+60
+61
+62</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa/centrography.rb', line 54</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_standard_distance'>standard_distance</span>
+  <span class='id identifier rubyid_var'>var</span> <span class='op'>=</span> <span class='int'>0</span>
+  <span class='id identifier rubyid_center'>center</span> <span class='op'>=</span> <span class='id identifier rubyid_mean_center'>mean_center</span>
+  <span class='id identifier rubyid_points'>points</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_point'>point</span><span class='op'>|</span>
+    <span class='id identifier rubyid_var'>var</span> <span class='op'>+=</span> <span class='lparen'>(</span><span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='id identifier rubyid_center'>center</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='op'>**</span><span class='int'>2</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>-</span> <span class='id identifier rubyid_center'>center</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='op'>**</span><span class='int'>2</span>
+  <span class='kw'>end</span>
+
+  <span class='const'>Math</span><span class='period'>.</span><span class='id identifier rubyid_sqrt'>sqrt</span><span class='lparen'>(</span><span class='id identifier rubyid_var'>var</span> <span class='op'>/</span> <span class='id identifier rubyid_n'>n</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="weighted_mean_center-instance_method">
+  
+    #<strong>weighted_mean_center</strong>(weights)  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Compute the weighted mean center of a PointPattern</p>
+
+<p>Computes the weighted mean of the x and y values based on each point&#39;s corresponding weight</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>weights</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>x_weighted_mean, y_weighted_mean</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spatial_stats/ppa/centrography.rb', line 33</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_weighted_mean_center'>weighted_mean_center</span><span class='lparen'>(</span><span class='id identifier rubyid_weights'>weights</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>weights.size != n</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_weights'>weights</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>==</span> <span class='id identifier rubyid_n'>n</span>
+
+  <span class='id identifier rubyid_w_sum'>w_sum</span> <span class='op'>=</span> <span class='float'>0.0</span>
+  <span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='float'>0.0</span>
+  <span class='id identifier rubyid_y'>y</span> <span class='op'>=</span> <span class='float'>0.0</span>
+  <span class='id identifier rubyid_points'>points</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_point'>point</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+    <span class='id identifier rubyid_w_sum'>w_sum</span> <span class='op'>+=</span> <span class='id identifier rubyid_weights'>weights</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_x'>x</span> <span class='op'>+=</span> <span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_weights'>weights</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_y'>y</span> <span class='op'>+=</span> <span class='id identifier rubyid_point'>point</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_weights'>weights</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+
+  <span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span> <span class='op'>/</span> <span class='id identifier rubyid_w_sum'>w_sum</span><span class='comma'>,</span> <span class='id identifier rubyid_y'>y</span> <span class='op'>/</span> <span class='id identifier rubyid_w_sum'>w_sum</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Tue Jun  9 17:07:55 2020 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.24 (ruby-2.6.3).
+</div>
+
+    </div>
+  </body>
+</html>
