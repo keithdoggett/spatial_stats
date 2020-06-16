@@ -13,11 +13,45 @@ module SpatialStats
 
         # add index to points so we can track it when they are in the tree.
         tmp_pts = points.each_with_index.map { |v, i| v << i }
-        @head = construct(tmp_pts)
+        @root = construct(tmp_pts)
       end
-      attr_reader :points, :head
+      attr_reader :points, :root
+
+      def nearest_point(point)
+        nearest_tuple = nearest(point, root)
+        nearest_tuple[:dmin] = Math.sqrt(nearest_tuple[:dmin])
+        nearest_tuple
+      end
 
       private
+
+      def nearest(point, node, curr_best = nil)
+        curr_best = { point: nil, idx: nil, dmin: Float::INFINITY } if curr_best.nil?
+        return curr_best if node.nil?
+
+        # Check if current node is better than what we have
+        dist = dist2(point, node.point)
+        curr_best = { point: node.point, idx: node.idx, dmin: dist } if dist < curr_best[:dmin]
+
+        # recurse down tree
+        axis = node.axis
+        first_child = nil
+        other_child = nil
+        if point[axis] < node.split
+          first_child = node.left
+          other_child = node.right
+        else
+          first_child = node.right
+          other_child = node.left
+        end
+
+        curr_best = nearest(point, first_child, curr_best)
+
+        # check if we need to evaluate other child based on
+        # hyperplane intersecting with hypersphere
+        curr_best = nearest(point, other_child, curr_best) if (point[axis] - node.split)**2 <= curr_best[:dmin]
+        curr_best
+      end
 
       ##
       # Process to construct tree
@@ -35,9 +69,9 @@ module SpatialStats
       def construct(pts, depth = 0)
         return nil if pts.empty?
 
-        return Node.new(pts[0].slice(0..1), pts[0][2]) if pts.size == 1
-
         axis = depth % 2
+        return Node.new(pts[0].slice(0..1), pts[0][2], nil, nil, axis, pts[0][axis]) if pts.size == 1
+
         sorted = pts.sort_by { |v| v[axis] }
 
         n = sorted.size
@@ -54,6 +88,10 @@ module SpatialStats
         node.left = construct(left_list, depth + 1)
         node.right = construct(right_list, depth + 1)
         node
+      end
+
+      def dist2(p1, p2)
+        (p1[0] - p2[0])**2 + (p1[1] - p2[1])**2
       end
     end
   end

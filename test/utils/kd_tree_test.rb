@@ -3,34 +3,42 @@
 require 'test_helper'
 
 class KDTreeTest < ActiveSupport::TestCase
-  # to get KDTree and Node more easily
-  include SpatialStats::Utils
-
-  def setup
-    @points = [[-1, -1], [1, -1], [1, 1], [-1, 1]]
-  end
+  def naive_nn(point, points); end
 
   def test_initialize
-    tree = KDTree.new(@points)
+    points = [[-1, -1], [1, -1], [1, 1], [-1, 1]]
+    tree = SpatialStats::Utils::KDTree.new(points)
 
-    assert_equal(@points, tree.points)
+    assert_equal(points, tree.points)
 
     # test structure
-    head = tree.head
-    assert_equal(1, head.split)
-    assert_equal(1, head.left.split)
-    assert_nil(head.right.split)
-    assert_equal(1, head.left.axis)
-    assert_nil(head.right.axis)
+    root = tree.root
+    assert_equal(1, root.split)
+    assert_equal(1, root.left.split)
+    assert_equal(1, root.right.split)
+    assert_equal(1, root.left.axis)
+    assert_equal(1, root.right.axis)
 
-    assert_equal([-1, -1], head.left.left.point)
-    assert_equal([-1, 1], head.left.point)
-    assert_equal([1, -1], head.point)
-    assert_equal([1, 1], head.right.point)
+    assert_equal([-1, -1], root.left.left.point)
+    assert_equal([-1, 1], root.left.point)
+    assert_equal([1, -1], root.point)
+    assert_equal([1, 1], root.right.point)
 
-    assert_equal(0, head.left.left.idx)
-    assert_equal(3, head.left.idx)
-    assert_equal(1, head.idx)
-    assert_equal(2, head.right.idx)
+    assert_equal(0, root.left.left.idx)
+    assert_equal(3, root.left.idx)
+    assert_equal(1, root.idx)
+    assert_equal(2, root.right.idx)
+  end
+
+  def test_nearest_point
+    points = [[-1, -1], [1, -1], [1, 1], [-1, 1], [0, 0]]
+    tree = SpatialStats::Utils::KDTree.new(points)
+    test_point = [-0.6, -0.6]
+
+    result = tree.nearest_point(test_point)
+    expected = { point: [-1, -1], idx: 0, dmin: 0.565 }
+    assert_equal(expected[:point], result[:point])
+    assert_equal(expected[:idx], result[:idx])
+    assert_in_delta(expected[:dmin], result[:dmin], 1e-3)
   end
 end
