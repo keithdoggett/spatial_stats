@@ -36,10 +36,10 @@ class KDTreeTest < ActiveSupport::TestCase
     test_point = [-0.6, -0.6]
 
     result = tree.nearest_point(test_point)
-    expected = { point: [-1, -1], idx: 0, dmin: 0.565 }
+    expected = { point: [-1, -1], idx: 0, dist: 0.565 }
     assert_equal(expected[:point], result[:node].point)
     assert_equal(expected[:idx], result[:node].idx)
-    assert_in_delta(expected[:dmin], result[:dmin], 1e-3)
+    assert_in_delta(expected[:dist], result[:dist], 1e-3)
   end
 
   def test_knn
@@ -49,13 +49,13 @@ class KDTreeTest < ActiveSupport::TestCase
 
     result = tree.knn(test_point, 2)
     expected = [
-      { point: [-1, -1], idx: 0, dmin: 0.565 },
-      { point: [0, 0], idx: 4, dmin: 0.8485 }
+      { point: [-1, -1], idx: 0, dist: 0.565 },
+      { point: [0, 0], idx: 4, dist: 0.8485 }
     ]
     expected.each_with_index do |v, i|
       assert_equal(v[:point], result[i][:node].point)
       assert_equal(v[:idx], result[i][:node].idx)
-      assert_in_delta(v[:dmin], result[i][:dmin], 1e-3)
+      assert_in_delta(v[:dist], result[i][:dist], 1e-3)
     end
   end
 end

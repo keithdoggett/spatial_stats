@@ -12,7 +12,7 @@ module SpatialStats
         @points = points
 
         # add index to points so we can track it when they are in the tree.
-        tmp_pts = points.each_with_index.map { |v, i| v << i }
+        tmp_pts = points.each_with_index.map { |v, i| v.dup << i }
         @root = construct(tmp_pts)
       end
       attr_reader :points, :root
@@ -22,10 +22,10 @@ module SpatialStats
       #
       # @param [Array] point x,y
       #
-      # @returns [Hash] {node: KDTree::Node, dmin: Float}
+      # @returns [Hash] {node: KDTree::Node, dist: Float}
       def nearest_point(point)
         nearest_tuple = nearest(point, root)
-        nearest_tuple[:dmin] = Math.sqrt(nearest_tuple[:dmin])
+        nearest_tuple[:dist] = Math.sqrt(nearest_tuple[:dist])
 
         # create a new node that removes all but point and idx
         new_node = Node.new
@@ -44,7 +44,7 @@ module SpatialStats
       # @param [Array] point x,y
       # @param [Integer] k
       #
-      # @returns [Array] [{node: KDTree::Node, dmin: Float}]
+      # @returns [Array] [{node: KDTree::Node, dist: Float}]
       def knn(point, k)
         k = points.size if k > points.size
         neighbors = Array.new(k)
@@ -53,7 +53,7 @@ module SpatialStats
         # convert neighbors to actual distance
         # not dist2
         neighbors.map do |neighbor|
-          neighbor[:dmin] = Math.sqrt(neighbor[:dmin])
+          neighbor[:dist] = Math.sqrt(neighbor[:dist])
 
           new_node = Node.new
           new_node.point = neighbor[:node].point
@@ -77,13 +77,13 @@ module SpatialStats
         dist = dist2(point, node.point)
         if !curr_neighbors.index(nil).nil?
           idx = curr_neighbors.index(nil)
-          curr_neighbors[idx] = { node: node, dmin: dist }
+          curr_neighbors[idx] = { node: node, dist: dist }
 
           # sort if curr_neighbors is now full
-          curr_neighbors.sort_by! { |v| v[:dmin] } if idx == k - 1
-        elsif dist < curr_neighbors[k - 1][:dmin]
-          curr_neighbors[k - 1] = { node: node, dmin: dist }
-          curr_neighbors.sort_by! { |v| v[:dmin] }
+          curr_neighbors.sort_by! { |v| v[:dist] } if idx == k - 1
+        elsif dist < curr_neighbors[k - 1][:dist]
+          curr_neighbors[k - 1] = { node: node, dist: dist }
+          curr_neighbors.sort_by! { |v| v[:dist] }
         end
 
         # keep working down the tree
@@ -102,9 +102,9 @@ module SpatialStats
 
         # check if we need to evaluate other side by either
         # still having nil values in array or the hypersphere
-        # from largest dmin intersects hyperplane of node
+        # from largest dist intersects hyperplane of node
         has_nil = !curr_neighbors.index(nil).nil?
-        if has_nil || (point[axis] - node.split)**2 <= curr_neighbors[k - 1][:dmin]
+        if has_nil || (point[axis] - node.split)**2 <= curr_neighbors[k - 1][:dist]
           curr_neighbors = _knn(point, other_child, curr_neighbors)
         end
         curr_neighbors
@@ -124,12 +124,12 @@ module SpatialStats
       # Finishes once it reaches the root node and does not need to check
       # the other side.
       def nearest(point, node, curr_best = nil)
-        curr_best = { node: nil, dmin: Float::INFINITY } if curr_best.nil?
+        curr_best = { node: nil, dist: Float::INFINITY } if curr_best.nil?
         return curr_best if node.nil?
 
         # Check if current node is better than what we have
         dist = dist2(point, node.point)
-        curr_best = { node: node, dmin: dist } if dist < curr_best[:dmin]
+        curr_best = { node: node, dist: dist } if dist < curr_best[:dist]
 
         # recurse down tree
         axis = node.axis
@@ -147,7 +147,7 @@ module SpatialStats
 
         # check if we need to evaluate other child based on
         # hyperplane intersecting with hypersphere
-        curr_best = nearest(point, other_child, curr_best) if (point[axis] - node.split)**2 <= curr_best[:dmin]
+        curr_best = nearest(point, other_child, curr_best) if (point[axis] - node.split)**2 <= curr_best[:dist]
         curr_best
       end
 
@@ -170,6 +170,8 @@ module SpatialStats
         axis = depth % 2
         return Node.new(pts[0].slice(0..1), pts[0][2], nil, nil, axis, pts[0][axis]) if pts.size == 1
 
+        # could speed up by sorting this once in both x and y before
+        # beginning construction
         sorted = pts.sort_by { |v| v[axis] }
 
         n = sorted.size

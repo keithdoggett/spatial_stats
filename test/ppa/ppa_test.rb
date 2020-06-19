@@ -11,5 +11,6 @@ class PPATest < ActiveSupport::TestCase
     pp = SpatialStats::PPA::PointPattern.new(@points)
     assert_equal(@points, pp.points)
     assert_equal(6, pp.n)
+    refute_nil(pp.kd_tree)
   end
 end

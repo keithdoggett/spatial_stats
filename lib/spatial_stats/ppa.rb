@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spatial_stats/ppa/centrography'
+require 'spatial_stats/ppa/distance'
 
 module SpatialStats
   ##
@@ -30,8 +31,9 @@ module SpatialStats
       def initialize(points)
         @points = points
         @n = points.size
+        @kd_tree = SpatialStats::Utils::KDTree.new(points)
       end
-      attr_accessor :points, :n
+      attr_accessor :points, :n, :kd_tree
     end
   end
 end
