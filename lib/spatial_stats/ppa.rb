@@ -2,6 +2,7 @@
 
 require 'spatial_stats/ppa/centrography'
 require 'spatial_stats/ppa/distance'
+require 'spatial_stats/ppa/point_process'
 
 module SpatialStats
   ##
