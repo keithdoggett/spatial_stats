@@ -95,7 +95,7 @@ GEM
     numo-narray (0.9.1.6)
     pg (1.2.3)
     pg (1.2.3-x86-mingw32)
-    rack (2.2.2)
+    rack (2.2.3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.3.1)
