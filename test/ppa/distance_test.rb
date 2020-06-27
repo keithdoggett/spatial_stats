@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'rubystats'
 
 class PPADistanceTest < ActiveSupport::TestCase
   def setup
     @points = [[0, 0], [1, 2], [2, 3], [3, 4], [-1.5, -1.5], [2, 2]]
     @pp = SpatialStats::PPA::PointPattern.new(@points)
+
+    seed = 123_456
+    Kernel.srand(seed)
   end
 
   def test_knn
@@ -47,5 +51,51 @@ class PPADistanceTest < ActiveSupport::TestCase
     max_dist = @pp.max_nn_dist
     expected = 2.121
     assert_in_delta(expected, max_dist, 1e-2)
+  end
+
+  def test_expected_nn_dist
+    expected_dist = @pp.expected_nn_dist
+    area = 24.75 # from bbox of pp
+    expected = 1 / (2 * Math.sqrt(6 / area))
+    assert_equal(expected, expected_dist)
+  end
+
+  def test_expected_nn_dist_custom_bounds
+    bounds = [[-2, -2], [6, 6]]
+    expected_dist = @pp.expected_nn_dist(bounds)
+    area = 64.0
+    expected = 1 / (2 * Math.sqrt(6 / area))
+    assert_equal(expected, expected_dist)
+  end
+
+  def test_p_value
+    # random gen points
+    unif_dist = Rubystats::UniformDistribution.new(0, 1000)
+    pts = 1000.times.map { [unif_dist.rng, unif_dist.rng] }
+    pp = SpatialStats::PPA::PointPattern.new(pts)
+
+    p_value = pp.p_value([[0, 0], [1000, 1000]])
+    assert_in_delta(0.58, p_value[:clustered], 1e-2)
+    assert_in_delta(0.42, p_value[:dispersed], 1e-2)
+  end
+
+  def test_p_value_clustered
+    unif_dist = Rubystats::UniformDistribution.new(0, 100)
+    pts = 100.times.map { [unif_dist.rng, unif_dist.rng] }
+    pp = SpatialStats::PPA::PointPattern.new(pts)
+
+    p_value = pp.p_value([[0, 0], [1000, 1000]])
+    assert_in_delta(1e-5, p_value[:clustered], 1e-2)
+    assert_in_delta(1.0, p_value[:dispersed], 1e-2)
+  end
+
+  def test_mc
+    unif_dist = Rubystats::UniformDistribution.new(0, 100)
+    pts = 100.times.map { [unif_dist.rng, unif_dist.rng] }
+    pp = SpatialStats::PPA::PointPattern.new(pts)
+
+    p_value = pp.mc([[0, 0], [1000, 1000]], 99)
+    assert_in_delta(0.01, p_value[:clustered], 1e-2)
+    assert_in_delta(1.0, p_value[:dispersed], 1e-2)
   end
 end

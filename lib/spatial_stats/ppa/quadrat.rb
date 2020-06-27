@@ -118,15 +118,20 @@ module SpatialStats
       # @returns [Integer] index of the quadrat it is in
       def point_quadrat(point)
         xmin = bbox[0][0]
-        xmax = bbox[1][0] + 1e-5 # add padding for edge point
+        xmax = bbox[1][0]
         ymin = bbox[0][1]
-        ymax = bbox[1][1] + 1e-5 # add padding for edge point
+        ymax = bbox[1][1]
 
         xdiff = point[0] - xmin
         ydiff = point[1] - ymin
 
         x_bin = (xdiff * x_regions / (xmax - xmin)).floor
         y_bin = (ydiff * y_regions / (ymax - ymin)).floor
+
+        # points on the edge of the bbox will be added to the next index
+        # which puts them out of bounds
+        x_bin -= 1 if point[0] == xmax
+        y_bin -= 1 if point[1] == ymax
 
         x_bin + (x_regions * y_bin)
       end
