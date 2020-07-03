@@ -58,4 +58,26 @@ class KDTreeTest < ActiveSupport::TestCase
       assert_in_delta(v[:dist], result[i][:dist], 1e-3)
     end
   end
+
+  def test_point_radius_search
+    # concentric squares centered at 0, one with l = 1 the other with l = 2
+    points = [[-1, -1], [1, -1], [1, 1], [-1, 1],
+              [-2, -2], [2, -2], [2, 2], [-2, 2]]
+    tree = SpatialStats::Utils::KDTree.new(points)
+    test_point = [0, 0]
+    test_radius = 1.5 # slightly higher than sqrt(2)
+
+    result = tree.point_radius_search(test_point, test_radius)
+    expected = [
+      { point: [1, -1], dist: Math.sqrt(2), idx: 1 },
+      { point: [-1, 1], dist: Math.sqrt(2), idx: 3 },
+      { point: [-1, -1], dist: Math.sqrt(2), idx: 0 },
+      { point: [1, 1], dist: Math.sqrt(2), idx: 2 }
+    ]
+    expected.each_with_index do |v, i|
+      assert_equal(v[:point], result[i][:node].point)
+      assert_equal(v[:idx], result[i][:node].idx)
+      assert_in_delta(v[:dist], result[i][:dist], 1e-3)
+    end
+  end
 end

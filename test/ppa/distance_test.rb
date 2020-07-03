@@ -89,7 +89,7 @@ class PPADistanceTest < ActiveSupport::TestCase
     assert_in_delta(1.0, p_value[:dispersed], 1e-2)
   end
 
-  def test_mc
+  def test_mc_clustered
     unif_dist = Rubystats::UniformDistribution.new(0, 100)
     pts = 100.times.map { [unif_dist.rng, unif_dist.rng] }
     pp = SpatialStats::PPA::PointPattern.new(pts)

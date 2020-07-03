@@ -64,6 +64,22 @@ module SpatialStats
         end
       end
 
+      def point_radius_search(point, radius)
+        neighbors = []
+        neighbors = radius_search(point, radius, root, neighbors)
+
+        neighbors.map do |neighbor|
+          neighbor[:dist] = Math.sqrt(neighbor[:dist])
+
+          new_node = Node.new
+          new_node.point = neighbor[:node].point
+          new_node.idx = neighbor[:node].idx
+          neighbor[:node] = new_node
+
+          neighbor
+        end
+      end
+
       private
 
       def _knn(point, node, curr_neighbors)
@@ -108,6 +124,47 @@ module SpatialStats
           curr_neighbors = _knn(point, other_child, curr_neighbors)
         end
         curr_neighbors
+      end
+
+      ##
+      # Method to find the nearest neighbor of a point
+      #
+      # First, recurses down the tree, following the axis and splits of
+      # each node. At each level it checks if its current best should be
+      # replaced with the existing node.
+      #
+      # After reaching the leaf node, it works back up and checks
+      # at each level if its hypersphere intersects the hyperplane
+      # defined at that node. If it does, it traverses down that node.
+      #
+      # Finishes once it reaches the root node and does not need to check
+      # the other side.
+      def radius_search(point, radius, node, neighbors)
+        return neighbors if node.nil?
+
+        # Check if current node is better than what we have
+        dist = dist2(point, node.point)
+        neighbors.push({ node: node, dist: dist }) if dist <= radius**2
+
+        # recurse down tree
+        axis = node.axis
+        first_child = nil
+        other_child = nil
+        if point[axis] < node.split
+          first_child = node.left
+          other_child = node.right
+        else
+          first_child = node.right
+          other_child = node.left
+        end
+
+        neighbors = radius_search(point, radius, first_child, neighbors)
+
+        # check if we need to evaluate other child based on
+        # hyperplane intersecting with hypersphere
+        # TODO FIX CONDITION
+        neighbors = radius_search(point, radius, other_child, neighbors) if (point[axis] - node.split)**2 <= radius**2
+        neighbors
       end
 
       ##
