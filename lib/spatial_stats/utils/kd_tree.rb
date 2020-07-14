@@ -64,6 +64,13 @@ module SpatialStats
         end
       end
 
+      ##
+      # Finds all points within the provided point and radius
+      #
+      # @param [Array] point x,y
+      # @param [Float] radius
+      #
+      # @returns [Array] [{node: KDTree::Node, dist: Float}]
       def point_radius_search(point, radius)
         neighbors = []
         neighbors = radius_search(point, radius, root, neighbors)
@@ -127,18 +134,13 @@ module SpatialStats
       end
 
       ##
-      # Method to find the nearest neighbor of a point
+      # Works by following the splits down the tree based on the
+      # point. Checks each node if its within the point radius.
+      # If it is within, it is added to the list.
       #
-      # First, recurses down the tree, following the axis and splits of
-      # each node. At each level it checks if its current best should be
-      # replaced with the existing node.
-      #
-      # After reaching the leaf node, it works back up and checks
-      # at each level if its hypersphere intersects the hyperplane
-      # defined at that node. If it does, it traverses down that node.
-      #
-      # Finishes once it reaches the root node and does not need to check
-      # the other side.
+      # Checks if it needs to go down the other side by seeing if
+      # the hypersphere from the point radius intersects the hyperplane
+      # of the split
       def radius_search(point, radius, node, neighbors)
         return neighbors if node.nil?
 
