@@ -6,6 +6,32 @@ module SpatialStats
   module PPA
     class PointPattern
       ##
+      # Returns the intensity of the point pattern
+      #
+      # @returns [Float] intensity
+      def lambda
+        @lambda ||= n / area_from_bounds(bbox).to_f
+      end
+
+      ##
+      # Returns pairs of indices of points that are within a radius
+      # of each other
+      #
+      # @param [Float] radius
+      #
+      # @returns [Array] pairs of indices
+      def pairs_in_radius(radius)
+        total_pairs = []
+        points.each_with_index do |pt, i|
+          pairs = kd_tree.point_radius_search(pt, radius)
+          pairs.each do |pair|
+            total_pairs += [[i, pair[:node].idx]] if pair[:node].idx != i
+          end
+        end
+        total_pairs
+      end
+
+      ##
       # Returns the index of the K-Nearest Neighbors
       # for every point in the PointPattern
       #

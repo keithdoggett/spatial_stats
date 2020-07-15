@@ -36,6 +36,12 @@ class DistanceStatisticTest < ActiveSupport::TestCase
     end
   end
 
+  def test_k_stat
+    k_stat = SpatialStats::PPA::KStatistic.new(@pp)
+    expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 2.75, 2.75, 2.75]
+    assert_equal(expected, k_stat.stat)
+  end
+
   def test_l_initialize
     l_stat = SpatialStats::PPA::LStatistic.new(@pp)
     expected_bins = [0.0, 0.1125, 0.225, 0.3375, 0.45, 0.5625, 0.675, 0.7875, 0.9, 1.0125, 1.125, 1.2375]
@@ -54,5 +60,14 @@ class DistanceStatisticTest < ActiveSupport::TestCase
     l_stat = SpatialStats::PPA::LStatistic.new(@pp)
     expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     assert_equal(expected, l_stat.expectation)
+  end
+
+  def test_l_stat
+    l_stat = SpatialStats::PPA::LStatistic.new(@pp)
+    expected = [0.0, -0.1125, -0.225, -0.3375, -0.45, -0.5625, -0.675, -0.7875, -0.9,
+                -0.07689742037261116, -0.1893974203726112, -0.30189742037261125]
+    l_stat.stat.each_with_index do |l, i|
+      assert_in_delta(expected[i], l, 1e-5)
+    end
   end
 end

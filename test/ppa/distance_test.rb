@@ -12,6 +12,21 @@ class PPADistanceTest < ActiveSupport::TestCase
     Kernel.srand(seed)
   end
 
+  def test_lambda
+    lam = @pp.lambda
+    expected = 0.242424242424
+    assert_in_delta(expected, lam, 1e-5)
+  end
+
+  def test_pairs_in_radius
+    radius = 1.5
+    pairs = @pp.pairs_in_radius(radius)
+    expected = [[1, 2], [1, 5], [2, 3],
+                [2, 5], [2, 1], [3, 2],
+                [5, 2], [5, 1]]
+    assert_equal(expected, pairs)
+  end
+
   def test_knn
     knn = @pp.knn
     expected_idx = [4, 5, 5, 2, 0, 2]
