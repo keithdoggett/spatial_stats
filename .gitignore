@@ -12,3 +12,4 @@ test/dummy/storage/
 test/dummy/tmp/
 test/dummy/test
 tmp/
+Gemfile.lock
